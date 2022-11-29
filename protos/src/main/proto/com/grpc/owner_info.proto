@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package com.grpc;
+
+option java_multiple_files = true;
+option java_package = "com.grpc.owner";
+
+message OwnerInfoResponse {
+  string message = 1;
+}
+
+message OwnerInfoRequest {
+  string name = 1;
+}
+
+service OwnerInfoService {
+  rpc getName(OwnerInfoRequest) returns(OwnerInfoResponse);
+}
