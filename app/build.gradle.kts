@@ -1,18 +1,15 @@
 import com.google.protobuf.gradle.*
+import ru.zveron.ZveronBuildType
 
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
+    id("zveron.android.application")
+    id("zveron.android.application.compose")
     id("com.google.protobuf")
 }
 
 android {
-    compileSdk = 33
-
     defaultConfig {
         applicationId = "ru.zveron"
-        minSdk = 23
-        targetSdk = 33
         versionCode = 1
         versionName = "1.0"
 
@@ -23,32 +20,25 @@ android {
     }
 
     buildTypes {
-        release {
-            isMinifyEnabled = false
+        val debug by getting {
+            applicationIdSuffix = ZveronBuildType.DEBUG.applicationIdSuffix
+        }
+
+        val release by getting {
+            isMinifyEnabled = true
+            applicationIdSuffix = ZveronBuildType.RELEASE.applicationIdSuffix
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
         }
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-    kotlinOptions {
-        jvmTarget = "11"
-    }
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.compose.asProvider().get()
-    }
     packagingOptions {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    namespace = "ru.zveron"
 }
 
 dependencies {

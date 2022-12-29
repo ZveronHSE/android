@@ -3,7 +3,7 @@ pluginManagement {
         gradlePluginPortal()
         mavenCentral()
         google()
-        includeBuild("plugins")
+        includeBuild("build-logic")
     }
 }
 dependencyResolutionManagement {
