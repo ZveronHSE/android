@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Zveron</string>
+
+    <string name="registration_button">Open registration</string>
 </resources>
