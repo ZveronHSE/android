@@ -33,6 +33,7 @@ androidx_activityCompose = { module = "androidx.activity:activity-compose", vers
 # compose
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidxComposeBom" }
 compose_ui_ui = { module = "androidx.compose.ui:ui" }
+compose_ui_uiTooling = { module = "androidx.compose.ui:ui-tooling" }
 compose_ui_uiToolingPreview = { module = "androidx.compose.ui:ui-tooling-preview" }
 compose_material3 = { module = "androidx.compose.material3:material3" }
 compose_material = { module = "androidx.compose.material:material" }

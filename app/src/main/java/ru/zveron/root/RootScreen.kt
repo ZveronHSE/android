@@ -3,6 +3,7 @@ package ru.zveron.root
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -23,6 +24,7 @@ import ru.zveron.appyx.modal.activeElement
 import ru.zveron.appyx.modal.operation.dismiss
 import ru.zveron.appyx.modal.operation.show
 import ru.zveron.authorization.socials_sheet.SocialsSheetScreen
+import ru.zveron.design.components.BottomSheet
 import ru.zveron.main_screen.MainScreen
 import ru.zveron.main_screen.MainScreenNavigator
 
@@ -62,6 +64,7 @@ class RootScreen(
         ModalBottomSheetLayout(
             sheetState = sheetState,
             sheetContent = { SheetContent(sheetState) },
+            sheetShape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp),
         ) {
             Children(
                 navModel = backStack,
@@ -81,28 +84,30 @@ class RootScreen(
         }
 
         Children(navModel = modal) {
-            children<RootScreenNavTarget> { child ->
-                var hideCalled by remember(activeElement) { mutableStateOf(false) }
+            BottomSheet {
+                children<RootScreenNavTarget> { child ->
+                    var hideCalled by remember(activeElement) { mutableStateOf(false) }
 
-                LaunchedEffect(activeElement, hideCalled) {
-                    val sheetVisibility = snapshotFlow { sheetState.isVisible }
-                    sheetVisibility
-                        .distinctUntilChanged()
-                        .drop(1)
-                        .filter { isSheetVisible -> !isSheetVisible }
-                        .collect { if (!hideCalled) modal.dismiss() }
-                }
-
-                LaunchedEffect(activeElement) {
-                    if (activeElement != null && !sheetState.isVisible) {
-                        sheetState.show()
-                    } else if (activeElement == null && sheetState.isVisible) {
-                        hideCalled = true
-                        sheetState.hide()
+                    LaunchedEffect(activeElement, hideCalled) {
+                        val sheetVisibility = snapshotFlow { sheetState.isVisible }
+                        sheetVisibility
+                            .distinctUntilChanged()
+                            .drop(1)
+                            .filter { isSheetVisible -> !isSheetVisible }
+                            .collect { if (!hideCalled) modal.dismiss() }
                     }
-                }
 
-                child()
+                    LaunchedEffect(activeElement) {
+                        if (activeElement != null && !sheetState.isVisible) {
+                            sheetState.show()
+                        } else if (activeElement == null && sheetState.isVisible) {
+                            hideCalled = true
+                            sheetState.hide()
+                        }
+                    }
+
+                    child()
+                }
             }
         }
     }
