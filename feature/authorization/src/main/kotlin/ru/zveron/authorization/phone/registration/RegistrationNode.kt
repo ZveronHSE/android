@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -80,7 +81,7 @@ private fun Registration(
         Spacer(Modifier.height(34.dp))
 
         Text(
-            "Последний шаг",
+            stringResource(R.string.last_step_label),
             style = TextStyle(
                 fontSize = 24.sp,
                 lineHeight = 34.sp,
@@ -93,7 +94,7 @@ private fun Registration(
         Spacer(Modifier.height(16.dp))
 
         Text(
-            "Как вас зовут?",
+            stringResource(R.string.name_label),
             style = TextStyle(
                 color = Color(0xFF929292),
                 fontSize = 13.sp,
@@ -106,7 +107,7 @@ private fun Registration(
         TextField(
             value = phone,
             onValueChange = onPhoneChanged,
-            placeholder = { Text("Иван") },
+            placeholder = { Text(stringResource(R.string.name_placeholder)) },
             colors = TextFieldDefaults.textFieldColors(
                 backgroundColor = MaterialTheme.colors.surface,
                 focusedIndicatorColor = Color.Transparent,
@@ -123,7 +124,7 @@ private fun Registration(
         Spacer(Modifier.height(16.dp))
 
         Text(
-            "Придумайте пароль",
+            stringResource(R.string.password_label),
             style = TextStyle(
                 color = Color(0xFF929292),
                 fontSize = 13.sp,
@@ -136,7 +137,7 @@ private fun Registration(
         TextField(
             value = password,
             onValueChange = onPasswordChanged,
-            placeholder = { Text("Введите пароль") },
+            placeholder = { Text(stringResource(R.string.password_placeholder)) },
             visualTransformation = PasswordVisualTransformation(),
             colors = TextFieldDefaults.textFieldColors(
                 backgroundColor = MaterialTheme.colors.surface,
@@ -153,7 +154,7 @@ private fun Registration(
 
         Spacer(Modifier.height(6.dp))
         Text(
-            "Нужен, чтобы войти без телефона",
+            stringResource(R.string.password_explanation),
             style = TextStyle(
                 color = Color(0xFF929292),
                 fontSize = 13.sp,
@@ -172,7 +173,7 @@ private fun Registration(
                 .padding(start = 16.dp, end = 16.dp, bottom = 10.dp),
         ) {
             Text(
-                "Продолжить",
+                stringResource(R.string.register),
                 style = TextStyle(
                     fontSize = 16.sp,
                     lineHeight = 18.75.sp,

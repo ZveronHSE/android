@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -90,7 +91,7 @@ private fun PhoneInput(
                 .fillMaxWidth(),
         ) {
             Text(
-                "Номер телефона",
+                stringResource(R.string.phone_number_label),
                 style = TextStyle(
                     fontSize = 24.sp,
                     lineHeight = 34.sp,
@@ -102,7 +103,7 @@ private fun PhoneInput(
             Spacer(Modifier.height(8.dp))
 
             Text(
-                "Отправим SMS с кодом подтверждения",
+                stringResource(R.string.sms_send_label),
                 style = TextStyle(
                     color = Color(0xFF666770),
                     fontSize = 13.sp,
@@ -114,7 +115,7 @@ private fun PhoneInput(
             Spacer(Modifier.height(24.dp))
 
             PhoneTextField(
-                countryCodePrefix = "+7 ",
+                countryCodePrefix = stringResource(R.string.country_code_prefix),
                 text = text,
                 onTextChanged = onTextChanged,
                 textStyle = TextStyle(
@@ -133,7 +134,7 @@ private fun PhoneInput(
                 .padding(horizontal = 16.dp),
         ) {
             Text(
-                "Продолжить",
+                stringResource(R.string.sms_button_label),
                 style = TextStyle(
                     fontSize = 16.sp,
                     lineHeight = 18.75.sp,
@@ -151,7 +152,7 @@ private fun PhoneInput(
                 .padding(bottom = 16.dp),
         ) {
             Text(
-                "Войти с помощью пароля",
+                stringResource(R.string.login_with_password),
                 style = TextStyle(
                     brush = enabledButtonGradient,
                     fontSize = 14.sp,

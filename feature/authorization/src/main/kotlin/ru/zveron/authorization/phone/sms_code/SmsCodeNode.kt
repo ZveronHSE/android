@@ -19,6 +19,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -70,7 +71,7 @@ private fun SmsCodeInput(
     onBackClicked: () -> Unit = {},
     onPasswordClicked: () -> Unit = {},
 ) {
-    val unbreakablePhoneNumber by remember(phoneNumber) {
+    val     unbreakablePhoneNumber by remember(phoneNumber) {
         mutableStateOf(phoneNumber.replace(' ', '\u00A0'))
     }
 
@@ -92,7 +93,7 @@ private fun SmsCodeInput(
         Spacer(Modifier.height(34.dp))
 
         Text(
-            text = "Код подтверждения",
+            stringResource(R.string.confirmation_code),
             style = TextStyle(
                 fontSize = 24.sp,
                 lineHeight = 34.sp,
@@ -105,7 +106,7 @@ private fun SmsCodeInput(
         Spacer(Modifier.height(4.dp))
 
         Text(
-            "Мы отправили код подтверждения на номер $unbreakablePhoneNumber",
+            stringResource(R.string.sms_sent_label, unbreakablePhoneNumber),
             style = TextStyle(
                 fontWeight = FontWeight.Light,
                 fontSize = 16.sp,
@@ -143,7 +144,7 @@ private fun SmsCodeInput(
             )
         ) {
             Text(
-                "Войти с помощью пароля",
+                stringResource(R.string.login_with_password),
                 style = TextStyle(
                     fontWeight = FontWeight.Light,
                     fontSize = 14.sp,

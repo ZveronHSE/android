@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -83,7 +84,7 @@ private fun PasswordInput(
         Spacer(Modifier.height(34.dp))
 
         Text(
-            "Вход",
+            stringResource(R.string.login_label),
             style = TextStyle(
                 fontSize = 24.sp,
                 lineHeight = 34.sp,
@@ -96,7 +97,7 @@ private fun PasswordInput(
         Spacer(Modifier.height(16.dp))
 
         Text(
-            "Номер телефона",
+            stringResource(R.string.phone_number),
             style = TextStyle(
                 color = Color(0xFF929292),
                 fontSize = 13.sp,
@@ -109,7 +110,7 @@ private fun PasswordInput(
         TextField(
             value = phone,
             onValueChange = onPhoneChanged,
-            placeholder = { Text("+7") },
+            placeholder = { Text(stringResource(R.string.phone_placeholder)) },
             colors = TextFieldDefaults.textFieldColors(
                 backgroundColor = MaterialTheme.colors.surface,
                 focusedIndicatorColor = Color.Transparent,
@@ -126,7 +127,7 @@ private fun PasswordInput(
         Spacer(Modifier.height(16.dp))
 
         Text(
-            "Пароль",
+            stringResource(R.string.password),
             style = TextStyle(
                 color = Color(0xFF929292),
                 fontSize = 13.sp,
@@ -139,7 +140,7 @@ private fun PasswordInput(
         TextField(
             value = password,
             onValueChange = onPasswordChanged,
-            placeholder = { Text("Введите пароль") },
+            placeholder = { Text(stringResource(R.string.password_placeholder)) },
             visualTransformation = PasswordVisualTransformation(),
             colors = TextFieldDefaults.textFieldColors(
                 backgroundColor = MaterialTheme.colors.surface,
@@ -163,7 +164,7 @@ private fun PasswordInput(
                 .padding(start = 16.dp, end = 16.dp, bottom = 10.dp),
         ) {
             Text(
-                "Продолжить",
+                stringResource(R.string.login_button_label),
                 style = TextStyle(
                     fontSize = 16.sp,
                     lineHeight = 18.75.sp,
