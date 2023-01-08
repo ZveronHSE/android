@@ -12,4 +12,7 @@ sealed class RootPhoneNavTarget: Parcelable {
 
     @Parcelize
     object PasswordInput: RootPhoneNavTarget()
+
+    @Parcelize
+    object Registration: RootPhoneNavTarget()
 }

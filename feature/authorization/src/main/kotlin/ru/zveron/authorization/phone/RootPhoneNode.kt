@@ -10,10 +10,12 @@ import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.activeElement
 import com.bumble.appyx.navmodel.backstack.operation.Push
 import com.bumble.appyx.navmodel.backstack.operation.SingleTop
+import com.bumble.appyx.navmodel.backstack.operation.newRoot
 import com.bumble.appyx.navmodel.backstack.operation.push
 import ru.zveron.appyx.combine.combineOperations
 import ru.zveron.authorization.phone.password.PasswordInputNode
 import ru.zveron.authorization.phone.phone_input.PhoneInputNode
+import ru.zveron.authorization.phone.registration.RegistrationNode
 import ru.zveron.authorization.phone.sms_code.SmsCodeNode
 
 class RootPhoneNode(
@@ -38,8 +40,13 @@ class RootPhoneNode(
                 buildContext,
                 navTarget.phoneNumber,
                 ::navigateToPassword,
+                ::navigateToRegistration,
             )
-            RootPhoneNavTarget.PasswordInput -> PasswordInputNode(buildContext)
+            RootPhoneNavTarget.PasswordInput -> PasswordInputNode(
+                buildContext,
+                ::navigateToRegistration,
+            )
+            RootPhoneNavTarget.Registration -> RegistrationNode(buildContext)
         }
     }
 
@@ -60,5 +67,11 @@ class RootPhoneNode(
                 Push(RootPhoneNavTarget.PasswordInput),
             )
         }
+    }
+
+    private fun navigateToRegistration() = backStack.push(RootPhoneNavTarget.Registration)
+
+    suspend fun attachRootRegistration(): RegistrationNode {
+        return attachChild { backStack.newRoot(RootPhoneNavTarget.Registration) }
     }
 }

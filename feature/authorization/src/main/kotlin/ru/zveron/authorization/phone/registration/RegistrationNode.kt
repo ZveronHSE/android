@@ -1,4 +1,4 @@
-package ru.zveron.authorization.phone.password
+package ru.zveron.authorization.phone.registration
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -32,39 +32,36 @@ import ru.zveron.authorization.R
 import ru.zveron.design.components.ActionButton
 import ru.zveron.design.theme.ZveronTheme
 
-class PasswordInputNode(
+class RegistrationNode(
     buildContext: BuildContext,
-    private val navigateToRegistration: () -> Unit,
 ) : Node(buildContext = buildContext) {
-    private val phoneState = mutableStateOf("")
+    private val usernameState = mutableStateOf("")
     private val passwordState = mutableStateOf("")
 
     @Composable
     override fun View(modifier: Modifier) {
-        val (phone, changePhone) = remember { phoneState }
+        val (username, changeUsername) = remember { usernameState }
         val (password, changePassword) = remember { passwordState }
 
-        PasswordInput(
-            phone = phone,
-            onPhoneChanged = changePhone,
+        Registration(
+            phone = username,
+            onPhoneChanged = changeUsername,
             password = password,
             onPasswordChanged = changePassword,
             onBackClicked = ::navigateUp,
-            onContinueClicked = navigateToRegistration,
             modifier = modifier,
         )
     }
 }
 
 @Composable
-private fun PasswordInput(
+private fun Registration(
     phone: String,
     onPhoneChanged: (String) -> Unit,
     password: String,
     onPasswordChanged: (String) -> Unit,
     modifier: Modifier = Modifier,
     onBackClicked: () -> Unit = {},
-    onContinueClicked: () -> Unit = {},
 ) {
     Column(modifier = modifier.fillMaxSize()) {
         IconButton(
@@ -83,7 +80,7 @@ private fun PasswordInput(
         Spacer(Modifier.height(34.dp))
 
         Text(
-            "Вход",
+            "Последний шаг",
             style = TextStyle(
                 fontSize = 24.sp,
                 lineHeight = 34.sp,
@@ -96,7 +93,7 @@ private fun PasswordInput(
         Spacer(Modifier.height(16.dp))
 
         Text(
-            "Номер телефона",
+            "Как вас зовут?",
             style = TextStyle(
                 color = Color(0xFF929292),
                 fontSize = 13.sp,
@@ -109,7 +106,7 @@ private fun PasswordInput(
         TextField(
             value = phone,
             onValueChange = onPhoneChanged,
-            placeholder = { Text("+7") },
+            placeholder = { Text("Иван") },
             colors = TextFieldDefaults.textFieldColors(
                 backgroundColor = MaterialTheme.colors.surface,
                 focusedIndicatorColor = Color.Transparent,
@@ -126,7 +123,7 @@ private fun PasswordInput(
         Spacer(Modifier.height(16.dp))
 
         Text(
-            "Пароль",
+            "Придумайте пароль",
             style = TextStyle(
                 color = Color(0xFF929292),
                 fontSize = 13.sp,
@@ -154,10 +151,22 @@ private fun PasswordInput(
                 .padding(start = 16.dp, end = 34.dp),
         )
 
+        Spacer(Modifier.height(6.dp))
+        Text(
+            "Нужен, чтобы войти без телефона",
+            style = TextStyle(
+                color = Color(0xFF929292),
+                fontSize = 13.sp,
+                lineHeight = 15.23.sp,
+                fontWeight = FontWeight.Normal,
+            ),
+            modifier = Modifier.padding(start = 16.dp),
+        )
+
         Spacer(Modifier.weight(1f))
 
         ActionButton(
-            onClick = onContinueClicked,
+            onClick = { /*TODO*/ },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 16.dp, end = 16.dp, bottom = 10.dp),
@@ -176,7 +185,7 @@ private fun PasswordInput(
 
 @Preview(showBackground = true)
 @Composable
-private fun PasswordPreview() {
+private fun RegistrationPreview() {
     val (phone, changePhone) = remember {
         mutableStateOf("")
     }
@@ -186,7 +195,7 @@ private fun PasswordPreview() {
     }
 
     ZveronTheme {
-        PasswordInput(
+        Registration(
             phone = phone,
             onPhoneChanged = changePhone,
             password = password,

@@ -34,20 +34,29 @@ class SmsCodeNode(
     buildContext: BuildContext,
     private val phoneNumber: String,
     private val navigateToPassword: () -> Unit,
+    private val navigateToRegistration: () -> Unit,
 ) : Node(buildContext = buildContext) {
     private val codeState = mutableStateOf("")
 
     @Composable
     override fun View(modifier: Modifier) {
-        val (code, setCode) = remember { codeState }
+        val code by remember { codeState }
         SmsCodeInput(
             code = code,
-            onCodeChanged = setCode,
+            onCodeChanged = ::onCodeChanged,
             phoneNumber = phoneNumber,
             modifier = modifier,
             onBackClicked = ::navigateUp,
             onPasswordClicked = navigateToPassword,
         )
+    }
+
+    private fun onCodeChanged(code: String) {
+        codeState.value = code
+        // TODO: change condition later
+        if (code.length == 5) {
+            navigateToRegistration.invoke()
+        }
     }
 }
 
