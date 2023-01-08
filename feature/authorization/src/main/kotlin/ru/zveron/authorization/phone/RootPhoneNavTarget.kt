@@ -6,4 +6,7 @@ import kotlinx.parcelize.Parcelize
 sealed class RootPhoneNavTarget: Parcelable {
     @Parcelize
     object PhoneInput: RootPhoneNavTarget()
+
+    @Parcelize
+    data class SmsCodeInput(val phoneNumber: String): RootPhoneNavTarget()
 }

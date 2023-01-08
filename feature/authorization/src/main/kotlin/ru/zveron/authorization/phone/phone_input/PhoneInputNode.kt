@@ -33,25 +33,41 @@ import ru.zveron.design.theme.enabledButtonGradient
 
 class PhoneInputNode(
     buildContext: BuildContext,
+    private val navigateToSms: (String) -> Unit,
 ) : Node(buildContext = buildContext) {
+    private val textState = mutableStateOf("")
+
     @Composable
     override fun View(modifier: Modifier) {
-        PhoneInput(modifier)
+        val (text, changeText) = remember { textState }
+
+        PhoneInput(
+            text = text,
+            onTextChanged = changeText,
+            modifier = modifier,
+            onBackClicked = ::navigateUp,
+            onContinueClicked = ::onContinueClicked,
+        )
+    }
+
+    private fun onContinueClicked() {
+        navigateToSms.invoke(textState.value)
     }
 }
 
 @OptIn(ExperimentalTextApi::class)
 @Composable
 private fun PhoneInput(
+    text: String,
+    onTextChanged: (String) -> Unit,
     modifier: Modifier = Modifier,
+    onBackClicked: () -> Unit = {},
+    onContinueClicked: () -> Unit = {},
+    onPasswordClicked: () -> Unit = {},
 ) {
-    val (text, changeText) = remember {
-        mutableStateOf("")
-    }
-
     Column(modifier = modifier.fillMaxSize()) {
         IconButton(
-            onClick = { /*TODO*/ },
+            onClick = onBackClicked,
             modifier = Modifier
                 .align(Alignment.Start)
                 .padding(top = 16.dp, start = 4.dp),
@@ -96,7 +112,7 @@ private fun PhoneInput(
             PhoneTextField(
                 countryCodePrefix = "+7 ",
                 text = text,
-                onTextChanged = changeText,
+                onTextChanged = onTextChanged,
                 textStyle = TextStyle(
                     fontSize = 28.sp,
                     lineHeight = 34.sp,
@@ -107,7 +123,7 @@ private fun PhoneInput(
         }
 
         ActionButton(
-            onClick = { /*TODO*/ },
+            onClick = onContinueClicked,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
@@ -125,7 +141,7 @@ private fun PhoneInput(
         Spacer(Modifier.height(8.dp))
 
         TextButton(
-            onClick = { /*TODO*/ },
+            onClick = onPasswordClicked,
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .padding(bottom = 16.dp),
@@ -147,6 +163,10 @@ private fun PhoneInput(
 @Composable
 private fun PhoneInputPreview() {
     ZveronTheme {
-        PhoneInput(modifier = Modifier.fillMaxSize())
+        val (text, changeText) = remember {
+            mutableStateOf("")
+        }
+
+        PhoneInput(text, changeText, modifier = Modifier.fillMaxSize())
     }
 }

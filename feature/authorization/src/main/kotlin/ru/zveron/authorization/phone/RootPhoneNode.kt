@@ -7,7 +7,9 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.node.ParentNode
 import com.bumble.appyx.navmodel.backstack.BackStack
+import com.bumble.appyx.navmodel.backstack.operation.push
 import ru.zveron.authorization.phone.phone_input.PhoneInputNode
+import ru.zveron.authorization.phone.sms_code.SmsCodeNode
 
 class RootPhoneNode(
     buildContext: BuildContext,
@@ -21,7 +23,10 @@ class RootPhoneNode(
 ) {
     override fun resolve(navTarget: RootPhoneNavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
-            RootPhoneNavTarget.PhoneInput -> PhoneInputNode(buildContext)
+            RootPhoneNavTarget.PhoneInput -> PhoneInputNode(buildContext) { phoneNumber ->
+                backStack.push(RootPhoneNavTarget.SmsCodeInput(phoneNumber))
+            }
+            is RootPhoneNavTarget.SmsCodeInput -> SmsCodeNode(buildContext, navTarget.phoneNumber)
         }
     }
 

@@ -51,7 +51,7 @@ fun PhoneTextField(
     BasicTextField(
         value = text,
         onValueChange = onTextChanged,
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
         visualTransformation = PhoneVisualTransformation(countryCodePrefix, hintColor),
         singleLine = true,
         maxLines = 1,
