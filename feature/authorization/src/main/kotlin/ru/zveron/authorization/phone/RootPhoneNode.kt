@@ -7,7 +7,12 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.node.ParentNode
 import com.bumble.appyx.navmodel.backstack.BackStack
+import com.bumble.appyx.navmodel.backstack.activeElement
+import com.bumble.appyx.navmodel.backstack.operation.Push
+import com.bumble.appyx.navmodel.backstack.operation.SingleTop
 import com.bumble.appyx.navmodel.backstack.operation.push
+import ru.zveron.appyx.combine.combineOperations
+import ru.zveron.authorization.phone.password.PasswordInputNode
 import ru.zveron.authorization.phone.phone_input.PhoneInputNode
 import ru.zveron.authorization.phone.sms_code.SmsCodeNode
 
@@ -17,16 +22,24 @@ class RootPhoneNode(
         initialElement = RootPhoneNavTarget.PhoneInput,
         savedStateMap = buildContext.savedStateMap,
     )
-): ParentNode<RootPhoneNavTarget>(
+) : ParentNode<RootPhoneNavTarget>(
     buildContext = buildContext,
     navModel = backStack,
 ) {
     override fun resolve(navTarget: RootPhoneNavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
-            RootPhoneNavTarget.PhoneInput -> PhoneInputNode(buildContext) { phoneNumber ->
+            RootPhoneNavTarget.PhoneInput -> PhoneInputNode(
+                buildContext,
+                ::navigateToPassword,
+            ) { phoneNumber ->
                 backStack.push(RootPhoneNavTarget.SmsCodeInput(phoneNumber))
             }
-            is RootPhoneNavTarget.SmsCodeInput -> SmsCodeNode(buildContext, navTarget.phoneNumber)
+            is RootPhoneNavTarget.SmsCodeInput -> SmsCodeNode(
+                buildContext,
+                navTarget.phoneNumber,
+                ::navigateToPassword,
+            )
+            RootPhoneNavTarget.PasswordInput -> PasswordInputNode(buildContext)
         }
     }
 
@@ -36,5 +49,16 @@ class RootPhoneNode(
             navModel = backStack,
             modifier = modifier,
         )
+    }
+
+    private fun navigateToPassword() {
+        if (backStack.activeElement == RootPhoneNavTarget.PhoneInput) {
+            backStack.push(RootPhoneNavTarget.PasswordInput)
+        } else {
+            backStack.combineOperations(
+                SingleTop.init(RootPhoneNavTarget.PhoneInput, backStack.elements.value),
+                Push(RootPhoneNavTarget.PasswordInput),
+            )
+        }
     }
 }

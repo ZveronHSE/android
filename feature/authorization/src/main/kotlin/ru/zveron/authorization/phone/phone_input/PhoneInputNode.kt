@@ -16,6 +16,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.TextStyle
@@ -33,6 +34,7 @@ import ru.zveron.design.theme.enabledButtonGradient
 
 class PhoneInputNode(
     buildContext: BuildContext,
+    private val navigateToPassword: () -> Unit,
     private val navigateToSms: (String) -> Unit,
 ) : Node(buildContext = buildContext) {
     private val textState = mutableStateOf("")
@@ -47,6 +49,7 @@ class PhoneInputNode(
             modifier = modifier,
             onBackClicked = ::navigateUp,
             onContinueClicked = ::onContinueClicked,
+            onPasswordClicked = navigateToPassword,
         )
     }
 
@@ -101,6 +104,7 @@ private fun PhoneInput(
             Text(
                 "Отправим SMS с кодом подтверждения",
                 style = TextStyle(
+                    color = Color(0xFF666770),
                     fontSize = 13.sp,
                     lineHeight = 15.23.sp,
                     fontWeight = FontWeight.Normal,

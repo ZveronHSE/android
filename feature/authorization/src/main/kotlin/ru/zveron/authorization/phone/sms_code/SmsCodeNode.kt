@@ -33,6 +33,7 @@ import ru.zveron.design.theme.ZveronTheme
 class SmsCodeNode(
     buildContext: BuildContext,
     private val phoneNumber: String,
+    private val navigateToPassword: () -> Unit,
 ) : Node(buildContext = buildContext) {
     private val codeState = mutableStateOf("")
 
@@ -45,6 +46,7 @@ class SmsCodeNode(
             phoneNumber = phoneNumber,
             modifier = modifier,
             onBackClicked = ::navigateUp,
+            onPasswordClicked = navigateToPassword,
         )
     }
 }
@@ -57,6 +59,7 @@ private fun SmsCodeInput(
     phoneNumber: String,
     modifier: Modifier = Modifier,
     onBackClicked: () -> Unit = {},
+    onPasswordClicked: () -> Unit = {},
 ) {
     val unbreakablePhoneNumber by remember(phoneNumber) {
         mutableStateOf(phoneNumber.replace(' ', '\u00A0'))
@@ -121,7 +124,7 @@ private fun SmsCodeInput(
         Spacer(Modifier.weight(1f))
 
         TextButton(
-            onClick = { /*TODO*/ },
+            onClick = onPasswordClicked,
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .padding(bottom = 16.dp),

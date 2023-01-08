@@ -20,4 +20,5 @@ dependencies {
     debugImplementation(libs.compose.ui.uiTooling)
 
     implementation(project(":design"))
+    implementation(project(":core:appyx"))
 }

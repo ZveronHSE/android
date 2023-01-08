@@ -9,4 +9,7 @@ sealed class RootPhoneNavTarget: Parcelable {
 
     @Parcelize
     data class SmsCodeInput(val phoneNumber: String): RootPhoneNavTarget()
+
+    @Parcelize
+    object PasswordInput: RootPhoneNavTarget()
 }
