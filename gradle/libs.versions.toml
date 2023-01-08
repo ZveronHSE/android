@@ -22,6 +22,8 @@ coroutines = "1.6.2"
 android_gradle_plugin = "7.3.1"
 protobuf_gradle_plugin = "0.8.18"
 
+appyx = "1.0.1"
+
 [libraries]
 #androidx
 androidx_coreKtx = { module = "androidx.core:core-ktx", version.ref = "androidx"}
@@ -30,17 +32,19 @@ androidx_activityCompose = { module = "androidx.activity:activity-compose", vers
 
 # compose
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidxComposeBom" }
-compose_ui_ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
-compose_ui_uiToolingPreview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
-compose_material3 = { module = "androidx.compose.material3:material3", version.ref = "compose_material3" }
+compose_ui_ui = { module = "androidx.compose.ui:ui" }
+compose_ui_uiTooling = { module = "androidx.compose.ui:ui-tooling" }
+compose_ui_uiToolingPreview = { module = "androidx.compose.ui:ui-tooling-preview" }
+compose_material3 = { module = "androidx.compose.material3:material3" }
+compose_material = { module = "androidx.compose.material:material" }
 
 # test
 junit_junit = { module = "junit:junit", version.ref = "junit" }
 test_ext_junit = { module = "androidx.test.ext:junit", version.ref = "android_junit" }
 test_espresso_core = { module = "androidx.test.espresso:espresso-core", version.ref = "espresso_core" }
-test_compose_ui_uiTest = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "compose" }
-test_compose_ui_uiTooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
-test_compose_ui_uiTestManifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "compose" }
+test_compose_ui_uiTest = { module = "androidx.compose.ui:ui-test-junit4" }
+test_compose_ui_uiTooling = { module = "androidx.compose.ui:ui-tooling" }
+test_compose_ui_uiTestManifest = { module = "androidx.compose.ui:ui-test-manifest" }
 
 # kotlinx
 kotlinx_coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
@@ -54,6 +58,11 @@ grpc_protobuf_kotlinLite = { module = "com.google.protobuf:protobuf-kotlin-lite"
 grpc_protobuf_protocJavaGen = { module = "io.grpc:protoc-gen-grpc-java", version.ref = "grpc" }
 grpc_protobuf_protoc = { module = "com.google.protobuf:protoc", version.ref = "protobuf" }
 
+# appyx navigation
+appyx_core = { module = "com.bumble.appyx:core", version.ref = "appyx" }
+appyx_testing_ui = { module = "com.bumble.appyx:testing-ui", version.ref = "appyx" }
+appyx_testing_ui_activty = { module = "com.bumble.appyx:testing-ui-activity", version.ref = "appyx" }
+
 android_gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "android_gradle_plugin" }
 kotlin_gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 protobuf_gradle_plugin = { module = "com.google.protobuf:protobuf-gradle-plugin", version.ref = "protobuf_gradle_plugin" }
@@ -62,5 +71,7 @@ protobuf_gradle_plugin = { module = "com.google.protobuf:protobuf-gradle-plugin"
 android_application = { id = "com.android.application", version.ref = "android_gradle_plugin" }
 android_library = { id = "com.android.library", version.ref = "android_gradle_plugin" }
 android_test = { id = "com.android.test", version.ref = "android_gradle_plugin" }
+
 protobuf = { id = "com.google.protobuf", version.ref = "protobuf_gradle_plugin" }
 
+kotlin_parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }

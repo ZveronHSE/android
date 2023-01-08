@@ -1,4 +1,4 @@
-package ru.zveron.ui.theme
+package ru.zveron.design.theme
 
 import androidx.compose.ui.graphics.Color
 

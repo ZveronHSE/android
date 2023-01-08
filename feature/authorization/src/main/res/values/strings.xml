@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="login_with_number">Войти по номеру</string>
+
+    <!-- Password screen -->
+    <string name="login_label">Вход</string>
+    <string name="phone_number">Номер телефона</string>
+    <string name="phone_placeholder">+7</string>
+    <string name="password">Пароль</string>
+    <string name="login_button_label">Продолжить</string>
+
+    <!-- Phone input screen -->
+    <string name="phone_number_label">Номер телефона</string>
+    <string name="sms_send_label">Отправим SMS с кодом подтверждения</string>
+    <string name="country_code_prefix">+7\u0020</string>
+    <string name="sms_button_label">Продолжить</string>
+
+    <!-- Registration screen -->
+    <string name="last_step_label">Последний шаг</string>
+    <string name="name_label">Как вас зовут?</string>
+    <string name="name_placeholder">Иван</string>
+    <string name="password_label">Придумайте пароль</string>
+    <string name="password_explanation">Нужен, чтобы войти без телефона</string>
+    <string name="register">Зарегистрироваться</string>
+
+    <!-- Sms code screen -->
+    <string name="confirmation_code">Код подтверждения</string>
+    <string name="sms_sent_label">Мы отправили код подтверждения на номер %1$s</string>
+
+    <string name="password_placeholder">Введите пароль</string>
+    <string name="login_with_password">Войти с помощью пароля</string>
+</resources>

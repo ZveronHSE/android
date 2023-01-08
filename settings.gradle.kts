@@ -17,3 +17,6 @@ dependencyResolutionManagement {
 rootProject.name = "Zveron"
 include(":app")
 include(":protos")
+include(":design")
+include(":feature:authorization")
+include(":core:appyx")

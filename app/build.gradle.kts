@@ -5,6 +5,7 @@ plugins {
     id("zveron.android.application")
     id("zveron.android.application.compose")
     id("com.google.protobuf")
+    id("kotlin-parcelize")
 }
 
 android {
@@ -47,8 +48,10 @@ dependencies {
     implementation(libs.androidx.activityCompose)
 
     implementation(libs.compose.ui.ui)
-    implementation(libs.compose.material3)
+    implementation(libs.compose.material)
     implementation(libs.compose.ui.uiToolingPreview)
+
+    implementation(libs.appyx.core)
 
     testImplementation(libs.junit.junit)
     androidTestImplementation(libs.test.ext.junit)
@@ -67,6 +70,11 @@ dependencies {
     api(libs.grpc.protobuf.kotlinLite)
 
     protobuf(project(":protos"))
+
+    implementation(project(":core:appyx"))
+    implementation(project(":design"))
+
+    implementation(project(":feature:authorization"))
 }
 
 protobuf {
