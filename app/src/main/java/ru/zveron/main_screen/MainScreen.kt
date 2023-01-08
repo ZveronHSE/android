@@ -1,7 +1,6 @@
 package ru.zveron.main_screen
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -20,7 +19,7 @@ class MainScreen(
 ) : Node(buildContext = buildContext) {
     @Composable
     override fun View(modifier: Modifier) {
-        Screen(modifier = modifier.fillMaxSize()) {
+        Screen(modifier = modifier) {
             mainScreenNavigator.openAuthorization()
         }
     }

@@ -1,8 +1,11 @@
 package ru.zveron.root
 
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -14,15 +17,17 @@ import com.bumble.appyx.core.navigation.model.combined.plus
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.node.ParentNode
 import com.bumble.appyx.navmodel.backstack.BackStack
+import com.bumble.appyx.navmodel.backstack.operation.push
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.map
 import ru.zveron.appyx.modal.Modal
 import ru.zveron.appyx.modal.activeElement
 import ru.zveron.appyx.modal.operation.dismiss
 import ru.zveron.appyx.modal.operation.show
+import ru.zveron.authorization.phone.RootPhoneNode
 import ru.zveron.authorization.socials_sheet.SocialsSheetScreen
 import ru.zveron.design.components.BottomSheet
 import ru.zveron.main_screen.MainScreen
@@ -48,7 +53,10 @@ class RootScreen(
     override fun resolve(navTarget: RootScreenNavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
             RootScreenNavTarget.MainPage -> MainScreen(buildContext, this)
-            RootScreenNavTarget.AuthorizationBottomSheet -> SocialsSheetScreen(buildContext)
+            RootScreenNavTarget.AuthorizationBottomSheet -> SocialsSheetScreen(buildContext) {
+                backStack.push(RootScreenNavTarget.PhoneAuthorization)
+            }
+            RootScreenNavTarget.PhoneAuthorization -> RootPhoneNode(buildContext)
         }
     }
 
@@ -69,7 +77,15 @@ class RootScreen(
             Children(
                 navModel = backStack,
                 modifier = Modifier.fillMaxSize()
-            )
+            ) {
+                children<RootScreenNavTarget> { child ->
+                    child(
+                        modifier = Modifier
+                            .windowInsetsPadding(WindowInsets.safeDrawing)
+                            .fillMaxSize()
+                    )
+                }
+            }
         }
     }
 

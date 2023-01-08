@@ -9,4 +9,7 @@ sealed class RootScreenNavTarget: Parcelable {
 
     @Parcelize
     object AuthorizationBottomSheet: RootScreenNavTarget()
+
+    @Parcelize
+    object PhoneAuthorization: RootScreenNavTarget()
 }

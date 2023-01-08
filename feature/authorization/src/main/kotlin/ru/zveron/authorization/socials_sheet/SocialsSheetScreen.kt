@@ -25,10 +25,19 @@ import ru.zveron.design.theme.VkColors
 
 class SocialsSheetScreen(
     buildContext: BuildContext,
+    private val navigateToPhoneAuthorization: () -> Unit,
 ): Node(buildContext = buildContext) {
     @Composable
     override fun View(modifier: Modifier) {
-        SocialsScreen(modifier)
+        SocialsScreen(
+            modifier = modifier,
+            onPhoneButtonClick = ::onPhoneButtonClick,
+        )
+    }
+
+    private fun onPhoneButtonClick() {
+        navigateUp()
+        navigateToPhoneAuthorization.invoke()
     }
 }
 
