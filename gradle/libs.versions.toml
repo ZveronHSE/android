@@ -24,6 +24,12 @@ protobuf_gradle_plugin = "0.8.18"
 
 appyx = "1.0.1"
 
+koin = "3.3.2"
+koin_android = "3.3.2"
+koin_android_compose = "3.4.1"
+
+retrofit = "2.9.0"
+
 [libraries]
 #androidx
 androidx_coreKtx = { module = "androidx.core:core-ktx", version.ref = "androidx"}
@@ -62,6 +68,13 @@ grpc_protobuf_protoc = { module = "com.google.protobuf:protoc", version.ref = "p
 appyx_core = { module = "com.bumble.appyx:core", version.ref = "appyx" }
 appyx_testing_ui = { module = "com.bumble.appyx:testing-ui", version.ref = "appyx" }
 appyx_testing_ui_activty = { module = "com.bumble.appyx:testing-ui-activity", version.ref = "appyx" }
+
+#koin
+koin_android = { module = "io.insert-koin:koin-android", version.ref = "koin_android" }
+koin_android_compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin_android_compose" }
+
+#retorfit
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 
 android_gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "android_gradle_plugin" }
 kotlin_gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }

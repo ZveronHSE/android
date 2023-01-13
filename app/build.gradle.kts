@@ -69,9 +69,13 @@ dependencies {
     api(libs.grpc.grpcKotlinStub)
     api(libs.grpc.protobuf.kotlinLite)
 
+    implementation(libs.koin.android)
+    implementation(libs.koin.android.compose)
+
     protobuf(project(":protos"))
 
     implementation(project(":core:appyx"))
+    implementation(project(":core:network"))
     implementation(project(":design"))
 
     implementation(project(":feature:authorization"))
