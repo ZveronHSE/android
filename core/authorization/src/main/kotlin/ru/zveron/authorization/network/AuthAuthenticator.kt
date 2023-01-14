@@ -13,7 +13,7 @@ class AuthAuthenticator(
 ): Authenticator {
     override fun authenticate(route: Route?, response: Response): Request? {
         return route?.let {
-            refreshTokenInteractor.refreshToken(route.address().url())
+            refreshTokenInteractor.refreshToken()
             authorizationStorage.accessToken?.let { token ->
                 response.request().newBuilder()
                     .header("Authorization", token)

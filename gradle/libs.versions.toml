@@ -1,5 +1,6 @@
 [versions]
 kotlin = "1.7.20"
+ksp = "1.7.20-1.0.8"
 
 androidx = "1.9.0"
 androidxComposeBom = "2022.12.00"
@@ -29,6 +30,8 @@ koin_android = "3.3.2"
 koin_android_compose = "3.4.1"
 
 retrofit = "2.9.0"
+
+moshi = "1.14.0"
 
 [libraries]
 #androidx
@@ -77,6 +80,11 @@ koin_test_junit4 = { module = "io.insert-koin:koin-test-junit4", version.ref = "
 #retorfit
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 
+# moshi json parser
+moshi = { module = "com.squareup.moshi:moshi", version.ref = "moshi" }
+moshi_adapters = { module = "com.squareup.moshi:moshi-adapters", version.ref = "moshi" }
+moshi_codegen = { module = "com.squareup.moshi:moshi-kotlin-codegen", version.ref = "moshi" }
+
 android_gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "android_gradle_plugin" }
 kotlin_gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 protobuf_gradle_plugin = { module = "com.google.protobuf:protobuf-gradle-plugin", version.ref = "protobuf_gradle_plugin" }
@@ -89,3 +97,4 @@ android_test = { id = "com.android.test", version.ref = "android_gradle_plugin" 
 protobuf = { id = "com.google.protobuf", version.ref = "protobuf_gradle_plugin" }
 
 kotlin_parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
+kotlin_ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }

@@ -73,6 +73,8 @@ dependencies {
     implementation(libs.koin.android)
     implementation(libs.koin.android.compose)
 
+    implementation(libs.moshi)
+
     protobuf(project(":protos"))
 
     implementation(project(":core:appyx"))

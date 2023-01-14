@@ -2,6 +2,7 @@ package ru.zveron.authorization
 
 import okhttp3.Authenticator
 import okhttp3.Interceptor
+import okhttp3.OkHttpClient
 import org.koin.core.module.dsl.bind
 import org.koin.core.module.dsl.named
 import org.koin.core.module.dsl.singleOf
@@ -19,6 +20,7 @@ import ru.zveron.authorization.network.domain.RefreshTokenInteractor
 import ru.zveron.authorization.storage.AuthorizationPreferencesWrapper
 import ru.zveron.authorization.storage.AuthorizationStorage
 import ru.zveron.authorization.storage.AuthorizationStorageImpl
+import ru.zveron.core.authorization.BuildConfig
 
 val authorizationModule = module {
     singleOf(::AuthorizationPreferencesWrapper)
@@ -29,8 +31,12 @@ val authorizationModule = module {
 
 val interceptorsModule = module {
     single<RefreshTokenApi> {
+        val tokenInterceptor = get<AuthorizationTokenParserInterceptor>()
+        val ohHttpClient = OkHttpClient.Builder().addInterceptor(tokenInterceptor).build()
+
         val retrofit = Retrofit.Builder()
             .baseUrl(BuildConfig.host)
+            .client(ohHttpClient)
             .build()
         retrofit.create(RefreshTokenApi::class.java)
     }

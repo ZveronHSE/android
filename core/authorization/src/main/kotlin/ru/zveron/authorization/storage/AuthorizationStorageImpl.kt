@@ -21,10 +21,16 @@ internal class AuthorizationStorageImpl(
 
     override fun updateAccessToken(accessToken: String, expiresIn: Long?) {
         authorizationPreferencesWrapper.accessToken = accessToken
+        expiresIn?.let {
+            authorizationPreferencesWrapper.accessTokenExpiration = expiresIn
+        }
     }
 
     override fun updateRefreshToken(refreshToken: String, expiresIn: Long?) {
         authorizationPreferencesWrapper.refreshToken = refreshToken
+        expiresIn?.let {
+            authorizationPreferencesWrapper.refreshTokenExpiration = expiresIn
+        }
     }
 
     override fun refreshDeviceFingerprint(fingerprint: String) {

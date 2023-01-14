@@ -9,7 +9,10 @@ import kotlin.reflect.KProperty
 private const val PREFERENCES_FILE = "authorization_preferences"
 
 private const val ACCESS_TOKEN_KEY = "access_token"
+private const val ACCESS_EXPIRATION_KEY = "access_expiration"
+
 private const val REFRESH_TOKEN_KEY = "refresh_token"
+private const val REFRESH_EXPIRATION_KEY = "refresh_expiration"
 
 private const val FINGERPRINT_TOKEN_KEY = "fingerprint"
 
@@ -19,7 +22,10 @@ internal class AuthorizationPreferencesWrapper(
     private val preferences = context.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE)
 
     var accessToken: String? by preferences.string(ACCESS_TOKEN_KEY)
+    var accessTokenExpiration: Long? by preferences.long(ACCESS_EXPIRATION_KEY)
+
     var refreshToken: String? by preferences.string(REFRESH_TOKEN_KEY)
+    var refreshTokenExpiration: Long? by preferences.long(REFRESH_EXPIRATION_KEY)
 
     var fingerprint: String? by preferences.string(FINGERPRINT_TOKEN_KEY)
 }
@@ -48,11 +54,17 @@ private fun SharedPreferences.string(name: String, default: String? = null) = Pr
     }
 )
 
-private fun SharedPreferences.float(name: String, default: Float = 0f) = PreferencesProperty(
+private fun SharedPreferences.long(name: String, default: Long = 0L) = PreferencesProperty<Long?>(
     name,
     default,
-    { varName, defaultVal -> getFloat(varName, defaultVal) },
+    { varName, _ -> getLong(varName, default) },
     { varName, value ->
-        edit { putFloat(varName, value) }
+        edit {
+            if (value != null) {
+                putLong(varName, value)
+            } else {
+                remove(varName)
+            }
+        }
     }
 )
