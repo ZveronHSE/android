@@ -1,0 +1,58 @@
+package ru.zveron.authorization.storage
+
+import android.content.Context
+import android.content.SharedPreferences
+import androidx.core.content.edit
+import kotlin.properties.ReadWriteProperty
+import kotlin.reflect.KProperty
+
+private const val PREFERENCES_FILE = "authorization_preferences"
+
+private const val ACCESS_TOKEN_KEY = "access_token"
+private const val REFRESH_TOKEN_KEY = "refresh_token"
+
+private const val FINGERPRINT_TOKEN_KEY = "fingerprint"
+
+internal class AuthorizationPreferencesWrapper(
+    context: Context,
+) {
+    private val preferences = context.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE)
+
+    var accessToken: String? by preferences.string(ACCESS_TOKEN_KEY)
+    var refreshToken: String? by preferences.string(REFRESH_TOKEN_KEY)
+
+    var fingerprint: String? by preferences.string(FINGERPRINT_TOKEN_KEY)
+}
+
+private class PreferencesProperty<T>(
+    private val name: String,
+    private val defaultValue: T,
+    private val getter: (String, T) -> T,
+    private val setter: (String, T) -> Unit,
+): ReadWriteProperty<Any, T> {
+    override fun getValue(thisRef: Any, property: KProperty<*>): T {
+        return getter(name, defaultValue)
+    }
+
+    override fun setValue(thisRef: Any, property: KProperty<*>, value: T) {
+        setter(name, value)
+    }
+}
+
+private fun SharedPreferences.string(name: String, default: String? = null) = PreferencesProperty(
+    name,
+    default,
+    { varName, defaultValue -> getString(varName, defaultValue) },
+    { varName, value ->
+        edit { putString(varName, value) }
+    }
+)
+
+private fun SharedPreferences.float(name: String, default: Float = 0f) = PreferencesProperty(
+    name,
+    default,
+    { varName, defaultVal -> getFloat(varName, defaultVal) },
+    { varName, value ->
+        edit { putFloat(varName, value) }
+    }
+)

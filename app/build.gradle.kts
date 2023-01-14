@@ -75,6 +75,7 @@ dependencies {
     protobuf(project(":protos"))
 
     implementation(project(":core:appyx"))
+    implementation(project(":core:authorization"))
     implementation(project(":core:network"))
     implementation(project(":design"))
 
