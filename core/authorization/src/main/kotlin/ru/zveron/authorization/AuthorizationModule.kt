@@ -1,9 +1,21 @@
 package ru.zveron.authorization
 
+import okhttp3.Authenticator
+import okhttp3.Interceptor
+import org.koin.core.module.dsl.bind
+import org.koin.core.module.dsl.named
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
+import retrofit2.Retrofit
+import ru.zveron.authorization.base_api.TokenParser
 import ru.zveron.authorization.fingerprint.FingerprintFactory
+import ru.zveron.authorization.network.AuthAuthenticator
+import ru.zveron.authorization.network.AuthInterceptor
+import ru.zveron.authorization.network.AuthorizationTokenParserInterceptor
+import ru.zveron.authorization.network.data.RefreshTokenRepository
+import ru.zveron.authorization.network.data.api.RefreshTokenApi
+import ru.zveron.authorization.network.domain.RefreshTokenInteractor
 import ru.zveron.authorization.storage.AuthorizationPreferencesWrapper
 import ru.zveron.authorization.storage.AuthorizationStorage
 import ru.zveron.authorization.storage.AuthorizationStorageImpl
@@ -13,4 +25,30 @@ val authorizationModule = module {
     singleOf(::AuthorizationStorageImpl) bind AuthorizationStorage::class
 
     singleOf(::FingerprintFactory)
+}
+
+val interceptorsModule = module {
+    single<RefreshTokenApi> {
+        val retrofit = Retrofit.Builder()
+            .baseUrl(BuildConfig.host)
+            .build()
+        retrofit.create(RefreshTokenApi::class.java)
+    }
+
+    singleOf(::TokenParser)
+    singleOf(::RefreshTokenRepository)
+    singleOf(::RefreshTokenInteractor)
+
+    singleOf(::AuthAuthenticator) {
+        bind<Authenticator>()
+        named("authorization")
+    }
+    singleOf(::AuthInterceptor) {
+        bind<Interceptor>()
+        named("authorization")
+    }
+    singleOf(::AuthorizationTokenParserInterceptor) {
+        bind<Interceptor>()
+        named("authorization_token")
+    }
 }

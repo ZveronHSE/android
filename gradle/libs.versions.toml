@@ -72,6 +72,7 @@ appyx_testing_ui_activty = { module = "com.bumble.appyx:testing-ui-activity", ve
 #koin
 koin_android = { module = "io.insert-koin:koin-android", version.ref = "koin_android" }
 koin_android_compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin_android_compose" }
+koin_test_junit4 = { module = "io.insert-koin:koin-test-junit4", version.ref = "koin" }
 
 #retorfit
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }

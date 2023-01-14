@@ -19,6 +19,14 @@ internal class AuthorizationStorageImpl(
         authorizationPreferencesWrapper.refreshToken = refreshToken
     }
 
+    override fun updateAccessToken(accessToken: String, expiresIn: Long?) {
+        authorizationPreferencesWrapper.accessToken = accessToken
+    }
+
+    override fun updateRefreshToken(refreshToken: String, expiresIn: Long?) {
+        authorizationPreferencesWrapper.refreshToken = refreshToken
+    }
+
     override fun refreshDeviceFingerprint(fingerprint: String) {
         authorizationPreferencesWrapper.fingerprint = fingerprint
     }

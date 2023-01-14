@@ -54,6 +54,7 @@ dependencies {
     implementation(libs.appyx.core)
 
     testImplementation(libs.junit.junit)
+    testImplementation(libs.koin.test.junit4)
     androidTestImplementation(libs.test.ext.junit)
     androidTestImplementation(libs.test.espresso.core)
     androidTestImplementation(libs.test.compose.ui.uiTest)
