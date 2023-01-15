@@ -79,6 +79,7 @@ koin_test_junit4 = { module = "io.insert-koin:koin-test-junit4", version.ref = "
 
 #retorfit
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+retrofit_moshiConverter = { module = "com.squareup.retrofit2:converter-moshi", version.ref = "retrofit" }
 
 # moshi json parser
 moshi = { module = "com.squareup.moshi:moshi", version.ref = "moshi" }

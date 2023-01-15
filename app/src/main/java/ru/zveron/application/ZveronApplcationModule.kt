@@ -4,7 +4,7 @@ import com.squareup.moshi.Moshi
 import org.koin.dsl.module
 import ru.zveron.authorization.authorizationModule
 import ru.zveron.authorization.interceptorsModule
-import ru.zveron.network.networkModule
+import ru.zveron.authorization.phone.rootPhoneModule
 
 private val applicationSingletonModule = module {
     single<Moshi> {
@@ -19,5 +19,7 @@ internal val appModule = module {
         networkModule,
         authorizationModule,
         interceptorsModule,
+
+        rootPhoneModule,
     )
 }

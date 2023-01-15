@@ -5,6 +5,7 @@ import org.junit.Test
 import org.koin.core.annotation.KoinExperimentalAPI
 import org.koin.test.verify.verify
 import ru.zveron.application.appModule
+import ru.zveron.authorization.phone.password.deps.PasswordNavigator
 
 class AppModuleCheck {
     @OptIn(KoinExperimentalAPI::class)
@@ -13,6 +14,7 @@ class AppModuleCheck {
         appModule.verify(
             extraTypes = listOf(
                 Context::class,
+                PasswordNavigator::class,
             )
         )
     }

@@ -53,6 +53,9 @@ dependencies {
 
     implementation(libs.appyx.core)
 
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.moshiConverter)
+
     testImplementation(libs.junit.junit)
     testImplementation(libs.koin.test.junit4)
     androidTestImplementation(libs.test.ext.junit)
