@@ -56,25 +56,25 @@ class PasswordInputNode(
 
         val state by viewModel.stateFlow.collectAsState()
 
-        val (phone, changePhone) = remember { viewModel.phoneState }
-        val (password, changePassword) = remember { viewModel.passwordState }
+        val phoneState = remember { viewModel.phoneState }
+        val passwordState = remember { viewModel.passwordState }
 
         val continueButtonEnabled by remember {
             derivedStateOf {
-                phone.length == 10 && !state.isLoading
+                phoneState.value.length == 10 && !state.isLoading
             }
         }
 
         PasswordInput(
             state = state,
-            phone = phone,
+            phone = phoneState.value,
             onPhoneChanged = {
                 if (it.length <= 10) {
-                    changePhone(it)
+                    phoneState.value = it
                 }
             },
-            password = password,
-            onPasswordChanged = changePassword,
+            password = passwordState.value,
+            onPasswordChanged = { passwordState.value = it },
             onBackClicked = ::navigateUp,
             onContinueClicked = viewModel::login,
             continueButtonEnabled = continueButtonEnabled,
