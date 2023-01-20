@@ -15,7 +15,7 @@ class AuthAuthenticator(
         return route?.let {
             refreshTokenInteractor.refreshToken()
             authorizationStorage.accessToken?.let { token ->
-                response.request().newBuilder()
+                response.request.newBuilder()
                     .header("Authorization", token)
                     .build()
             }

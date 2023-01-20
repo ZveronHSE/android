@@ -10,6 +10,8 @@ import kotlinx.coroutines.launch
 import ru.zveron.authorization.phone.password.data.PasswordRepository
 import ru.zveron.authorization.phone.password.deps.PasswordNavigator
 
+private const val PHONE_LENGTH = 10
+
 class PasswordViewModel(
     private val passwordNavigator: PasswordNavigator,
     private val passwordRepository: PasswordRepository,
@@ -28,8 +30,12 @@ class PasswordViewModel(
             if (!result) {
                 _stateFlow.update { it.copy(isError = true, isLoading = false) }
             } else {
-//                passwordNavigator.navigateToRegistration()
+                _stateFlow.update { it.copy(isError = false, isLoading = false) }
             }
         }
+    }
+
+    fun canLogin(phone: String, password: String, state: PasswordUiState): Boolean {
+        return phone.length == PHONE_LENGTH && password.isNotBlank() && !state.isLoading
     }
 }

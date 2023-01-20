@@ -10,6 +10,7 @@ android {
 dependencies {
     implementation(libs.koin.android)
     implementation(libs.retrofit)
+    implementation(libs.okHttp.loggingInterceptor)
     implementation(libs.moshi)
 
     implementation(project(":core:network"))

@@ -14,6 +14,6 @@ class TokenParser {
         if (cookie.isEmpty()) {
             return null
         }
-        return cookie.first().value()
+        return cookie.first().value
     }
 }

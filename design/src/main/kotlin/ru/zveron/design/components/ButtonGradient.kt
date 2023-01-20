@@ -4,8 +4,8 @@ import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.BoxWithConstraintsScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -31,14 +31,14 @@ fun ActionButton(
     onClick: () -> Unit = {},
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     contentAlignment: Alignment = Alignment.Center,
-    content: @Composable BoxScope.() -> Unit = {},
+    content: @Composable BoxWithConstraintsScope.() -> Unit = {},
 ) {
     val alpha = if (enabled) 1f else 0.5f
 
     CompositionLocalProvider(
         LocalContentColor provides MaterialTheme.colors.onPrimary
     ) {
-        Box(
+        BoxWithConstraints(
             modifier = modifier
                 .height(52.dp)
                 .background(enabledButtonGradient, RoundedCornerShape(10.dp), alpha)

@@ -3,6 +3,7 @@ package ru.zveron.authorization
 import okhttp3.Authenticator
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.core.module.dsl.bind
 import org.koin.core.module.dsl.named
 import org.koin.core.module.dsl.singleOf
@@ -32,7 +33,11 @@ val authorizationModule = module {
 val interceptorsModule = module {
     single<RefreshTokenApi> {
         val tokenInterceptor = get<AuthorizationTokenParserInterceptor>()
-        val ohHttpClient = OkHttpClient.Builder().addInterceptor(tokenInterceptor).build()
+        val loggingInterceptor = get<HttpLoggingInterceptor>()
+        val ohHttpClient = OkHttpClient.Builder()
+            .addInterceptor(tokenInterceptor)
+            .addInterceptor(loggingInterceptor)
+            .build()
 
         val retrofit = Retrofit.Builder()
             .baseUrl(BuildConfig.host)

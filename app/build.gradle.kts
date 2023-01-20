@@ -55,6 +55,7 @@ dependencies {
 
     implementation(libs.retrofit)
     implementation(libs.retrofit.moshiConverter)
+    implementation(libs.okHttp.loggingInterceptor)
 
     testImplementation(libs.junit.junit)
     testImplementation(libs.koin.test.junit4)

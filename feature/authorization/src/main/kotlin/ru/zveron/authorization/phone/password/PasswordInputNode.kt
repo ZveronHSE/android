@@ -1,5 +1,6 @@
 package ru.zveron.authorization.phone.password
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -42,6 +43,7 @@ import ru.zveron.authorization.phone.password.ui.PasswordUiState
 import ru.zveron.authorization.phone.password.ui.PasswordViewModel
 import ru.zveron.authorization.phone.password.ui.PhoneCodeVisualTransformation
 import ru.zveron.design.components.ActionButton
+import ru.zveron.design.shimmering.shimmeringBackground
 import ru.zveron.design.theme.ZveronTheme
 
 class PasswordInputNode(
@@ -54,19 +56,19 @@ class PasswordInputNode(
             parameters = { parametersOf(passwordNavigator) }
         )
 
-        val state by viewModel.stateFlow.collectAsState()
+        val state = viewModel.stateFlow.collectAsState()
 
         val phoneState = remember { viewModel.phoneState }
         val passwordState = remember { viewModel.passwordState }
 
         val continueButtonEnabled by remember {
             derivedStateOf {
-                phoneState.value.length == 10 && !state.isLoading
+                viewModel.canLogin(phoneState.value, passwordState.value, state.value)
             }
         }
 
         PasswordInput(
-            state = state,
+            state = state.value,
             phone = phoneState.value,
             onPhoneChanged = {
                 if (it.length <= 10) {
@@ -206,6 +208,10 @@ private fun PasswordInput(
                     fontWeight = FontWeight.Normal,
                 ),
             )
+
+            if (state.isLoading) {
+                Box(modifier = Modifier.fillMaxSize().shimmeringBackground(this.maxWidth))
+            }
         }
     }
 }
