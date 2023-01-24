@@ -53,7 +53,12 @@ dependencies {
 
     implementation(libs.appyx.core)
 
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.moshiConverter)
+    implementation(libs.okHttp.loggingInterceptor)
+
     testImplementation(libs.junit.junit)
+    testImplementation(libs.koin.test.junit4)
     androidTestImplementation(libs.test.ext.junit)
     androidTestImplementation(libs.test.espresso.core)
     androidTestImplementation(libs.test.compose.ui.uiTest)
@@ -72,9 +77,12 @@ dependencies {
     implementation(libs.koin.android)
     implementation(libs.koin.android.compose)
 
+    implementation(libs.moshi)
+
     protobuf(project(":protos"))
 
     implementation(project(":core:appyx"))
+    implementation(project(":core:authorization"))
     implementation(project(":core:network"))
     implementation(project(":design"))
 

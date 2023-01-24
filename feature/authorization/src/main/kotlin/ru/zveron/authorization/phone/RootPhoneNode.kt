@@ -42,10 +42,9 @@ class RootPhoneNode(
                 ::navigateToPassword,
                 ::navigateToRegistration,
             )
-            RootPhoneNavTarget.PasswordInput -> PasswordInputNode(
-                buildContext,
-                ::navigateToRegistration,
-            )
+            RootPhoneNavTarget.PasswordInput -> PasswordInputNode(buildContext) {
+                navigateToRegistration()
+            }
             RootPhoneNavTarget.Registration -> RegistrationNode(buildContext)
         }
     }

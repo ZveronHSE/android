@@ -1,5 +1,6 @@
 package ru.zveron.authorization.phone.password
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -7,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
@@ -14,6 +16,9 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -23,35 +28,58 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
+import org.koin.androidx.compose.koinViewModel
+import org.koin.core.parameter.parametersOf
 import ru.zveron.authorization.R
+import ru.zveron.authorization.phone.password.deps.PasswordNavigator
+import ru.zveron.authorization.phone.password.ui.PasswordUiState
+import ru.zveron.authorization.phone.password.ui.PasswordViewModel
+import ru.zveron.authorization.phone.password.ui.PhoneCodeVisualTransformation
 import ru.zveron.design.components.ActionButton
+import ru.zveron.design.shimmering.shimmeringBackground
 import ru.zveron.design.theme.ZveronTheme
 
 class PasswordInputNode(
     buildContext: BuildContext,
-    private val navigateToRegistration: () -> Unit,
+    private val passwordNavigator: PasswordNavigator,
 ) : Node(buildContext = buildContext) {
-    private val phoneState = mutableStateOf("")
-    private val passwordState = mutableStateOf("")
-
     @Composable
     override fun View(modifier: Modifier) {
-        val (phone, changePhone) = remember { phoneState }
-        val (password, changePassword) = remember { passwordState }
+        val viewModel = koinViewModel<PasswordViewModel>(
+            parameters = { parametersOf(passwordNavigator) }
+        )
+
+        val state = viewModel.stateFlow.collectAsState()
+
+        val phoneState = remember { viewModel.phoneState }
+        val passwordState = remember { viewModel.passwordState }
+
+        val continueButtonEnabled by remember {
+            derivedStateOf {
+                viewModel.canLogin(phoneState.value, passwordState.value, state.value)
+            }
+        }
 
         PasswordInput(
-            phone = phone,
-            onPhoneChanged = changePhone,
-            password = password,
-            onPasswordChanged = changePassword,
+            state = state.value,
+            phone = phoneState.value,
+            onPhoneChanged = {
+                if (it.length <= 10) {
+                    phoneState.value = it
+                }
+            },
+            password = passwordState.value,
+            onPasswordChanged = { passwordState.value = it },
             onBackClicked = ::navigateUp,
-            onContinueClicked = navigateToRegistration,
+            onContinueClicked = viewModel::login,
+            continueButtonEnabled = continueButtonEnabled,
             modifier = modifier,
         )
     }
@@ -59,6 +87,7 @@ class PasswordInputNode(
 
 @Composable
 private fun PasswordInput(
+    state: PasswordUiState,
     phone: String,
     onPhoneChanged: (String) -> Unit,
     password: String,
@@ -66,6 +95,7 @@ private fun PasswordInput(
     modifier: Modifier = Modifier,
     onBackClicked: () -> Unit = {},
     onContinueClicked: () -> Unit = {},
+    continueButtonEnabled: Boolean = true,
 ) {
     Column(modifier = modifier.fillMaxSize()) {
         IconButton(
@@ -118,6 +148,11 @@ private fun PasswordInput(
                 errorIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
             ),
+            visualTransformation = PhoneCodeVisualTransformation(
+                stringResource(R.string.phone_placeholder)
+            ),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
+            isError = state.isError,
             shape = RoundedCornerShape(10.dp),
             modifier = Modifier
                 .fillMaxWidth()
@@ -149,6 +184,7 @@ private fun PasswordInput(
                 errorIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
             ),
+            isError = state.isError,
             shape = RoundedCornerShape(10.dp),
             modifier = Modifier
                 .fillMaxWidth()
@@ -159,6 +195,7 @@ private fun PasswordInput(
 
         ActionButton(
             onClick = onContinueClicked,
+            enabled = continueButtonEnabled,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 16.dp, end = 16.dp, bottom = 10.dp),
@@ -171,6 +208,10 @@ private fun PasswordInput(
                     fontWeight = FontWeight.Normal,
                 ),
             )
+
+            if (state.isLoading) {
+                Box(modifier = Modifier.fillMaxSize().shimmeringBackground(this.maxWidth))
+            }
         }
     }
 }
@@ -178,6 +219,8 @@ private fun PasswordInput(
 @Preview(showBackground = true)
 @Composable
 private fun PasswordPreview() {
+    val state = PasswordUiState(isError = false)
+
     val (phone, changePhone) = remember {
         mutableStateOf("")
     }
@@ -186,12 +229,20 @@ private fun PasswordPreview() {
         mutableStateOf("")
     }
 
+    val continueButtonEnabled by remember {
+        derivedStateOf {
+            phone.length == 10 && !state.isLoading
+        }
+    }
+
     ZveronTheme {
         PasswordInput(
+            state = state,
             phone = phone,
             onPhoneChanged = changePhone,
             password = password,
             onPasswordChanged = changePassword,
+            continueButtonEnabled = continueButtonEnabled,
         )
     }
 }
