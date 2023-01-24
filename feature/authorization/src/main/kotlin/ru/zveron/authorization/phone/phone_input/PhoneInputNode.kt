@@ -1,6 +1,7 @@
 package ru.zveron.authorization.phone.phone_input
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,9 +10,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -27,47 +32,62 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
+import org.koin.androidx.compose.koinViewModel
+import org.koin.core.parameter.parametersOf
 import ru.zveron.authorization.R
+import ru.zveron.authorization.phone.phone_input.deps.PhoneInputNavigator
+import ru.zveron.authorization.phone.phone_input.ui.PhoneInputState
+import ru.zveron.authorization.phone.phone_input.ui.PhoneInputViewModel
 import ru.zveron.design.components.ActionButton
 import ru.zveron.design.inputs.PhoneTextField
+import ru.zveron.design.shimmering.shimmeringBackground
 import ru.zveron.design.theme.ZveronTheme
 import ru.zveron.design.theme.enabledButtonGradient
 
 class PhoneInputNode(
     buildContext: BuildContext,
-    private val navigateToPassword: () -> Unit,
-    private val navigateToSms: (String) -> Unit,
+    private val phoneInputNavigator: PhoneInputNavigator,
 ) : Node(buildContext = buildContext) {
-    private val textState = mutableStateOf("")
 
     @Composable
     override fun View(modifier: Modifier) {
-        val (text, changeText) = remember { textState }
+        val viewModel = koinViewModel<PhoneInputViewModel>(
+            parameters = { parametersOf(phoneInputNavigator) }
+        )
+
+        val textState = remember { viewModel.textState }
+        val state = viewModel.stateFlow.collectAsState()
+
+        val isContinueButtonEnabled by remember {
+            derivedStateOf {
+                viewModel.canContinue(textState.value, state.value)
+            }
+        }
 
         PhoneInput(
-            text = text,
-            onTextChanged = changeText,
+            state = state.value,
+            text = textState.value,
+            onTextChanged = { textState.value = it },
             modifier = modifier,
             onBackClicked = ::navigateUp,
-            onContinueClicked = ::onContinueClicked,
-            onPasswordClicked = navigateToPassword,
+            onContinueClicked = viewModel::continueClicked,
+            onPasswordClicked = phoneInputNavigator::navigateToPasswordScreen,
+            isContinueButtonEnabled = isContinueButtonEnabled,
         )
-    }
-
-    private fun onContinueClicked() {
-        navigateToSms.invoke(textState.value)
     }
 }
 
 @OptIn(ExperimentalTextApi::class)
 @Composable
 private fun PhoneInput(
+    state: PhoneInputState,
     text: String,
     onTextChanged: (String) -> Unit,
     modifier: Modifier = Modifier,
     onBackClicked: () -> Unit = {},
     onContinueClicked: () -> Unit = {},
     onPasswordClicked: () -> Unit = {},
+    isContinueButtonEnabled: Boolean = true,
 ) {
     Column(modifier = modifier.fillMaxSize()) {
         IconButton(
@@ -123,12 +143,18 @@ private fun PhoneInput(
                     lineHeight = 34.sp,
                     letterSpacing = 0.36.sp,
                     fontWeight = FontWeight.Medium,
+                    color = if (state.isError) {
+                        MaterialTheme.colors.error
+                    } else {
+                        Color.Unspecified
+                    },
                 )
             )
         }
 
         ActionButton(
             onClick = onContinueClicked,
+            enabled = isContinueButtonEnabled,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
@@ -141,6 +167,10 @@ private fun PhoneInput(
                     fontWeight = FontWeight.Normal,
                 )
             )
+
+            if (state.isLoading) {
+                Box(Modifier.fillMaxSize().shimmeringBackground(this.maxWidth))
+            }
         }
 
         Spacer(Modifier.height(8.dp))
@@ -172,6 +202,8 @@ private fun PhoneInputPreview() {
             mutableStateOf("")
         }
 
-        PhoneInput(text, changeText, modifier = Modifier.fillMaxSize())
+        val state = PhoneInputState()
+
+        PhoneInput(state, text, changeText, modifier = Modifier.fillMaxSize())
     }
 }
