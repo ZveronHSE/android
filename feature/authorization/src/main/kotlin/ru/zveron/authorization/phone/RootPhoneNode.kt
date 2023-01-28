@@ -18,6 +18,8 @@ import ru.zveron.authorization.phone.phone_input.PhoneInputNode
 import ru.zveron.authorization.phone.phone_input.deps.PhoneInputNavigator
 import ru.zveron.authorization.phone.registration.RegistrationNode
 import ru.zveron.authorization.phone.sms_code.SmsCodeNode
+import ru.zveron.authorization.phone.sms_code.deps.SmsCodeDeps
+import ru.zveron.authorization.phone.sms_code.deps.SmsCodeNavigator
 
 class RootPhoneNode(
     buildContext: BuildContext,
@@ -28,7 +30,7 @@ class RootPhoneNode(
 ) : ParentNode<RootPhoneNavTarget>(
     buildContext = buildContext,
     navModel = backStack,
-), PhoneInputNavigator {
+), PhoneInputNavigator, SmsCodeNavigator {
     override fun resolve(navTarget: RootPhoneNavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
             RootPhoneNavTarget.PhoneInput -> PhoneInputNode(
@@ -37,9 +39,7 @@ class RootPhoneNode(
             )
             is RootPhoneNavTarget.SmsCodeInput -> SmsCodeNode(
                 buildContext,
-                navTarget.phoneNumber,
-                ::navigateToPassword,
-                ::navigateToRegistration,
+                SmsCodeDeps(navTarget.phoneNumber, this),
             )
             RootPhoneNavTarget.PasswordInput -> PasswordInputNode(buildContext) {
                 navigateToRegistration()
@@ -56,7 +56,7 @@ class RootPhoneNode(
         )
     }
 
-    private fun navigateToPassword() {
+    override fun navigateToPassword() {
         if (backStack.activeElement == RootPhoneNavTarget.PhoneInput) {
             backStack.push(RootPhoneNavTarget.PasswordInput)
         } else {
@@ -67,7 +67,7 @@ class RootPhoneNode(
         }
     }
 
-    private fun navigateToRegistration() = backStack.push(RootPhoneNavTarget.Registration)
+    override fun navigateToRegistration() = backStack.push(RootPhoneNavTarget.Registration)
 
     suspend fun attachRootRegistration(): RegistrationNode {
         return attachChild { backStack.newRoot(RootPhoneNavTarget.Registration) }

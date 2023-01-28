@@ -8,6 +8,7 @@ import org.koin.test.verify.verify
 import ru.zveron.application.appModule
 import ru.zveron.authorization.phone.password.deps.PasswordNavigator
 import ru.zveron.authorization.phone.phone_input.deps.PhoneInputNavigator
+import ru.zveron.authorization.phone.sms_code.deps.SmsCodeNavigator
 
 class AppModuleCheck {
     @OptIn(KoinExperimentalAPI::class)
@@ -18,6 +19,7 @@ class AppModuleCheck {
                 Context::class,
                 PasswordNavigator::class,
                 PhoneInputNavigator::class,
+                SmsCodeNavigator::class,
                 HttpLoggingInterceptor.Logger::class,
             )
         )
