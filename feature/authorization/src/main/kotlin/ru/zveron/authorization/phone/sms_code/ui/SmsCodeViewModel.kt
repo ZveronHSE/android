@@ -7,8 +7,10 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onCompletion
@@ -20,7 +22,7 @@ import ru.zveron.authorization.phone.phone_input.data.PhoneSendRepository
 import ru.zveron.authorization.phone.sms_code.deps.SmsCodeNavigator
 import ru.zveron.authorization.phone.sms_code.domain.CheckCodeInteractor
 
-private const val DESIRED_CODE_LENGTH = 5
+internal const val DESIRED_CODE_LENGTH = 4
 private const val CODE_DELAY_IN_SECONDS = 30
 
 class SmsCodeViewModel(
@@ -33,6 +35,9 @@ class SmsCodeViewModel(
     private val _stateFlow = MutableStateFlow(SmsCodeState())
     val stateFlow = _stateFlow.asStateFlow()
 
+    private val _finishRegistrationFlow = MutableSharedFlow<Unit>()
+    val finishRegistrationFlow = _finishRegistrationFlow.asSharedFlow()
+
     private var tickerJob: Job? = null
 
     val phoneNumberState = mutableStateOf(
@@ -44,10 +49,14 @@ class SmsCodeViewModel(
     private fun smsCodeInputted() {
         _stateFlow.update { it.copy(isLoading = true) }
         viewModelScope.launch {
-            val isSuccess = checkCodeInteractor.checkCode(codeState.value, phoneNumber)
-            if (isSuccess) {
+            val result = checkCodeInteractor.checkCode(codeState.value, phoneNumber)
+            if (result != null) {
                 _stateFlow.update { it.copy(isLoading = false, isError = false) }
-                smsCodeNavigator.navigateToRegistration()
+                if (result.isNewUser) {
+                    smsCodeNavigator.navigateToRegistration()
+                } else {
+                    // TODO: think of how to finish registration
+                }
             } else {
                 codeState.value = ""
                 _stateFlow.update { it.copy(isLoading = false, isError = true) }

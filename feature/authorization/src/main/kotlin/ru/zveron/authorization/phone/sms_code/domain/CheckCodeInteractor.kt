@@ -10,14 +10,14 @@ class CheckCodeInteractor(
     private val authorizationStorage: AuthorizationStorage,
     private val phoneFormatter: PhoneFormatter,
 ) {
-    suspend fun checkCode(code: String, phone: String): Boolean {
+    suspend fun checkCode(code: String, phone: String): CheckCodeResult? {
         return authorizationStorage.deviceFingerPrint?.let { fingerprint ->
             val request = CheckCodeRequest(
                 phone = phoneFormatter.formatPhoneInputToRequest(phone),
                 code = code,
-                fingerprint = fingerprint
+                fingerPrint = fingerprint
             )
             return checkCodeRepository.sendCode(request)
-        } ?: false
+        }
     }
 }

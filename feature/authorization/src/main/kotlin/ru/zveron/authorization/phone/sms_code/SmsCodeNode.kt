@@ -37,9 +37,10 @@ import org.koin.core.parameter.parametersOf
 import ru.zveron.authorization.R
 import ru.zveron.authorization.phone.sms_code.deps.SmsCodeDeps
 import ru.zveron.authorization.phone.sms_code.ui.CodeRequestState
+import ru.zveron.authorization.phone.sms_code.ui.DESIRED_CODE_LENGTH
 import ru.zveron.authorization.phone.sms_code.ui.SmsCodeState
 import ru.zveron.authorization.phone.sms_code.ui.SmsCodeViewModel
-import ru.zveron.design.inputs.SmsCodeTxtField
+import ru.zveron.design.inputs.OtpTextField
 import ru.zveron.design.theme.ZveronTheme
 import ru.zveron.design.theme.enabledButtonGradient
 
@@ -56,6 +57,10 @@ class SmsCodeNode(
 
         LaunchedEffect(viewModel) {
             viewModel.launchTicker()
+
+            viewModel.finishRegistrationFlow.collect {
+                this@SmsCodeNode.finish()
+            }
         }
 
         val state by viewModel.stateFlow.collectAsState()
@@ -135,10 +140,11 @@ private fun SmsCodeInput(
         Spacer(Modifier.height(38.dp))
 
         val dividerColor = if (!state.isError) Color(0x4D000000) else Color(0xFFFF4949)
-        SmsCodeTxtField(
+
+        OtpTextField(
             code = code,
             onCodeChanged = onCodeChanged,
-            modifier = Modifier.padding(start = 8.dp),
+            maxCodeLength = DESIRED_CODE_LENGTH,
             textStyle = TextStyle(
                 fontSize = 18.sp,
                 lineHeight = 20.sp,
@@ -146,6 +152,7 @@ private fun SmsCodeInput(
                 fontWeight = FontWeight.SemiBold,
             ),
             dividerColor = dividerColor,
+            modifier = Modifier.padding(start = 16.dp),
         )
 
         if (state.isError) {
