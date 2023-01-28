@@ -26,6 +26,9 @@
     <!-- Sms code screen -->
     <string name="confirmation_code">Код подтверждения</string>
     <string name="sms_sent_label">Мы отправили код подтверждения на номер %1$s</string>
+    <string name="sms_request_code_timer">Запросить повторно через %1$d с</string>
+    <string name="sms_request_code_button_label">Запросить повторно</string>
+    <string name="sms_error_label">Неверный код, введите еще раз</string>
 
     <string name="password_placeholder">Введите пароль</string>
     <string name="login_with_password">Войти с помощью пароля</string>

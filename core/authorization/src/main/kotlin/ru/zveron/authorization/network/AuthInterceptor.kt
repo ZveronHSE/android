@@ -8,11 +8,17 @@ internal class AuthInterceptor(
     private val authorizationStorage: AuthorizationStorage,
 ): Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
-        val token = authorizationStorage.accessToken
-        val request = chain.request().newBuilder()
-        token?.let {
-            request.addHeader("Authorization", token)
+        val request = chain.request()
+        if (request.url.encodedPath.contains("/api/phone")
+            || request.url.encodedPath.contains("/api/auth")
+        ) {
+            return chain.proceed(request)
         }
-        return chain.proceed(request.build())
+        val token = authorizationStorage.accessToken
+        val newRequest = chain.request().newBuilder()
+        token?.let {
+            newRequest.addHeader("Authorization", token)
+        }
+        return chain.proceed(newRequest.build())
     }
 }

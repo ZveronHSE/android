@@ -7,6 +7,7 @@ import okhttp3.Response
 import ru.zveron.authorization.base_api.TokenParser
 import ru.zveron.authorization.base_api.TokenResponse
 import ru.zveron.authorization.storage.AuthorizationStorage
+import java.io.IOException
 
 /**
  * To read response body in interceptor without closing it, we need to use
@@ -46,6 +47,8 @@ class AuthorizationTokenParserInterceptor(
             val peekedBody = response.peekBody(PEEK_BYTE_COUNT)
             tokenResponseJsonAdapter.fromJson(peekedBody.string())
         } catch (e: JsonDataException) {
+            null
+        } catch (e: IOException) {
             null
         }
     }
