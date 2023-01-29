@@ -10,7 +10,6 @@ import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.activeElement
 import com.bumble.appyx.navmodel.backstack.operation.Push
 import com.bumble.appyx.navmodel.backstack.operation.SingleTop
-import com.bumble.appyx.navmodel.backstack.operation.newRoot
 import com.bumble.appyx.navmodel.backstack.operation.push
 import ru.zveron.appyx.combine.combineOperations
 import ru.zveron.authorization.phone.password.PasswordInputNode
@@ -31,6 +30,12 @@ class RootPhoneNode(
     buildContext = buildContext,
     navModel = backStack,
 ), PhoneInputNavigator, SmsCodeNavigator {
+    override fun onChildFinished(child: Node) {
+        super.onChildFinished(child)
+
+        navigateUp()
+    }
+
     override fun resolve(navTarget: RootPhoneNavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
             RootPhoneNavTarget.PhoneInput -> PhoneInputNode(
@@ -42,9 +47,9 @@ class RootPhoneNode(
                 SmsCodeDeps(navTarget.phoneNumber, this),
             )
             RootPhoneNavTarget.PasswordInput -> PasswordInputNode(buildContext) {
-                navigateToRegistration()
+                navigateToRegistration(it)
             }
-            RootPhoneNavTarget.Registration -> RegistrationNode(buildContext)
+            is RootPhoneNavTarget.Registration -> RegistrationNode(navTarget.phoneNumber, buildContext)
         }
     }
 
@@ -67,11 +72,11 @@ class RootPhoneNode(
         }
     }
 
-    override fun navigateToRegistration() = backStack.push(RootPhoneNavTarget.Registration)
+    override fun navigateToRegistration(phone: String) = backStack.push(RootPhoneNavTarget.Registration(phone))
 
-    suspend fun attachRootRegistration(): RegistrationNode {
-        return attachChild { backStack.newRoot(RootPhoneNavTarget.Registration) }
-    }
+//    suspend fun attachRootRegistration(): RegistrationNode {
+//        return attachChild { backStack.newRoot(RootPhoneNavTarget.Registration) }
+//    }
 
     override fun navigateToPasswordScreen() {
         navigateToPassword()

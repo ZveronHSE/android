@@ -53,7 +53,7 @@ class SmsCodeViewModel(
             if (result != null) {
                 _stateFlow.update { it.copy(isLoading = false, isError = false) }
                 if (result.isNewUser) {
-                    smsCodeNavigator.navigateToRegistration()
+                    smsCodeNavigator.navigateToRegistration(phoneNumber)
                 } else {
                     // TODO: think of how to finish registration
                 }
