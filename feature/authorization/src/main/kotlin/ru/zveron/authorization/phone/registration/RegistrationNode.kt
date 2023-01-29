@@ -1,5 +1,6 @@
 package ru.zveron.authorization.phone.registration
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,6 +15,9 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -29,27 +33,44 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
+import org.koin.androidx.compose.koinViewModel
+import org.koin.core.parameter.parametersOf
 import ru.zveron.authorization.R
+import ru.zveron.authorization.phone.registration.ui.RegistrationViewModel
 import ru.zveron.design.components.ActionButton
+import ru.zveron.design.shimmering.shimmeringBackground
 import ru.zveron.design.theme.ZveronTheme
 
 class RegistrationNode(
+    private val phone: String,
     buildContext: BuildContext,
 ) : Node(buildContext = buildContext) {
-    private val usernameState = mutableStateOf("")
-    private val passwordState = mutableStateOf("")
 
     @Composable
     override fun View(modifier: Modifier) {
-        val (username, changeUsername) = remember { usernameState }
-        val (password, changePassword) = remember { passwordState }
+        val viewModel = koinViewModel<RegistrationViewModel>(
+            parameters = { parametersOf(phone) },
+        )
+
+        val (username, changeUsername) = remember { viewModel.usernameState }
+        val (password, changePassword) = remember { viewModel.passwordState }
+
+        val state by viewModel.registrationUiState.collectAsState()
+
+        LaunchedEffect(viewModel) {
+            viewModel.finishRegistrationFlow.collect {
+                this@RegistrationNode.finish()
+            }
+        }
 
         Registration(
+            isLoading = state.isLoading,
             phone = username,
             onPhoneChanged = changeUsername,
             password = password,
             onPasswordChanged = changePassword,
             onBackClicked = ::navigateUp,
+            onRegisterClicked = viewModel::register,
             modifier = modifier,
         )
     }
@@ -57,12 +78,14 @@ class RegistrationNode(
 
 @Composable
 private fun Registration(
+    isLoading: Boolean,
     phone: String,
     onPhoneChanged: (String) -> Unit,
     password: String,
     onPasswordChanged: (String) -> Unit,
     modifier: Modifier = Modifier,
     onBackClicked: () -> Unit = {},
+    onRegisterClicked: () -> Unit = {},
 ) {
     Column(modifier = modifier.fillMaxSize()) {
         IconButton(
@@ -167,7 +190,7 @@ private fun Registration(
         Spacer(Modifier.weight(1f))
 
         ActionButton(
-            onClick = { /*TODO*/ },
+            onClick = onRegisterClicked,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 16.dp, end = 16.dp, bottom = 10.dp),
@@ -180,6 +203,14 @@ private fun Registration(
                     fontWeight = FontWeight.Normal,
                 ),
             )
+
+            if (isLoading) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .shimmeringBackground(this.maxWidth)
+                )
+            }
         }
     }
 }
@@ -197,6 +228,29 @@ private fun RegistrationPreview() {
 
     ZveronTheme {
         Registration(
+            isLoading = false,
+            phone = phone,
+            onPhoneChanged = changePhone,
+            password = password,
+            onPasswordChanged = changePassword,
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun RegistrationPreviewLoading() {
+    val (phone, changePhone) = remember {
+        mutableStateOf("")
+    }
+
+    val (password, changePassword) = remember {
+        mutableStateOf("")
+    }
+
+    ZveronTheme {
+        Registration(
+            isLoading = true,
             phone = phone,
             onPhoneChanged = changePhone,
             password = password,

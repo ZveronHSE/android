@@ -14,5 +14,5 @@ sealed class RootPhoneNavTarget: Parcelable {
     object PasswordInput: RootPhoneNavTarget()
 
     @Parcelize
-    object Registration: RootPhoneNavTarget()
+    data class Registration(val phoneNumber: String): RootPhoneNavTarget()
 }
