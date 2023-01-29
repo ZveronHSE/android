@@ -31,9 +31,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bumble.appyx.core.modality.BuildContext
-import com.bumble.appyx.core.node.Node
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
+import org.koin.core.scope.Scope
+import ru.zveron.appyx.viewmodel.ViewModelNode
 import ru.zveron.authorization.R
 import ru.zveron.authorization.phone.phone_input.deps.PhoneInputNavigator
 import ru.zveron.authorization.phone.phone_input.ui.PhoneInputState
@@ -44,15 +45,26 @@ import ru.zveron.design.shimmering.shimmeringBackground
 import ru.zveron.design.theme.ZveronTheme
 import ru.zveron.design.theme.enabledButtonGradient
 
-class PhoneInputNode(
+internal class PhoneInputNode(
     buildContext: BuildContext,
     private val phoneInputNavigator: PhoneInputNavigator,
-) : Node(buildContext = buildContext) {
+    rootScope: Scope,
+    private val phoneInputComponent: PhoneInputComponent = PhoneInputComponent(),
+) : ViewModelNode(
+    buildContext = buildContext,
+    plugins = listOf(phoneInputComponent),
+) {
+
+    init {
+        phoneInputComponent.scope.linkTo(rootScope)
+    }
 
     @Composable
     override fun View(modifier: Modifier) {
         val viewModel = koinViewModel<PhoneInputViewModel>(
-            parameters = { parametersOf(phoneInputNavigator) }
+            scope = phoneInputComponent.scope,
+            parameters = { parametersOf(phoneInputNavigator) },
+            viewModelStoreOwner = this,
         )
 
         val textState = remember { viewModel.textState }

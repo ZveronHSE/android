@@ -9,5 +9,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.compose.ui.ui)
     implementation(libs.appyx.core)
+    implementation(libs.compose.lifecycle.viewmodel)
 }
