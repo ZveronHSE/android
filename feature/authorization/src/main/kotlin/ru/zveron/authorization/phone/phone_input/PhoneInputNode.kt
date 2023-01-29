@@ -31,10 +31,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bumble.appyx.core.modality.BuildContext
-import com.bumble.appyx.core.node.Node
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 import org.koin.core.scope.Scope
+import ru.zveron.appyx.viewmodel.ViewModelNode
 import ru.zveron.authorization.R
 import ru.zveron.authorization.phone.phone_input.deps.PhoneInputNavigator
 import ru.zveron.authorization.phone.phone_input.ui.PhoneInputState
@@ -50,7 +50,7 @@ internal class PhoneInputNode(
     private val phoneInputNavigator: PhoneInputNavigator,
     rootScope: Scope,
     private val phoneInputComponent: PhoneInputComponent = PhoneInputComponent(),
-) : Node(
+) : ViewModelNode(
     buildContext = buildContext,
     plugins = listOf(phoneInputComponent),
 ) {
@@ -63,7 +63,8 @@ internal class PhoneInputNode(
     override fun View(modifier: Modifier) {
         val viewModel = koinViewModel<PhoneInputViewModel>(
             scope = phoneInputComponent.scope,
-            parameters = { parametersOf(phoneInputNavigator) }
+            parameters = { parametersOf(phoneInputNavigator) },
+            viewModelStoreOwner = this,
         )
 
         val textState = remember { viewModel.textState }

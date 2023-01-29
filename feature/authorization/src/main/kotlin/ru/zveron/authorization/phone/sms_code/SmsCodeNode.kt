@@ -31,10 +31,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bumble.appyx.core.modality.BuildContext
-import com.bumble.appyx.core.node.Node
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 import org.koin.core.scope.Scope
+import ru.zveron.appyx.viewmodel.ViewModelNode
 import ru.zveron.authorization.R
 import ru.zveron.authorization.phone.sms_code.deps.SmsCodeDeps
 import ru.zveron.authorization.phone.sms_code.ui.CodeRequestState
@@ -50,9 +50,9 @@ internal class SmsCodeNode(
     private val smsCodeDeps: SmsCodeDeps,
     rootPhoneScope: Scope,
     private val smsCodeComponent: SmsCodeComponent = SmsCodeComponent(),
-) : Node(
+) : ViewModelNode(
     buildContext = buildContext,
-    plugins = listOf(smsCodeComponent)
+    plugins = listOf(smsCodeComponent),
 ) {
 
     init {
@@ -64,6 +64,7 @@ internal class SmsCodeNode(
         val viewModel = koinViewModel<SmsCodeViewModel>(
             scope = smsCodeComponent.scope,
             parameters = { parametersOf(smsCodeDeps) },
+            viewModelStoreOwner = this,
         )
 
         LaunchedEffect(viewModel) {

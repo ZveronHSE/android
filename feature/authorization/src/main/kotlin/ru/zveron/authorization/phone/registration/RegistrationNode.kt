@@ -32,10 +32,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bumble.appyx.core.modality.BuildContext
-import com.bumble.appyx.core.node.Node
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 import org.koin.core.scope.Scope
+import ru.zveron.appyx.viewmodel.ViewModelNode
 import ru.zveron.authorization.R
 import ru.zveron.authorization.phone.registration.ui.RegistrationViewModel
 import ru.zveron.design.components.ActionButton
@@ -47,7 +47,7 @@ internal class RegistrationNode(
     buildContext: BuildContext,
     scope: Scope,
     private val registrationComponent: RegistrationComponent = RegistrationComponent(),
-) : Node(
+) : ViewModelNode(
     buildContext = buildContext,
     plugins = listOf(registrationComponent),
 ) {
@@ -61,6 +61,7 @@ internal class RegistrationNode(
         val viewModel = koinViewModel<RegistrationViewModel>(
             scope = registrationComponent.scope,
             parameters = { parametersOf(phone) },
+            viewModelStoreOwner = this,
         )
 
         val (username, changeUsername) = remember { viewModel.usernameState }
