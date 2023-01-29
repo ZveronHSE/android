@@ -35,20 +35,31 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
+import org.koin.core.scope.Scope
 import ru.zveron.authorization.R
 import ru.zveron.authorization.phone.registration.ui.RegistrationViewModel
 import ru.zveron.design.components.ActionButton
 import ru.zveron.design.shimmering.shimmeringBackground
 import ru.zveron.design.theme.ZveronTheme
 
-class RegistrationNode(
+internal class RegistrationNode(
     private val phone: String,
     buildContext: BuildContext,
-) : Node(buildContext = buildContext) {
+    scope: Scope,
+    private val registrationComponent: RegistrationComponent = RegistrationComponent(),
+) : Node(
+    buildContext = buildContext,
+    plugins = listOf(registrationComponent),
+) {
+
+    init {
+        registrationComponent.scope.linkTo(scope)
+    }
 
     @Composable
     override fun View(modifier: Modifier) {
         val viewModel = koinViewModel<RegistrationViewModel>(
+            scope = registrationComponent.scope,
             parameters = { parametersOf(phone) },
         )
 

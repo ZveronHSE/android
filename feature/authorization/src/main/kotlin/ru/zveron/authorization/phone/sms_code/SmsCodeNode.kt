@@ -34,6 +34,7 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
+import org.koin.core.scope.Scope
 import ru.zveron.authorization.R
 import ru.zveron.authorization.phone.sms_code.deps.SmsCodeDeps
 import ru.zveron.authorization.phone.sms_code.ui.CodeRequestState
@@ -44,14 +45,24 @@ import ru.zveron.design.inputs.OtpTextField
 import ru.zveron.design.theme.ZveronTheme
 import ru.zveron.design.theme.enabledButtonGradient
 
-class SmsCodeNode(
+internal class SmsCodeNode(
     buildContext: BuildContext,
     private val smsCodeDeps: SmsCodeDeps,
-) : Node(buildContext = buildContext) {
+    rootPhoneScope: Scope,
+    private val smsCodeComponent: SmsCodeComponent = SmsCodeComponent(),
+) : Node(
+    buildContext = buildContext,
+    plugins = listOf(smsCodeComponent)
+) {
+
+    init {
+        smsCodeComponent.scope.linkTo(rootPhoneScope)
+    }
 
     @Composable
     override fun View(modifier: Modifier) {
         val viewModel = koinViewModel<SmsCodeViewModel>(
+            scope = smsCodeComponent.scope,
             parameters = { parametersOf(smsCodeDeps) },
         )
 

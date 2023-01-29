@@ -11,6 +11,9 @@ import com.bumble.appyx.navmodel.backstack.activeElement
 import com.bumble.appyx.navmodel.backstack.operation.Push
 import com.bumble.appyx.navmodel.backstack.operation.SingleTop
 import com.bumble.appyx.navmodel.backstack.operation.push
+import org.koin.core.component.KoinScopeComponent
+import org.koin.core.component.createScope
+import org.koin.core.scope.Scope
 import ru.zveron.appyx.combine.combineOperations
 import ru.zveron.authorization.phone.password.PasswordInputNode
 import ru.zveron.authorization.phone.phone_input.PhoneInputNode
@@ -29,7 +32,10 @@ class RootPhoneNode(
 ) : ParentNode<RootPhoneNavTarget>(
     buildContext = buildContext,
     navModel = backStack,
-), PhoneInputNavigator, SmsCodeNavigator {
+), PhoneInputNavigator, SmsCodeNavigator, KoinScopeComponent {
+
+    override val scope: Scope by lazy { createScope(this) }
+
     override fun onChildFinished(child: Node) {
         super.onChildFinished(child)
 
@@ -40,16 +46,18 @@ class RootPhoneNode(
         return when (navTarget) {
             RootPhoneNavTarget.PhoneInput -> PhoneInputNode(
                 buildContext,
-                this
+                this,
+                scope,
             )
             is RootPhoneNavTarget.SmsCodeInput -> SmsCodeNode(
                 buildContext,
                 SmsCodeDeps(navTarget.phoneNumber, this),
+                scope,
             )
-            RootPhoneNavTarget.PasswordInput -> PasswordInputNode(buildContext) {
+            RootPhoneNavTarget.PasswordInput -> PasswordInputNode(buildContext, scope) {
                 navigateToRegistration(it)
             }
-            is RootPhoneNavTarget.Registration -> RegistrationNode(navTarget.phoneNumber, buildContext)
+            is RootPhoneNavTarget.Registration -> RegistrationNode(navTarget.phoneNumber, buildContext, scope)
         }
     }
 
