@@ -5,11 +5,11 @@ import org.koin.dsl.module
 import ru.zveron.authorization.authorizationModule
 import ru.zveron.authorization.interceptorsModule
 import ru.zveron.authorization.phone.rootPhoneModule
+import ru.zveron.main_screen.mainScreenModule
 
 private val applicationSingletonModule = module {
     single<Moshi> {
-        Moshi.Builder()
-            .build()
+        Moshi.Builder().build()
     }
 }
 
@@ -21,5 +21,6 @@ internal val appModule = module {
         interceptorsModule,
 
         rootPhoneModule,
+        mainScreenModule,
     )
 }
