@@ -27,8 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.zveron.design.R
-import ru.zveron.design.images.ResourceImage
-import ru.zveron.design.images.ZveronImage
+import ru.zveron.design.resources.ZveronImage
 import ru.zveron.design.theme.ZveronTheme
 
 @Composable
@@ -145,7 +144,7 @@ internal fun LotCardGridPreview() {
 @Composable
 private fun SampleCard(modifier: Modifier = Modifier, isLiked: Boolean = true) {
     LotCard(
-        zveronImage = ResourceImage(R.drawable.cool_dog),
+        zveronImage = ZveronImage.ResourceImage(R.drawable.cool_dog),
         title = "Продам щенков Корги. 2 месяца",
         price = "20 000 ₽",
         date = "сегодня",

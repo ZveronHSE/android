@@ -1,4 +1,4 @@
-package ru.zveron.design.images
+package ru.zveron.design.resources
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
@@ -10,12 +10,13 @@ import androidx.compose.ui.graphics.DefaultAlpha
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import coil.compose.rememberAsyncImagePainter
 
-sealed interface ZveronImage
+sealed interface ZveronImage {
+    class ResourceImage(@DrawableRes val resId: Int): ZveronImage
 
-class ResourceImage(@DrawableRes val resId: Int): ZveronImage
-
-class RemoteImage(val imageUrl: String): ZveronImage
+    class RemoteImage(val imageUrl: String): ZveronImage
+}
 
 @Composable
 fun ZveronImage(
@@ -40,7 +41,7 @@ fun ZveronImage(
 @Composable
 internal fun ZveronImage.getPainter(): Painter {
     return when (this) {
-        is RemoteImage -> TODO()
-        is ResourceImage -> painterResource(id = this.resId)
+        is ZveronImage.RemoteImage -> rememberAsyncImagePainter(this.imageUrl)
+        is ZveronImage.ResourceImage -> painterResource(id = this.resId)
     }
 }

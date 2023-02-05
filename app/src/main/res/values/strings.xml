@@ -2,4 +2,11 @@
     <string name="app_name">Zveron</string>
 
     <string name="registration_button">Open registration</string>
+    
+    <!-- Tabs -->
+    <string name="lots_feed_label">Главная</string>
+    <string name="favorites_label">Избранное</string>
+    <string name="create_lot_label">Объявления</string>
+    <string name="messages_label">Сообщения</string>
+    <string name="profile_label">Профиль</string>
 </resources>

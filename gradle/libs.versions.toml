@@ -34,6 +34,8 @@ okHttp_logging = "4.10.0"
 
 moshi = "1.14.0"
 
+coil = "2.2.2"
+
 [libraries]
 #androidx
 androidx_coreKtx = { module = "androidx.core:core-ktx", version.ref = "androidx"}
@@ -88,6 +90,9 @@ okHttp_loggingInterceptor = { module = "com.squareup.okhttp3:logging-interceptor
 moshi = { module = "com.squareup.moshi:moshi", version.ref = "moshi" }
 moshi_adapters = { module = "com.squareup.moshi:moshi-adapters", version.ref = "moshi" }
 moshi_codegen = { module = "com.squareup.moshi:moshi-kotlin-codegen", version.ref = "moshi" }
+
+# coil
+coil_compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 
 android_gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "android_gradle_plugin" }
 kotlin_gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }

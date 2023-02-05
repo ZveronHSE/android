@@ -14,5 +14,7 @@ dependencies {
     implementation(libs.compose.material)
     implementation(libs.compose.ui.uiToolingPreview)
 
+    implementation(libs.coil.compose)
+
     debugImplementation(libs.compose.ui.uiTooling)
 }
