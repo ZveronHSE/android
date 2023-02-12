@@ -73,7 +73,7 @@ internal class MainScreen(
 
                     Spacer(Modifier.height(8.dp))
 
-                    Text(text = BuildConfig.host)
+                    Text(text = BuildConfig.baseUrl)
                 }
 
                 BottomNavigation(

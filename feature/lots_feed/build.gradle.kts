@@ -26,6 +26,8 @@ dependencies {
     implementation(libs.compose.material)
     implementation(libs.compose.ui.uiToolingPreview)
 
+    implementation(libs.zveronContracts)
+
     debugImplementation(libs.compose.ui.uiTooling)
 
     implementation(project(":design"))

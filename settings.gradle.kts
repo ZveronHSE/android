@@ -3,6 +3,9 @@ pluginManagement {
         gradlePluginPortal()
         mavenCentral()
         google()
+        maven {
+            url = uri("https://jitpack.io")
+        }
         includeBuild("build-logic")
     }
 }
@@ -12,6 +15,9 @@ dependencyResolutionManagement {
         gradlePluginPortal()
         google()
         mavenCentral()
+        maven {
+            url = uri("https://jitpack.io")
+        }
     }
 }
 rootProject.name = "Zveron"

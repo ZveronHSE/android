@@ -1,10 +1,8 @@
-import com.google.protobuf.gradle.*
 import ru.zveron.ZveronBuildType
 
 plugins {
     id("zveron.android.application")
     id("zveron.android.application.compose")
-    id("com.google.protobuf")
     id("kotlin-parcelize")
 }
 
@@ -67,19 +65,12 @@ dependencies {
 
     implementation(libs.kotlinx.coroutines)
 
-    runtimeOnly(libs.grpc.okhttp)
-
-    api(libs.grpc.grpcStub)
-    api(libs.grpc.protobuf.lite)
-    api(libs.grpc.grpcKotlinStub)
-    api(libs.grpc.protobuf.kotlinLite)
-
     implementation(libs.koin.android)
     implementation(libs.koin.android.compose)
 
     implementation(libs.moshi)
 
-    protobuf(project(":protos"))
+    implementation(libs.zveronContracts)
 
     implementation(project(":core:appyx"))
     implementation(project(":core:authorization"))
@@ -87,29 +78,4 @@ dependencies {
     implementation(project(":design"))
 
     implementation(project(":feature:authorization"))
-}
-
-protobuf {
-    protoc {
-        artifact = libs.grpc.protobuf.protoc.get().toString()
-    }
-    plugins {
-        id("grpc") {
-            artifact = libs.grpc.protobuf.protocJavaGen.get().toString()
-        }
-    }
-    generateProtoTasks {
-        all().forEach { task ->
-            task.builtins {
-                create("java") {
-                    option("lite")
-                }
-            }
-            task.plugins {
-                id("grpc") {
-                    option("lite")
-                }
-            }
-        }
-    }
 }
