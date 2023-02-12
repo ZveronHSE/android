@@ -3,6 +3,7 @@ package ru.zveron.design.resources
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -12,9 +13,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import coil.compose.rememberAsyncImagePainter
 
+@Immutable
 sealed interface ZveronImage {
+    @Immutable
     class ResourceImage(@DrawableRes val resId: Int): ZveronImage
 
+    @Immutable
     class RemoteImage(val imageUrl: String): ZveronImage
 }
 
