@@ -15,6 +15,7 @@ enum class FlavorDimension {
 private const val BASE_URL_FIELD = "baseUrl"
 private const val HOST_FIELD = "host"
 private const val PORT_FIELD = "port"
+private const val USE_DEBUG_MOCKS = "useDebugMocks"
 
 enum class ZveronFlavor(val dimension: FlavorDimension, val applicationIdSuffix: String? = null) {
     demo(FlavorDimension.contentType),
@@ -53,6 +54,12 @@ fun Project.getHost(zveronFlavor: ZveronFlavor): String {
     }
 }
 
+fun Project.useDebugMocks(): Boolean {
+    val zveronProperties = loadProperties("$rootDir/zveron.properties")
+    val useDebugMocks: String by zveronProperties
+    return useDebugMocks.toBoolean()
+}
+
 fun Project.getPort(zveronFlavor: ZveronFlavor): Int {
     val zveronProperties = loadProperties("$rootDir/zveron.properties")
 
@@ -80,6 +87,12 @@ fun Project.configureFlavors(
         productFlavors {
             ZveronFlavor.values().forEach {
                 create(it.name) {
+                    buildConfigField(
+                        "Boolean",
+                        USE_DEBUG_MOCKS,
+                        "${this@configureFlavors.useDebugMocks()}"
+                    )
+
                     dimension = it.dimension.name
                     flavorConfigurationBlock(this, it)
 

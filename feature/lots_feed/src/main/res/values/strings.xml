@@ -4,6 +4,8 @@
     <string name="filter_content_description">Фильтры</string>
 
     <!--    Filter names-->
-    <string name="date_desc_filter">Самые новые</string>
-    <string name="price_desc_filter">Самые дорогие</string>
+    <string name="date_desc_filter">По дате публикации</string>
+    <string name="cheap_desc_filter">Дешевые</string>
+    <string name="expensive_desc_filter">Дорогие</string>
+    <string name="high_rating_desc_filter">С высоким рейтингом</string>
 </resources>
