@@ -2,4 +2,8 @@
 <resources>
     <string name="search_input_hint">Поиск</string>
     <string name="filter_content_description">Фильтры</string>
+
+    <!--    Filter names-->
+    <string name="date_desc_filter">Самые новые</string>
+    <string name="price_desc_filter">Самые дорогие</string>
 </resources>

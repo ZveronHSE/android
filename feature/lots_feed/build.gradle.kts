@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "ru.zveron.authorization"
+    namespace = "ru.zveron.lots_feed"
 }
 
 dependencies {
@@ -27,6 +27,9 @@ dependencies {
     implementation(libs.compose.ui.uiToolingPreview)
 
     implementation(libs.zveronContracts)
+
+    implementation(libs.grpc.protobuf.javaUtil)
+    implementation(libs.grpc.okhttp)
 
     debugImplementation(libs.compose.ui.uiTooling)
 

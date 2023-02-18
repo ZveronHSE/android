@@ -1,4 +1,4 @@
-package ru.zveron.lots_feed.ui
+package ru.zveron.lots_feed.feed.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import ru.zveron.authorization.R
+import ru.zveron.lots_feed.R
 import ru.zveron.design.lots.SearchBar
 import ru.zveron.design.theme.ZveronTheme
 

@@ -1,4 +1,4 @@
-package ru.zveron.lots_feed
+package ru.zveron.lots_feed.feed
 
 import com.bumble.appyx.core.plugin.Destroyable
 import org.koin.core.component.KoinScopeComponent

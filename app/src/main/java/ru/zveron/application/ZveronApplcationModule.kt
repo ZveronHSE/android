@@ -5,6 +5,7 @@ import org.koin.dsl.module
 import ru.zveron.authorization.authorizationModule
 import ru.zveron.authorization.interceptorsModule
 import ru.zveron.authorization.phone.rootPhoneModule
+import ru.zveron.lots_feed.feed.lotsFeedModule
 import ru.zveron.main_screen.mainScreenModule
 
 private val applicationSingletonModule = module {
@@ -22,5 +23,6 @@ internal val appModule = module {
 
         rootPhoneModule,
         mainScreenModule,
+        lotsFeedModule,
     )
 }

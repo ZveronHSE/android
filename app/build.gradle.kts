@@ -78,4 +78,5 @@ dependencies {
     implementation(project(":design"))
 
     implementation(project(":feature:authorization"))
+    implementation(project(":feature:lots_feed"))
 }

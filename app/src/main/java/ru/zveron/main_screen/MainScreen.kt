@@ -18,20 +18,30 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.bumble.appyx.core.composable.Children
 import com.bumble.appyx.core.modality.BuildContext
+import com.bumble.appyx.core.node.Node
+import com.bumble.appyx.navmodel.spotlight.Spotlight
 import org.koin.androidx.compose.koinViewModel
 import ru.zveron.BuildConfig
 import ru.zveron.R
-import ru.zveron.appyx.viewmodel.ViewModelNode
+import ru.zveron.appyx.viewmodel.ViewModelParentNode
 import ru.zveron.design.components.BottomNavigation
 import ru.zveron.design.components.BottomNavigationItem
+import ru.zveron.lots_feed.feed.LotsFeedNode
+import ru.zveron.main_screen.bottom_navigation.BottomNavigationNavTarget
 
 internal class MainScreen(
     buildContext: BuildContext,
     private val mainScreenNavigator: MainScreenNavigator,
     private val mainScreenComponent: MainScreenComponent = MainScreenComponent(),
-) : ViewModelNode(
+    private val spotlight: Spotlight<BottomNavigationNavTarget> = Spotlight(
+        items = listOf(BottomNavigationNavTarget.LotsFeed),
+        savedStateMap = buildContext.savedStateMap,
+    ),
+) : ViewModelParentNode<BottomNavigationNavTarget>(
     buildContext = buildContext,
+    navModel = spotlight,
     plugins = listOf(mainScreenComponent),
 ) {
 
@@ -44,8 +54,12 @@ internal class MainScreen(
 
         val items by viewModel.state.collectAsState()
 
-        Screen(items, modifier = modifier) {
-            mainScreenNavigator.openAuthorization()
+        Screen(items, modifier = modifier)
+    }
+
+    override fun resolve(navTarget: BottomNavigationNavTarget, buildContext: BuildContext): Node {
+        return when (navTarget) {
+            BottomNavigationNavTarget.LotsFeed -> LotsFeedNode(buildContext)
         }
     }
 
@@ -53,28 +67,16 @@ internal class MainScreen(
     private fun Screen(
         items: List<BottomNavigationItem>,
         modifier: Modifier = Modifier,
-        onButtonClick: () -> Unit = {},
     ) {
         Surface(
             modifier = modifier,
             color = MaterialTheme.colors.background
         ) {
             Box(Modifier.fillMaxSize()) {
-                Column(
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally,
+                Children(
+                    navModel = spotlight,
                     modifier = Modifier.fillMaxSize(),
-                ) {
-                    Button(
-                        onClick = onButtonClick,
-                    ) {
-                        Text(text = stringResource(id = R.string.registration_button))
-                    }
-
-                    Spacer(Modifier.height(8.dp))
-
-                    Text(text = BuildConfig.baseUrl)
-                }
+                )
 
                 BottomNavigation(
                     items = items,
@@ -85,5 +87,27 @@ internal class MainScreen(
             }
 
         }
+    }
+
+    @Composable
+    private fun LegacyMainScreen(
+        onButtonClick: () -> Unit = {},
+    ) {
+        Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.fillMaxSize(),
+        ) {
+            Button(
+                onClick = onButtonClick,
+            ) {
+                Text(text = stringResource(id = R.string.registration_button))
+            }
+
+            Spacer(Modifier.height(8.dp))
+
+            Text(text = BuildConfig.baseUrl)
+        }
+
     }
 }

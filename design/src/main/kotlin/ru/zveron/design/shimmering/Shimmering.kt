@@ -6,14 +6,18 @@ import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
@@ -64,6 +68,20 @@ fun PreviewGradientShimmering() {
         ActionButton(modifier = Modifier.fillMaxWidth()) {
             Text("Отправить код", style = MaterialTheme.typography.body1)
 
+            Box(Modifier.fillMaxSize().shimmeringBackground(this.maxWidth))
+        }
+    }
+}
+
+@Preview
+@Composable
+internal fun CircleGradientShimmering() {
+    ZveronTheme {
+        BoxWithConstraints(
+            modifier = Modifier
+                .size(50.dp)
+                .clip(CircleShape)
+        ) {
             Box(Modifier.fillMaxSize().shimmeringBackground(this.maxWidth))
         }
     }

@@ -14,6 +14,8 @@ junit = "4.13.2"
 android_junit = "1.1.4"
 espresso_core = "3.5.0"
 
+grpc = "1.47.0"
+grpc_kotlin = "1.3.0"
 protobuf = "3.21.2"
 
 coroutines = "1.6.2"
@@ -61,6 +63,16 @@ test_compose_ui_uiTestManifest = { module = "androidx.compose.ui:ui-test-manifes
 
 # kotlinx
 kotlinx_coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
+
+# grpc and protobuf
+grpc_protobuf_javaUtil = { module = "com.google.protobuf:protobuf-java-util", version.ref = "protobuf" }
+grpc_okhttp = { module = "io.grpc:grpc-okhttp", version.ref = "grpc" }
+#grpc_grpcStub = { module = "io.grpc:grpc-stub", version.ref = "grpc" }
+#grpc_protobuf_lite = { module = "io.grpc:grpc-protobuf-lite", version.ref = "grpc" }
+#grpc_grpcKotlinStub = { module = "io.grpc:grpc-kotlin-stub", version.ref = "grpc_kotlin" }
+#grpc_protobuf_kotlinLite = { module = "com.google.protobuf:protobuf-kotlin-lite", version.ref = "protobuf" }
+#grpc_protobuf_protocJavaGen = { module = "io.grpc:protoc-gen-grpc-java", version.ref = "grpc" }
+#grpc_protobuf_protoc = { module = "com.google.protobuf:protoc", version.ref = "protobuf" }
 
 # appyx navigation
 appyx_core = { module = "com.bumble.appyx:core", version.ref = "appyx" }
