@@ -28,9 +28,8 @@ import ru.zveron.R
 import ru.zveron.appyx.viewmodel.ViewModelParentNode
 import ru.zveron.design.components.BottomNavigation
 import ru.zveron.design.components.BottomNavigationItem
-import ru.zveron.lots_feed.feed.LotsFeedNode
-import ru.zveron.lots_feed.feed.LotsFeedNodeArgument
 import ru.zveron.main_screen.bottom_navigation.BottomNavigationNavTarget
+import ru.zveron.main_screen.bottom_navigation.lots_feed_backstack.LotsFeedBackStackNode
 
 internal class MainScreen(
     buildContext: BuildContext,
@@ -60,7 +59,7 @@ internal class MainScreen(
 
     override fun resolve(navTarget: BottomNavigationNavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
-            BottomNavigationNavTarget.LotsFeed -> LotsFeedNode(buildContext, LotsFeedNodeArgument(null))
+            BottomNavigationNavTarget.LotsFeed -> LotsFeedBackStackNode(buildContext)
         }
     }
 

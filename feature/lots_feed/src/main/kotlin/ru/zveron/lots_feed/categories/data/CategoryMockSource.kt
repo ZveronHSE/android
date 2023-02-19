@@ -11,7 +11,7 @@ class CategoryMockSource: CategorySource {
             Category(
                 id = 1,
                 name = "Животные",
-                imageUrl = ""//"https://img.icons8.com/3d-fluency/256/dog.png",
+                imageUrl = "https://img.icons8.com/3d-fluency/256/dog.png",
             ),
             Category(
                 id = 2,

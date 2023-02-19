@@ -1,14 +1,17 @@
 package ru.zveron.lots_feed.feed.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridItemScope
@@ -16,12 +19,15 @@ import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -65,7 +71,7 @@ internal fun LotsFeed(
     hasBackButton: Boolean = false,
     onNavigateBack: () -> Unit = {},
     onSortTypeSelected: (SortType) -> Unit = {},
-    onCategoryClick: (Int) -> Unit = {},
+    onCategoryClick: (CategoryUiState) -> Unit = {},
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -75,12 +81,31 @@ internal fun LotsFeed(
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         fullWidthItem {
-            SearchBar(
-                searchTitle = stringResource(R.string.search_input_hint),
-                filterContentDescription = stringResource(R.string.filter_content_description),
-                onSearchClick = onSearchClicked,
-                onOptions = onFiltersClicked,
-            )
+            Row (
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                if (hasBackButton) {
+                    Icon(
+                        painterResource(R.drawable.ic_back_triangle),
+                        contentDescription = stringResource(R.string.back_hint),
+                        modifier = Modifier.clickable(
+                            role = Role.Button,
+                            onClickLabel = stringResource(R.string.back_hint),
+                            onClick = onNavigateBack,
+                        )
+                    )
+
+                    Spacer(Modifier.width(8.dp))
+                }
+
+                SearchBar(
+                    searchTitle = stringResource(R.string.search_input_hint),
+                    filterContentDescription = stringResource(R.string.filter_content_description),
+                    onSearchClick = onSearchClicked,
+                    onOptions = onFiltersClicked,
+                )
+            }
         }
 
         fullWidthItem { Spacer(Modifier.height(20.dp)) }
@@ -216,6 +241,20 @@ private fun LotsFeedSuccessPreview() {
             categoryTitle = ZveronText.RawString("Категории"),
             categoriesUiState = categoriesState,
             feedUiState = feedState,
+            modifier = Modifier.fillMaxSize(),
+        )
+    }
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFFF9F9F9)
+@Composable
+private fun LotsFeedLoadingWithBackPreview() {
+    ZveronTheme {
+        LotsFeed(
+            categoryTitle = ZveronText.RawString("Категории"),
+            feedUiState = LotsFeedUiState.Loading,
+            categoriesUiState = CategoriesUiState.Loading,
+            hasBackButton = true,
             modifier = Modifier.fillMaxSize(),
         )
     }

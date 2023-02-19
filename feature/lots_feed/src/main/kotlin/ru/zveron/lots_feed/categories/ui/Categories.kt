@@ -19,7 +19,7 @@ private const val CATEGORIES_COUNT = 2
 internal fun Categories(
     categoriesUiState: CategoriesUiState,
     modifier: Modifier = Modifier,
-    onCategoryClick: (Int) -> Unit = {},
+    onCategoryClick: (CategoryUiState) -> Unit = {},
 ) {
     when (categoriesUiState) {
         CategoriesUiState.Loading -> LoadingCategories(modifier)
@@ -49,7 +49,7 @@ private fun LoadingCategories(
 private fun ReadyCategories(
     categories: List<CategoryUiState>,
     modifier: Modifier = Modifier,
-    onCategoryClick: (Int) -> Unit = {},
+    onCategoryClick: (CategoryUiState) -> Unit = {},
 ) {
     CompositionLocalProvider(
         LocalLoadingImageSize provides 84.dp

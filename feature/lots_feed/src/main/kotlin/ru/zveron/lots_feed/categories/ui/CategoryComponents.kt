@@ -73,13 +73,13 @@ fun CategoryStub(
 fun Category(
     category: CategoryUiState,
     modifier: Modifier = Modifier,
-    onCategoryClick: (Int) -> Unit = {},
+    onCategoryClick: (CategoryUiState) -> Unit = {},
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier.clickable(
             onClickLabel = category.title,
-            onClick = { onCategoryClick.invoke(category.id) },
+            onClick = { onCategoryClick.invoke(category) },
         ),
     ) {
         ZveronImage(

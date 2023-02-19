@@ -2,6 +2,7 @@
 <resources>
     <string name="search_input_hint">Поиск</string>
     <string name="filter_content_description">Фильтры</string>
+    <string name="back_hint">Назад</string>
 
     <string name="root_category_title">Категории</string>
 
