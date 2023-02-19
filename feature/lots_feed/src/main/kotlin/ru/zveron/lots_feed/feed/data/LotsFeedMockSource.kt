@@ -13,31 +13,15 @@ class LotsFeedMockSource: LotsFeedSource {
     ): List<Lot> {
         delay(1000L)
 
-        return listOf(
+        return List(12) {
             Lot(
-                id = 1,
+                id = it.toLong(),
                 title = "Lot 1",
                 price = "1$",
                 publicationDate = "20.20.20",
                 photoId = 0,
                 isFavorite = false,
-            ),
-            Lot(
-                id = 2,
-                title = "Lot 2",
-                price = "300$",
-                publicationDate = "20.20.20",
-                photoId = 0,
-                isFavorite = false,
-            ),
-            Lot(
-                id = 3,
-                title = "Lot 3",
-                price = "100500$",
-                publicationDate = "20.20.20",
-                photoId = 0,
-                isFavorite = false,
             )
-        )
+        }
     }
 }

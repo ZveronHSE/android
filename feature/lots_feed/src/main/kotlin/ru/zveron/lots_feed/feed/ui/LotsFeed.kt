@@ -4,14 +4,15 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyGridItemScope
+import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -35,6 +36,19 @@ import ru.zveron.lots_feed.categories.ui.CategoryUiState
 
 private const val LOADING_STUBS_COUNT = 12
 
+private fun LazyGridScope.fullWidthItem(
+    key: Any? = null,
+    contentType: Any? = null,
+    content: @Composable LazyGridItemScope.() -> Unit
+) {
+    item(
+        key = key,
+        span = { GridItemSpan(3) },
+        contentType = contentType,
+        content = content,
+    )
+}
+
 @Composable
 internal fun LotsFeed(
     feedUiState: LotsFeedUiState,
@@ -47,33 +61,42 @@ internal fun LotsFeed(
     onSortTypeSelected: (SortType) -> Unit = {},
     onCategoryClick: (Int) -> Unit = {},
 ) {
-    Column(modifier = modifier.padding(top = 18.dp)) {
-        SearchBar(
-            searchTitle = stringResource(R.string.search_input_hint),
-            filterContentDescription = stringResource(R.string.filter_content_description),
-            onSearchClick = onSearchClicked,
-            onOptions = onFiltersClicked,
-            modifier = Modifier.padding(horizontal = 16.dp),
-        )
-
-        Spacer(Modifier.height(32.dp))
-
-        Categories(
-            categoriesUiState = categoriesUiState,
-            modifier = Modifier.padding(horizontal = 16.dp),
-            onCategoryClick = onCategoryClick,
-        )
-
-        Spacer(Modifier.height(32.dp))
-
-        Box(
-            Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)) {
-            SortDropdown(modifier = Modifier.align(Alignment.CenterEnd), onSortTypeSelected)
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
+        contentPadding = PaddingValues(16.dp),
+        modifier = modifier,
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        fullWidthItem {
+            SearchBar(
+                searchTitle = stringResource(R.string.search_input_hint),
+                filterContentDescription = stringResource(R.string.filter_content_description),
+                onSearchClick = onSearchClicked,
+                onOptions = onFiltersClicked,
+            )
         }
 
-        Spacer(Modifier.height(16.dp))
+        fullWidthItem { Spacer(Modifier.height(32.dp)) }
+
+        fullWidthItem {
+            Categories(
+                categoriesUiState = categoriesUiState,
+                onCategoryClick = onCategoryClick,
+            )
+        }
+
+        fullWidthItem { Spacer(Modifier.height(32.dp)) }
+
+        fullWidthItem {
+            Box(
+                Modifier.fillMaxWidth()
+            ) {
+                SortDropdown(modifier = Modifier.align(Alignment.CenterEnd), onSortTypeSelected)
+            }
+        }
+
+        fullWidthItem { Spacer(Modifier.height(16.dp)) }
 
         when (feedUiState) {
             LotsFeedUiState.Loading -> LoadingLots()
@@ -82,53 +105,32 @@ internal fun LotsFeed(
     }
 }
 
-@Composable
-private fun LoadingLots(
-    modifier: Modifier = Modifier,
-) {
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
-        contentPadding = PaddingValues(16.dp),
-        modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-    ) {
-        items(LOADING_STUBS_COUNT) {
-            BoxWithConstraints(
-                Modifier
-                    .height(180.dp)
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(Color(0xFF717171))
-            ) {
-                Box(modifier = Modifier
-                    .fillMaxSize()
-                    .shimmeringBackground(maxWidth))
-            }
+private fun LazyGridScope.LoadingLots() {
+    items(LOADING_STUBS_COUNT) {
+        BoxWithConstraints(
+            Modifier
+                .height(180.dp)
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(16.dp))
+                .background(Color(0xFF717171))
+        ) {
+            Box(modifier = Modifier
+                .fillMaxSize()
+                .shimmeringBackground(maxWidth))
         }
     }
 }
 
-@Composable
-private fun LotsGrid(
+private fun LazyGridScope.LotsGrid(
     items: List<LotUiState>,
-    modifier: Modifier = Modifier,
 ) {
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
-        contentPadding = PaddingValues(16.dp),
-        modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-    ) {
-        items(items, key = { it.id }) { lotUiState ->
-            LotCard(
-                zveronImage = lotUiState.image,
-                title = lotUiState.title,
-                price = lotUiState.price,
-                date = lotUiState.date,
-            )
-        }
+    items(items, key = { it.id }) { lotUiState ->
+        LotCard(
+            zveronImage = lotUiState.image,
+            title = lotUiState.title,
+            price = lotUiState.price,
+            date = lotUiState.date,
+        )
     }
 }
 
