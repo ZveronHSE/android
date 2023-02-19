@@ -1,14 +1,14 @@
 package ru.zveron.lots_feed.feed
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import org.koin.androidx.compose.koinViewModel
 import ru.zveron.appyx.viewmodel.ViewModelNode
+import ru.zveron.lots_feed.feed.ui.LotsFeed
 import ru.zveron.lots_feed.feed.ui.LotsFeedViewModel
 
 class LotsFeedNode(
@@ -29,8 +29,12 @@ class LotsFeedNode(
             feedViewModel.loadLots()
         }
 
-        Box(modifier.fillMaxSize()) {
-            Text("test")
-        }
+        val feedUiState by feedViewModel.feedUiState.collectAsState()
+
+        LotsFeed(
+            feedUiState = feedUiState,
+            modifier = modifier,
+            onNavigateBack = ::navigateUp,
+        )
     }
 }
