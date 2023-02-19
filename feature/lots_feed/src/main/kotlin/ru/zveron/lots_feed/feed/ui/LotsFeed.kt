@@ -29,18 +29,23 @@ import ru.zveron.design.resources.ZveronImage
 import ru.zveron.design.shimmering.shimmeringBackground
 import ru.zveron.design.theme.ZveronTheme
 import ru.zveron.lots_feed.R
+import ru.zveron.lots_feed.categories.ui.Categories
+import ru.zveron.lots_feed.categories.ui.CategoriesUiState
+import ru.zveron.lots_feed.categories.ui.CategoryUiState
 
 private const val LOADING_STUBS_COUNT = 12
 
 @Composable
 internal fun LotsFeed(
     feedUiState: LotsFeedUiState,
+    categoriesUiState: CategoriesUiState,
     modifier: Modifier = Modifier,
     onSearchClicked: () -> Unit = {},
     onFiltersClicked: () -> Unit = {},
     hasBackButton: Boolean = false,
     onNavigateBack: () -> Unit = {},
     onSortTypeSelected: (SortType) -> Unit = {},
+    onCategoryClick: (Int) -> Unit = {},
 ) {
     Column(modifier = modifier.padding(top = 18.dp)) {
         SearchBar(
@@ -49,6 +54,14 @@ internal fun LotsFeed(
             onSearchClick = onSearchClicked,
             onOptions = onFiltersClicked,
             modifier = Modifier.padding(horizontal = 16.dp),
+        )
+
+        Spacer(Modifier.height(32.dp))
+
+        Categories(
+            categoriesUiState = categoriesUiState,
+            modifier = Modifier.padding(horizontal = 16.dp),
+            onCategoryClick = onCategoryClick,
         )
 
         Spacer(Modifier.height(32.dp))
@@ -125,6 +138,7 @@ private fun LotsFeedLoadingPreview() {
     ZveronTheme {
         LotsFeed(
             feedUiState = LotsFeedUiState.Loading,
+            categoriesUiState = CategoriesUiState.Loading,
             modifier = Modifier.fillMaxSize(),
         )
     }
@@ -133,7 +147,7 @@ private fun LotsFeedLoadingPreview() {
 @Preview(showBackground = true, backgroundColor = 0xFFF9F9F9)
 @Composable
 private fun LotsFeedSuccessPreview() {
-    val state = LotsFeedUiState.Success(
+    val feedState = LotsFeedUiState.Success(
         lots = listOf(
             LotUiState(
                 id = 1,
@@ -159,9 +173,25 @@ private fun LotsFeedSuccessPreview() {
         )
     )
 
+    val categoriesState = CategoriesUiState.Success(
+        categories = listOf(
+          CategoryUiState(
+              id = 1,
+              image = ZveronImage.ResourceImage(ru.zveron.design.R.drawable.cool_dog),
+              title = "Животные"
+          ),
+          CategoryUiState(
+              id = 2,
+              image = ZveronImage.ResourceImage(ru.zveron.design.R.drawable.cool_dog),
+              title = "Товары",
+          )
+        ),
+    )
+
     ZveronTheme {
         LotsFeed(
-            feedUiState = state,
+            categoriesUiState = categoriesState,
+            feedUiState = feedState,
             modifier = Modifier.fillMaxSize(),
         )
     }

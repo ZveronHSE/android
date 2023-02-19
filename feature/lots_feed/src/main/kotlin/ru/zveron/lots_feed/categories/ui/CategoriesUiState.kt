@@ -6,12 +6,12 @@ import ru.zveron.design.resources.ZveronImage
 sealed class CategoriesUiState {
     object Loading: CategoriesUiState()
 
-    data class Success(val categories: List<Category>): CategoriesUiState()
+    data class Success(val categories: List<CategoryUiState>): CategoriesUiState()
 }
 
 @Immutable
-data class Category(
-    val id: Long,
+data class CategoryUiState(
+    val id: Int,
     val image: ZveronImage,
     val title: String,
 )

@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import org.koin.androidx.compose.koinViewModel
 import ru.zveron.appyx.viewmodel.ViewModelNode
+import ru.zveron.lots_feed.categories.ui.CategoriesViewModel
 import ru.zveron.lots_feed.feed.ui.LotsFeed
 import ru.zveron.lots_feed.feed.ui.LotsFeedViewModel
 
@@ -25,14 +26,26 @@ class LotsFeedNode(
             scope = lotsFeedComponent.scope,
         )
 
+        val categoriesViewModel = koinViewModel<CategoriesViewModel>(
+            viewModelStoreOwner = this,
+            scope = lotsFeedComponent.scope,
+        )
+
         LaunchedEffect(feedViewModel) {
             feedViewModel.loadLots()
         }
 
+        LaunchedEffect(categoriesViewModel) {
+            categoriesViewModel.loadCategories(null)
+        }
+
         val feedUiState by feedViewModel.feedUiState.collectAsState()
+
+        val categoriesUiState by categoriesViewModel.uiState.collectAsState()
 
         LotsFeed(
             feedUiState = feedUiState,
+            categoriesUiState = categoriesUiState,
             modifier = modifier,
             onNavigateBack = ::navigateUp,
         )

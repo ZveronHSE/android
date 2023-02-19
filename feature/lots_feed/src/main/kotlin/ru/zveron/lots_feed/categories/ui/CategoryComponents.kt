@@ -1,5 +1,6 @@
 package ru.zveron.lots_feed.categories.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -16,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -39,7 +41,8 @@ fun CategoryStub(
         BoxWithConstraints(
             modifier = Modifier
                 .size(84.dp)
-                .clip(CircleShape),
+                .clip(CircleShape)
+                .background(Color.LightGray),
         ) {
             Box(
                 Modifier
@@ -54,7 +57,8 @@ fun CategoryStub(
             modifier = Modifier
                 .width(90.dp)
                 .height(20.dp)
-                .clip(RoundedCornerShape(8.dp)),
+                .clip(RoundedCornerShape(8.dp))
+                .background(Color.LightGray),
         ) {
             Box(
                 Modifier
@@ -67,9 +71,9 @@ fun CategoryStub(
 
 @Composable
 fun Category(
-    category: Category,
+    category: CategoryUiState,
     modifier: Modifier = Modifier,
-    onCategoryClick: (Long) -> Unit = {},
+    onCategoryClick: (Int) -> Unit = {},
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -102,7 +106,7 @@ fun Category(
 @Composable
 internal fun CategoryPreview() {
     ZveronTheme {
-        val category = Category(
+        val category = CategoryUiState(
             id = 0,
             image = ZveronImage.ResourceImage(R.drawable.cool_dog),
             title = "Товары"
