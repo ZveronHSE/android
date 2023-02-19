@@ -22,11 +22,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import ru.zveron.design.fonts.Rubik
 import ru.zveron.design.lots.LotCard
 import ru.zveron.design.lots.SearchBar
 import ru.zveron.design.resources.ZveronImage
+import ru.zveron.design.resources.ZveronText
 import ru.zveron.design.shimmering.shimmeringBackground
 import ru.zveron.design.theme.ZveronTheme
 import ru.zveron.lots_feed.R
@@ -51,6 +56,7 @@ private fun LazyGridScope.fullWidthItem(
 
 @Composable
 internal fun LotsFeed(
+    categoryTitle: ZveronText,
     feedUiState: LotsFeedUiState,
     categoriesUiState: CategoriesUiState,
     modifier: Modifier = Modifier,
@@ -77,7 +83,21 @@ internal fun LotsFeed(
             )
         }
 
-        fullWidthItem { Spacer(Modifier.height(32.dp)) }
+        fullWidthItem { Spacer(Modifier.height(20.dp)) }
+
+        fullWidthItem {
+            ZveronText(
+                categoryTitle,
+                style = TextStyle(
+                    fontFamily = Rubik,
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 28.sp,
+                    lineHeight = 33.18.sp,
+                )
+            )
+        }
+
+        fullWidthItem { Spacer(Modifier.height(24.dp)) }
 
         fullWidthItem {
             Categories(
@@ -139,6 +159,7 @@ private fun LazyGridScope.LotsGrid(
 private fun LotsFeedLoadingPreview() {
     ZveronTheme {
         LotsFeed(
+            categoryTitle = ZveronText.RawString("Категории"),
             feedUiState = LotsFeedUiState.Loading,
             categoriesUiState = CategoriesUiState.Loading,
             modifier = Modifier.fillMaxSize(),
@@ -192,6 +213,7 @@ private fun LotsFeedSuccessPreview() {
 
     ZveronTheme {
         LotsFeed(
+            categoryTitle = ZveronText.RawString("Категории"),
             categoriesUiState = categoriesState,
             feedUiState = feedState,
             modifier = Modifier.fillMaxSize(),

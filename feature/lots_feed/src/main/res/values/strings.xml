@@ -3,6 +3,8 @@
     <string name="search_input_hint">Поиск</string>
     <string name="filter_content_description">Фильтры</string>
 
+    <string name="root_category_title">Категории</string>
+
     <!--    Filter names-->
     <string name="date_desc_filter">По дате публикации</string>
     <string name="cheap_desc_filter">Дешевые</string>
