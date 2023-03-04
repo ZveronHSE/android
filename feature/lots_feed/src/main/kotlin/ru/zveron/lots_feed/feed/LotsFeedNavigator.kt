@@ -1,7 +1,7 @@
 package ru.zveron.lots_feed.feed
 
 interface LotsFeedNavigator {
-    fun goToFilters()
+    fun goToFilters(categoryId: Int)
 
     fun goToCategory(category: CategoryArgument)
 

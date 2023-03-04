@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import org.koin.androidx.compose.koinViewModel
@@ -42,6 +43,10 @@ class LotsFeedNode(
             scope = lotsFeedComponent.scope,
         )
 
+        val filtersNavigation = remember {
+            { lotsFeedNavigator.goToFilters(lotsFeedNodeArgument.categoryArgument?.id ?: 0) }
+        }
+
         LaunchedEffect(feedViewModel) {
             feedViewModel.loadLots()
         }
@@ -69,7 +74,7 @@ class LotsFeedNode(
                 lotsFeedNavigator.goToCategory(CategoryArgument(it.id, it.title))
             },
             onSearchClicked = lotsFeedNavigator::goToSearch,
-            onFiltersClicked = lotsFeedNavigator::goToFilters,
+            onFiltersClicked = filtersNavigation,
         )
     }
 }

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="search_input_hint">Поиск</string>
+    <string name="search_clear_hint">Очистить</string>
+
     <string name="filter_content_description">Фильтры</string>
     <string name="back_hint">Назад</string>
 
@@ -11,4 +13,8 @@
     <string name="cheap_desc_filter">Дешевые</string>
     <string name="expensive_desc_filter">Дорогие</string>
     <string name="high_rating_desc_filter">С высоким рейтингом</string>
+
+    <!-- Filters screen -->
+    <string name="filters_app_bar_title">Фильтры</string>
+    <string name="filters_button_title">Готово</string>
 </resources>

@@ -10,10 +10,13 @@ import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.push
 import kotlinx.parcelize.Parcelize
 import ru.zveron.appyx.viewmodel.ViewModelParentNode
+import ru.zveron.lots_feed.choose_item.ChooseItemNode
 import ru.zveron.lots_feed.feed.CategoryArgument
 import ru.zveron.lots_feed.feed.LotsFeedNavigator
 import ru.zveron.lots_feed.feed.LotsFeedNode
 import ru.zveron.lots_feed.feed.LotsFeedNodeArgument
+import ru.zveron.lots_feed.filters_screen.FiltersNode
+import ru.zveron.lots_feed.filters_screen.FiltersParams
 
 class LotsFeedBackStackNode(
     buildContext: BuildContext,
@@ -32,6 +35,16 @@ class LotsFeedBackStackNode(
 
         @Parcelize
         data class ChildCategory(val category: CategoryArgument): NavTarget()
+
+        @Parcelize
+        data class Filters(val categoryId: Int): NavTarget()
+
+        @Parcelize
+        data class PickItem(
+            val items: List<Pair<Int, String>>,
+            val title: String,
+            val onItemPicked: (Int) -> Unit,
+        ): NavTarget()
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -49,6 +62,20 @@ class LotsFeedBackStackNode(
                 this,
                 LotsFeedNodeArgument(navTarget.category),
             )
+
+            is NavTarget.Filters -> FiltersNode(
+                buildContext,
+                lotsFeedBackStackComponent.scope,
+                // TODO: add lot form id
+                FiltersParams(navTarget.categoryId, 0)
+            )
+
+            is NavTarget.PickItem -> ChooseItemNode(
+                buildContext,
+                navTarget.items,
+                navTarget.title,
+                navTarget.onItemPicked,
+            )
         }
     }
 
@@ -60,8 +87,8 @@ class LotsFeedBackStackNode(
         )
     }
 
-    override fun goToFilters() {
-        TODO("Not yet implemented")
+    override fun goToFilters(categoryId: Int) {
+        backstack.push(NavTarget.Filters(categoryId))
     }
 
     override fun goToCategory(category: CategoryArgument) {

@@ -36,6 +36,7 @@ import org.koin.core.parameter.parametersOf
 import org.koin.core.scope.Scope
 import ru.zveron.appyx.viewmodel.ViewModelNode
 import ru.zveron.authorization.R
+import ru.zveron.design.R as DesignR
 import ru.zveron.authorization.phone.phone_input.deps.PhoneInputNavigator
 import ru.zveron.authorization.phone.phone_input.ui.PhoneInputState
 import ru.zveron.authorization.phone.phone_input.ui.PhoneInputViewModel
@@ -109,7 +110,7 @@ private fun PhoneInput(
                 .padding(top = 16.dp, start = 4.dp),
         ) {
             Icon(
-                painter = painterResource(R.drawable.ic_close),
+                painter = painterResource(DesignR.drawable.ic_close),
                 // TODO: fix accessibility
                 contentDescription = null,
             )
