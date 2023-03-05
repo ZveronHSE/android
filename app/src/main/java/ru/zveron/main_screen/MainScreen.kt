@@ -25,6 +25,7 @@ import com.bumble.appyx.navmodel.spotlight.Spotlight
 import org.koin.androidx.compose.koinViewModel
 import ru.zveron.BuildConfig
 import ru.zveron.R
+import ru.zveron.appyx.bottom_navigation.BottomNavigationMode
 import ru.zveron.appyx.viewmodel.ViewModelParentNode
 import ru.zveron.design.components.BottomNavigation
 import ru.zveron.design.components.BottomNavigationItem
@@ -68,6 +69,9 @@ internal class MainScreen(
         items: List<BottomNavigationItem>,
         modifier: Modifier = Modifier,
     ) {
+        val isBottomBarVisible =
+            bottomNavigationMode.collectAsState(initial = BottomNavigationMode.SHOW_BOTTOM_BAR)
+
         Surface(
             modifier = modifier,
             color = MaterialTheme.colors.background
@@ -78,12 +82,14 @@ internal class MainScreen(
                     modifier = Modifier.fillMaxSize(),
                 )
 
-                BottomNavigation(
-                    items = items,
-                    modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .padding(start = 16.dp, end = 16.dp, bottom = 34.dp),
-                )
+                if (isBottomBarVisible.value == BottomNavigationMode.SHOW_BOTTOM_BAR) {
+                    BottomNavigation(
+                        items = items,
+                        modifier = Modifier
+                            .align(Alignment.BottomCenter)
+                            .padding(start = 16.dp, end = 16.dp, bottom = 34.dp),
+                    )
+                }
             }
 
         }

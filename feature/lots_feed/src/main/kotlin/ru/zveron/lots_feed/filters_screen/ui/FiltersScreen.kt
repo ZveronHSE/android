@@ -208,6 +208,7 @@ private fun RootCategory(
 
     Row(
         horizontalArrangement = Arrangement.spacedBy(4.dp),
+        verticalAlignment = Alignment.CenterVertically,
         modifier = modifier,
     ) {
         Selector(
@@ -345,7 +346,7 @@ private fun FilterScreenPreview() {
             RootCategoryUiState(1, "Животные"),
             RootCategoryUiState(2, "Товары для животных")
         ),
-        selectedCategoryId = 1,
+        selectedCategoryId = null,
     )
 
     val filtersState = FiltersParametersUiState.Success(
