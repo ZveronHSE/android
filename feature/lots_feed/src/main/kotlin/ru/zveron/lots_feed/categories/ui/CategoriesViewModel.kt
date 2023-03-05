@@ -1,5 +1,6 @@
 package ru.zveron.lots_feed.categories.ui
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,9 +17,13 @@ internal class CategoriesViewModel(
 
     fun loadCategories(categoryId: Int?) {
         viewModelScope.launch {
-            _uiState.value = CategoriesUiState.Loading
-            val categories = categoryInteractor.loadChildrenCategories(categoryId)
-            _uiState.value = CategoriesUiState.Success(categories.map { it.toUiState() })
+            try {
+                _uiState.value = CategoriesUiState.Loading
+                val categories = categoryInteractor.loadChildrenCategories(categoryId)
+                _uiState.value = CategoriesUiState.Success(categories.map { it.toUiState() })
+            } catch (e: Exception) {
+                Log.e("Categories", "Error loading child categories", e)
+            }
         }
     }
 }

@@ -38,7 +38,7 @@ internal class FiltersViewModel(
                     })
                 }
             } catch (e: Exception) {
-                Log.e("Parameters", e.message.orEmpty())
+                Log.e("Parameters", "Error loading parameters", e)
             }
         }
     }

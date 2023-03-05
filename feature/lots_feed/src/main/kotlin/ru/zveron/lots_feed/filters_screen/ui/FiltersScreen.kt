@@ -2,6 +2,7 @@ package ru.zveron.lots_feed.filters_screen.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -11,6 +12,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
@@ -34,15 +38,23 @@ import androidx.compose.ui.unit.sp
 import ru.zveron.design.components.ActionButton
 import ru.zveron.design.shimmering.shimmeringBackground
 import ru.zveron.design.theme.ZveronTheme
+import ru.zveron.design.theme.gray3
+import ru.zveron.design.theme.gray5
 import ru.zveron.lots_feed.R
+import ru.zveron.lots_feed.filters_screen.ui.root_categories.RootCategoriesState
+import ru.zveron.lots_feed.filters_screen.ui.root_categories.RootCategoryUiState
 import ru.zveron.design.R as DesignR
+import androidx.compose.foundation.lazy.items
+import ru.zveron.design.selectors.Selector
 
 @Composable
 fun FilterScreen(
+    rootCategoriesState: RootCategoriesState,
     parametersState: FiltersParametersUiState,
     modifier: Modifier = Modifier,
     onBackClicked: () -> Unit = {},
     onDoneClicked: () -> Unit = {},
+    onRootCategorySelected: (Int) -> Unit = {},
 ) {
     Column(
         modifier = modifier.background(MaterialTheme.colors.background),
@@ -52,16 +64,25 @@ fun FilterScreen(
             modifier = Modifier.clip(RoundedCornerShape(bottomStart = 16.dp, bottomEnd = 16.dp))
         )
 
+        Spacer(Modifier.height(8.dp))
+
+        RootCategoriesSelector(
+            rootCategoriesState = rootCategoriesState,
+            onRootCategorySelected = onRootCategorySelected,
+        )
+
         DefaultSectionSpacer()
 
         Parameters(
             state = parametersState,
         )
-        
+
         Spacer(Modifier.weight(1f))
 
         ActionButton(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 16.dp, start = 16.dp, end = 16.dp),
             onClick = onDoneClicked,
         ) {
             Text(
@@ -113,6 +134,98 @@ private fun FiltersAppBar(
 }
 
 @Composable
+private fun RootCategoriesSelector(
+    rootCategoriesState: RootCategoriesState,
+    modifier: Modifier = Modifier,
+    onRootCategorySelected: (Int) -> Unit = {},
+) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(18.dp),
+        modifier = modifier
+            .clip(RoundedCornerShape(16.dp))
+            .fillMaxWidth()
+            .background(MaterialTheme.colors.surface)
+            .padding(horizontal = 17.dp, vertical = 24.dp),
+    ) {
+        Text(
+            text = stringResource(R.string.root_categories_selector_title),
+            style = TextStyle(
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Normal,
+                color = gray5,
+            ),
+        )
+
+        LazyRow(
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            modifier = Modifier
+                .selectableGroup()
+                .fillMaxWidth(),
+        ) {
+            when (rootCategoriesState) {
+                RootCategoriesState.Loading -> {
+                    items(2) {
+                        BoxWithConstraints(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(8.dp))
+                                .height(16.dp)
+                                .width(120.dp)
+                                .background(gray3)
+                        ) {
+                            Box(
+                                Modifier
+                                    .fillMaxSize()
+                                    .shimmeringBackground(this.maxWidth)
+                            )
+                        }
+                    }
+                }
+
+                is RootCategoriesState.Success -> {
+                    items(rootCategoriesState.categories, key = { it.id }) { rootCategoryUiState ->
+                        RootCategory(
+                            rootCategoryUiState = rootCategoryUiState,
+                            selectedId = rootCategoriesState.selectedCategoryId,
+                            onRootCategorySelected = onRootCategorySelected,
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun RootCategory(
+    rootCategoryUiState: RootCategoryUiState,
+    selectedId: Int?,
+    modifier: Modifier = Modifier,
+    onRootCategorySelected: (Int) -> Unit = {},
+) {
+    val selectorClickHandler = remember(rootCategoryUiState, onRootCategorySelected) {
+        { onRootCategorySelected.invoke(rootCategoryUiState.id) }
+    }
+
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
+        modifier = modifier,
+    ) {
+        Selector(
+            selected = rootCategoryUiState.id == selectedId,
+            onClick = selectorClickHandler,
+        )
+
+        Text(
+            text = rootCategoryUiState.name,
+            style = TextStyle(
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Normal,
+            )
+        )
+    }
+}
+
+@Composable
 private fun Parameters(
     state: FiltersParametersUiState,
 ) {
@@ -132,6 +245,7 @@ private fun SuccessParameters(
             parameters.lastIndex -> Modifier.clip(
                 RoundedCornerShape(bottomStart = 16.dp, bottomEnd = 16.dp)
             )
+
             else -> Modifier
         }
         key(parameter.id) {
@@ -164,7 +278,8 @@ private fun ParameterRow(
             .clickable(onClickLabel = parameter.title, onClick = clicker)
             .padding(horizontal = 17.dp)
     ) {
-        val textDecoration = if (parameter.isUnderlined) TextDecoration.Underline else TextDecoration.None
+        val textDecoration =
+            if (parameter.isUnderlined) TextDecoration.Underline else TextDecoration.None
 
         Text(
             text = parameter.title,
@@ -215,6 +330,7 @@ private fun ParametersLoading(
 private fun FilterScreenLoadingPreview() {
     ZveronTheme {
         FilterScreen(
+            rootCategoriesState = RootCategoriesState.Loading,
             parametersState = FiltersParametersUiState.Loading,
             modifier = Modifier.fillMaxSize(),
         )
@@ -224,7 +340,15 @@ private fun FilterScreenLoadingPreview() {
 @Preview
 @Composable
 private fun FilterScreenPreview() {
-    val state = FiltersParametersUiState.Success(
+    val rootCategoriesState = RootCategoriesState.Success(
+        categories = listOf(
+            RootCategoryUiState(1, "Животные"),
+            RootCategoryUiState(2, "Товары для животных")
+        ),
+        selectedCategoryId = 1,
+    )
+
+    val filtersState = FiltersParametersUiState.Success(
         listOf(
             ParameterUiState(1, "Порода", isUnderlined = false),
             ParameterUiState(2, "Цвет", isUnderlined = true),
@@ -234,7 +358,8 @@ private fun FilterScreenPreview() {
 
     ZveronTheme {
         FilterScreen(
-            parametersState = state,
+            rootCategoriesState = rootCategoriesState,
+            parametersState = filtersState,
             modifier = Modifier.fillMaxSize(),
         )
     }

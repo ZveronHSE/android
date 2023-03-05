@@ -1,5 +1,6 @@
 package ru.zveron.lots_feed.feed.ui
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,14 +24,18 @@ class LotsFeedViewModel(
 
     fun loadLots() {
         viewModelScope.launch {
-            _feedUiState.value = LotsFeedUiState.Loading
-            val lotsResponse = lotsFeedRepository.loadLots(
-                currentFilters.value,
-                _currentSortType.value.toSortType(),
-            )
-            val newLots = lotsResponse.map { it.toUiLot() }
+            try {
+                _feedUiState.value = LotsFeedUiState.Loading
+                val lotsResponse = lotsFeedRepository.loadLots(
+                    currentFilters.value,
+                    _currentSortType.value.toSortType(),
+                )
+                val newLots = lotsResponse.map { it.toUiLot() }
 
-            _feedUiState.value = LotsFeedUiState.Success(newLots)
+                _feedUiState.value = LotsFeedUiState.Success(newLots)
+            } catch (e: Exception) {
+                Log.e("Lots", "Error loading main page lots", e)
+            }
         }
     }
 }
