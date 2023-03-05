@@ -52,7 +52,10 @@ val networkModule = module {
     }
 
     single<ManagedChannel> {
-        ManagedChannelBuilder.forAddress(BuildConfig.host, BuildConfig.port).build()
+        ManagedChannelBuilder
+            .forAddress(BuildConfig.host, BuildConfig.port)
+            .usePlaintext()
+            .build()
     }
 
     single<ApigatewayServiceGrpc.ApigatewayServiceBlockingStub> {
