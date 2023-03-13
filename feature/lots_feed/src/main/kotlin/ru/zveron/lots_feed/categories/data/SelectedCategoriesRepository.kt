@@ -24,6 +24,25 @@ class SelectedCategoriesRepository {
             it.copy(innerCategory = innerCategory)
         }
     }
+
+    fun resetCurrentCategory(): Boolean {
+        if (_currentCategorySelection.value.isEmpty()) {
+            return false
+        }
+
+        _currentCategorySelection.update {
+            if (it.innerCategory != null) {
+                it.copy(innerCategory = null)
+            } else {
+                CategorySelection(null, null)
+            }
+        }
+        return true
+    }
+
+    fun canResetCategory(): Boolean {
+        return !_currentCategorySelection.value.isEmpty()
+    }
 }
 
 data class CategorySelection(
@@ -32,5 +51,9 @@ data class CategorySelection(
 ) {
     fun getCurrentCategory(): Category? {
         return innerCategory ?: rootCategory
+    }
+
+    fun isEmpty(): Boolean {
+        return rootCategory == null && innerCategory == null
     }
 }

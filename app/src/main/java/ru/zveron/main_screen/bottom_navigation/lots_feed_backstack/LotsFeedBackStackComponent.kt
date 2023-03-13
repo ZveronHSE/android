@@ -3,6 +3,7 @@ package ru.zveron.main_screen.bottom_navigation.lots_feed_backstack
 import com.bumble.appyx.core.plugin.Destroyable
 import org.koin.core.component.KoinScopeComponent
 import org.koin.core.component.createScope
+import org.koin.core.component.get
 import org.koin.core.scope.Scope
 
 class LotsFeedBackStackComponent: Destroyable, KoinScopeComponent {
@@ -10,5 +11,9 @@ class LotsFeedBackStackComponent: Destroyable, KoinScopeComponent {
 
     override fun destroy() {
         closeScope()
+    }
+
+    fun getBackPlugin(): LotsFeedBackPlugin {
+        return get()
     }
 }

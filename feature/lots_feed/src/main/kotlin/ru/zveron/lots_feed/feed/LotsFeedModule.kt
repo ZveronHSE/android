@@ -12,6 +12,7 @@ import ru.zveron.lots_feed.categories.data.CategoryRepository
 import ru.zveron.lots_feed.categories.data.CategorySource
 import ru.zveron.lots_feed.categories.data.SelectedCategoriesRepository
 import ru.zveron.lots_feed.categories.domain.CategoryInteractor
+import ru.zveron.lots_feed.categories.domain.SelectedCategoriesInteractor
 import ru.zveron.lots_feed.categories.ui.CategoriesViewModel
 import ru.zveron.lots_feed.feed.data.LotsFeedGrpcSource
 import ru.zveron.lots_feed.feed.data.LotsFeedMockSource
@@ -48,4 +49,5 @@ val lotsFeedModule = module {
     singleOf(::CategoryLocalCacheSource)
 
     singleOf(::SelectedCategoriesRepository)
+    singleOf(::SelectedCategoriesInteractor)
 }

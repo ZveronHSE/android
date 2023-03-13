@@ -21,13 +21,16 @@ import ru.zveron.lots_feed.filters_screen.FiltersParams
 class LotsFeedBackStackNode(
     buildContext: BuildContext,
     private val lotsFeedBackStackComponent: LotsFeedBackStackComponent = LotsFeedBackStackComponent(),
+    lotsFeedBackPlugin: LotsFeedBackPlugin = lotsFeedBackStackComponent.getBackPlugin(),
     private val backstack: BackStack<NavTarget> = BackStack(
         initialElement = NavTarget.RootCategory,
         savedStateMap = buildContext.savedStateMap,
+        backPressHandler = lotsFeedBackPlugin,
     ),
 ): ViewModelParentNode<LotsFeedBackStackNode.NavTarget>(
     buildContext = buildContext,
     navModel = backstack,
+    plugins = listOf(lotsFeedBackStackComponent),
 ), LotsFeedNavigator {
     sealed class NavTarget: Parcelable {
         @Parcelize

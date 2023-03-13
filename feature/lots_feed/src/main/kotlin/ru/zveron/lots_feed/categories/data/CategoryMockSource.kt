@@ -26,14 +26,14 @@ class CategoryMockSource: CategorySource {
 
         return listOf(
             Category(
-                id = 1,
-                name = "Животные",
-                imageUrl = "",
+                id = 3,
+                name = "Собаки",
+                imageUrl = "https://img.icons8.com/fluency/256/poodle.png",
             ),
             Category(
-                id = 2,
-                name = "Товары",
-                imageUrl = "",
+                id = 4,
+                name = "Коты",
+                imageUrl = "https://img.icons8.com/fluency/256/cat.png",
             )
         )
     }

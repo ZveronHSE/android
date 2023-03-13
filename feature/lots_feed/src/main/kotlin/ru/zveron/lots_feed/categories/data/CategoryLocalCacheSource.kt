@@ -4,9 +4,10 @@ import ru.zveron.lots_feed.models.categories.Category
 
 class CategoryLocalCacheSource: CategorySource {
     private val rootCategories = mutableListOf<Category>()
+    private val categoriesCache = mutableMapOf<Int, Category>()
 
     fun getCategoryByID(id: Int): Category? {
-        return rootCategories.find { it.id == id }
+        return categoriesCache[id]
     }
 
     fun containsRootCategories(): Boolean {
@@ -14,7 +15,14 @@ class CategoryLocalCacheSource: CategorySource {
     }
 
     fun addRootCategories(categories: List<Category>) {
-        rootCategories.addAll(categories)
+        if(rootCategories.isEmpty()) {
+            rootCategories.addAll(categories)
+        }
+        categoriesCache.putAll(categories.associateBy { it.id })
+    }
+
+    fun addCategories(categories: List<Category>) {
+        categoriesCache.putAll(categories.associateBy { it.id })
     }
 
     override suspend fun loadRootCategories(): List<Category> {

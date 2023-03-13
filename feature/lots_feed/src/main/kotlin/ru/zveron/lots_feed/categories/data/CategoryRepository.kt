@@ -14,7 +14,9 @@ class CategoryRepository(
 
     suspend fun loadCategoryChildren(categoryId: Int): List<Category> {
         // TODO: add local caching here
-        return remoteCategorySource.loadChildCategories(categoryId)
+        val categories = remoteCategorySource.loadChildCategories(categoryId)
+        categoryLocalCacheSource.addCategories(categories)
+        return categories
     }
 
     suspend fun loadRootCategories(): List<Category> {

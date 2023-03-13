@@ -22,6 +22,10 @@ class LotsFeedViewModel(
 
     private val currentFilters = MutableStateFlow(listOf<Filter>())
 
+    init {
+        loadLots()
+    }
+
     fun loadLots() {
         viewModelScope.launch {
             try {
