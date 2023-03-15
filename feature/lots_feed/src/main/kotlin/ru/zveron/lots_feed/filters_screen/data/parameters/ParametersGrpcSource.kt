@@ -1,4 +1,4 @@
-package ru.zveron.lots_feed.filters_screen.data
+package ru.zveron.lots_feed.filters_screen.data.parameters
 
 import com.google.protobuf.util.JsonFormat
 import ru.zveron.contract.apigateway.ApigatewayServiceGrpc.ApigatewayServiceBlockingStub

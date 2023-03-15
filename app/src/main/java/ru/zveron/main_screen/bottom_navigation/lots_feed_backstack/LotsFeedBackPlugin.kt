@@ -38,7 +38,7 @@ class LotsFeedBackPlugin(
     }
 
     private fun isLotsFeedScreen(navElement: NavElement<LotsFeedBackStackNode.NavTarget, out BackStack.State>): Boolean {
-        return navElement.key.navTarget is LotsFeedBackStackNode.NavTarget.ChildCategory || navElement.key.navTarget is LotsFeedBackStackNode.NavTarget.RootCategory
+        return navElement.key.navTarget is LotsFeedBackStackNode.NavTarget.RootCategory
     }
 
     private fun areThereStashedElements(

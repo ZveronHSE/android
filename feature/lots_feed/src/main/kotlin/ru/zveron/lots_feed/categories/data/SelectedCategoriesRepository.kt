@@ -56,4 +56,8 @@ data class CategorySelection(
     fun isEmpty(): Boolean {
         return rootCategory == null && innerCategory == null
     }
+
+    companion object {
+        val EMPTY = CategorySelection(null, null)
+    }
 }

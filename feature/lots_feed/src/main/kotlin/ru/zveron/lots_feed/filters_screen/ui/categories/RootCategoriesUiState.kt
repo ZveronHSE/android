@@ -1,17 +1,17 @@
-package ru.zveron.lots_feed.filters_screen.ui.root_categories
+package ru.zveron.lots_feed.filters_screen.ui.categories
 
 import androidx.compose.runtime.Immutable
 
 @Immutable
-sealed class RootCategoriesState {
+sealed class RootCategoriesUiState {
     @Immutable
-    object Loading: RootCategoriesState()
+    object Loading: RootCategoriesUiState()
 
     @Immutable
     data class Success(
         val categories: List<RootCategoryUiState>,
         val selectedCategoryId: Int?,
-    ): RootCategoriesState()
+    ): RootCategoriesUiState()
 }
 
 @Immutable

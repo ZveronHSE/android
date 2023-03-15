@@ -1,10 +1,10 @@
-package ru.zveron.lots_feed.filters_screen.domain
+package ru.zveron.lots_feed.filters_screen.data.parameters
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import ru.zveron.lots_feed.models.parameters.Parameter
 
-internal class ParametersHolder {
+internal class FiltersSelectedParametersHolder {
     private val _currentParameters = MutableStateFlow<List<Parameter>>(emptyList())
     private val _currentParametersValues = MutableStateFlow<Map<Int, String>>(emptyMap())
 

@@ -69,16 +69,6 @@ abstract class ViewModelParentNode<NavTarget : Any>(
         }
     }
 
-//    override val bottomNavigationMode: Flow<BottomNavigationMode> = children.flatMapConcat { entryMap ->
-//        val bottomNavigationModeHolder = entryMap.values
-//            .mapNotNull { it.nodeOrNull }
-//            .filterIsInstance<BottomNavigationModeHolder>()
-//            .takeIf { it.isNotEmpty() }
-//            ?.lastOrNull()
-//
-//        bottomNavigationModeHolder?.bottomNavigationMode ?: flowOf(BottomNavigationMode.SHOW_BOTTOM_BAR)
-//    }
-
     override val bottomNavigationMode: Flow<BottomNavigationMode> = navModel.screenState.flatMapLatest { screenState ->
         val bottomNavigationModeHolder = screenState.onScreen
             .map { childOrCreate(it.key).nodeOrNull }

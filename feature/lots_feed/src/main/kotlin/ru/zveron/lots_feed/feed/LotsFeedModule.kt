@@ -12,6 +12,7 @@ import ru.zveron.lots_feed.categories.data.CategoryRepository
 import ru.zveron.lots_feed.categories.data.CategorySource
 import ru.zveron.lots_feed.categories.data.SelectedCategoriesRepository
 import ru.zveron.lots_feed.categories.domain.CategoryInteractor
+import ru.zveron.lots_feed.categories.domain.PassDataToFiltersInteractor
 import ru.zveron.lots_feed.categories.domain.SelectedCategoriesInteractor
 import ru.zveron.lots_feed.categories.ui.CategoriesViewModel
 import ru.zveron.lots_feed.feed.data.LotsFeedGrpcSource
@@ -35,6 +36,8 @@ val lotsFeedModule = module {
 
         viewModelOf(::CategoriesViewModel)
         scopedOf(::CategoryInteractor)
+
+        scopedOf(::PassDataToFiltersInteractor)
     }
 
     singleOf(::CategoryRepository)

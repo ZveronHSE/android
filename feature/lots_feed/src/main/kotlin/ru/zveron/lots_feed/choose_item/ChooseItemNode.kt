@@ -1,23 +1,35 @@
 package ru.zveron.lots_feed.choose_item
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
+import ru.zveron.design.resources.ZveronText
 
 class ChooseItemNode(
     buildContext: BuildContext,
-    val items: List<Pair<Int, String>>,
-    val title: String,
-    val onItemPicked: (Int) -> Unit,
-): Node(buildContext) {
+    val title: ZveronText,
+    val chooseItemItemProvider: ChooseItemItemProvider
+) : Node(buildContext) {
     @Composable
     override fun View(modifier: Modifier) {
+        val uiState by chooseItemItemProvider.uiState.collectAsState()
+
+        val itemClickHandler = remember {
+            { id: Int ->
+                chooseItemItemProvider.itemPicked(id)
+                navigateUp()
+            }
+        }
+
         ChooseItemScreen(
-            items = items,
+            uiState = uiState,
             title = title,
             modifier = modifier,
-            onItemClick = onItemPicked,
+            onItemClick = itemClickHandler,
             onBackClicked = ::navigateUp,
         )
     }

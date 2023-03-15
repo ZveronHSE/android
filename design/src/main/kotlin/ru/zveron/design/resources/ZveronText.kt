@@ -1,10 +1,12 @@
 package ru.zveron.design.resources
 
+import android.os.Parcelable
 import androidx.annotation.PluralsRes
 import androidx.annotation.StringRes
 import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -19,11 +21,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
+import kotlinx.parcelize.Parcelize
 
-sealed class ZveronText {
+@Immutable
+sealed class ZveronText: Parcelable {
     @Composable
     abstract fun getText(): String
 
+    @Parcelize
+    @Immutable
     data class RawResource(@StringRes val resId: Int): ZveronText() {
         @Composable
         override fun getText(): String {
@@ -31,11 +37,13 @@ sealed class ZveronText {
         }
     }
 
+    @Parcelize
+    @Immutable
     data class ArgResource(
         @StringRes val resId: Int,
-        val formatArgs: List<Any>,
+        val formatArgs: List<String>,
     ): ZveronText() {
-        constructor(@StringRes resId: Int, vararg formatArgs: Any) : this(resId, formatArgs.toList())
+        constructor(@StringRes resId: Int, vararg formatArgs: String) : this(resId, formatArgs.toList())
 
         @Composable
         override fun getText(): String {
@@ -43,6 +51,8 @@ sealed class ZveronText {
         }
     }
 
+    @Parcelize
+    @Immutable
     data class PluralResource(
         @PluralsRes val resId: Int,
         val plural: Int
@@ -54,12 +64,14 @@ sealed class ZveronText {
         }
     }
 
+    @Parcelize
+    @Immutable
     data class PluralArgResource(
         @PluralsRes val resId: Int,
         val plural: Int,
-        val formatArgs: List<Any>,
+        val formatArgs: List<String>,
     ): ZveronText() {
-        constructor(@PluralsRes resId: Int, plural: Int, vararg formatArgs: Any) : this(resId, plural, formatArgs.toList())
+        constructor(@PluralsRes resId: Int, plural: Int, vararg formatArgs: String) : this(resId, plural, formatArgs.toList())
 
         @OptIn(ExperimentalComposeUiApi::class)
         @Composable
@@ -68,6 +80,7 @@ sealed class ZveronText {
         }
     }
 
+    @Parcelize
     data class RawString(val text: String): ZveronText() {
         @Composable
         override fun getText(): String {

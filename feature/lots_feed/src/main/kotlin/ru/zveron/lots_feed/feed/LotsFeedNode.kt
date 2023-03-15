@@ -3,10 +3,10 @@ package ru.zveron.lots_feed.feed
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import org.koin.androidx.compose.koinViewModel
+import org.koin.core.parameter.parametersOf
 import org.koin.core.scope.Scope
 import ru.zveron.appyx.viewmodel.ViewModelNode
 import ru.zveron.lots_feed.categories.ui.CategoriesViewModel
@@ -17,7 +17,6 @@ class LotsFeedNode(
     buildContext: BuildContext,
     scope: Scope,
     private val lotsFeedNavigator: LotsFeedNavigator,
-    private val lotsFeedNodeArgument: LotsFeedNodeArgument,
     private val lotsFeedComponent: LotsFeedComponent = LotsFeedComponent(),
 ) : ViewModelNode(
     buildContext,
@@ -33,16 +32,14 @@ class LotsFeedNode(
         val feedViewModel = koinViewModel<LotsFeedViewModel>(
             viewModelStoreOwner = this,
             scope = lotsFeedComponent.scope,
+            parameters = { parametersOf(lotsFeedNavigator) },
         )
 
         val categoriesViewModel = koinViewModel<CategoriesViewModel>(
             viewModelStoreOwner = this,
             scope = lotsFeedComponent.scope,
+            parameters = { parametersOf(lotsFeedNavigator) },
         )
-
-        val filtersNavigation = remember {
-            { lotsFeedNavigator.goToFilters(lotsFeedNodeArgument.categoryArgument?.id ?: 0) }
-        }
 
         val feedUiState by feedViewModel.feedUiState.collectAsState()
 
@@ -64,7 +61,7 @@ class LotsFeedNode(
 //                lotsFeedNavigator.goToCategory(CategoryArgument(it.id, it.title))
             },
             onSearchClicked = lotsFeedNavigator::goToSearch,
-            onFiltersClicked = filtersNavigation,
+            onFiltersClicked = feedViewModel::goToFilters,
         )
     }
 }

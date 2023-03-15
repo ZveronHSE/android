@@ -5,7 +5,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -34,11 +37,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.intl.Locale
-import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import ru.zveron.design.resources.ZveronText
+import ru.zveron.design.shimmering.shimmeringBackground
 import ru.zveron.design.theme.ZveronTheme
 import ru.zveron.design.theme.enabledButtonGradient
 import ru.zveron.design.theme.gray1
@@ -48,18 +51,19 @@ import ru.zveron.design.R as DesignR
 
 @Composable
 fun ChooseItemScreen(
-    items: List<Pair<Int, String>>,
-    title: String,
+    uiState: ChooseItemUiState,
+    title: ZveronText,
     modifier: Modifier = Modifier,
     onItemClick: (Int) -> Unit = {},
     onBackClicked: () -> Unit = {},
 ) {
     val searchInput = remember { mutableStateOf("") }
 
-    val visibleItems by remember(items) {
+    val visibleItems by remember(uiState) {
         derivedStateOf {
-            items.filter {
-                it.second.toLowerCase(Locale.current).contains(searchInput.value.toLowerCase(Locale.current))
+            when(uiState) {
+                ChooseItemUiState.Loading -> emptyList()
+                is ChooseItemUiState.Success -> uiState.items.filter { it.title.contains(searchInput.value, true) }
             }
         }
     }
@@ -78,7 +82,7 @@ fun ChooseItemScreen(
 
         Spacer(Modifier.height(32.dp))
 
-        Text(
+        ZveronText(
             text = title,
             style = TextStyle(
                 fontSize = 28.sp,
@@ -152,20 +156,62 @@ fun ChooseItemScreen(
 
         Spacer(Modifier.height(32.dp))
 
-        LazyColumn(
-            modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(28.dp),
-        ) {
-            items(visibleItems, key = { it.first }) {
-                val clicker = remember {
-                    { onItemClick.invoke(it.first) }
-                }
-                Text(
-                    text = it.second,
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .fillMaxWidth()
-                        .clickable(onClick = clicker, onClickLabel = it.second),
+        when (uiState) {
+            ChooseItemUiState.Loading -> LoadingItems()
+            is ChooseItemUiState.Success -> Items(items = visibleItems, onItemClick = onItemClick)
+        }
+    }
+}
+
+@Composable
+private fun ColumnScope.Items(
+    items: List<ChooseItem>,
+    modifier: Modifier = Modifier,
+    onItemClick: (Int) -> Unit = {},
+) {
+    LazyColumn(
+        modifier = modifier.weight(1f),
+        verticalArrangement = Arrangement.spacedBy(28.dp),
+    ) {
+        items(items, key = { it.id }) {
+            val clicker = remember {
+                { onItemClick.invoke(it.id) }
+            }
+            Text(
+                text = it.title,
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth()
+                    .clickable(onClick = clicker, onClickLabel = it.title),
+            )
+        }
+    }
+}
+
+@Composable
+private fun ColumnScope.LoadingItems(
+    modifier: Modifier = Modifier,
+) {
+    LazyColumn(
+        modifier = modifier.weight(1f),
+        verticalArrangement = Arrangement.spacedBy(28.dp),
+    ) {
+        items(5) {
+            BoxWithConstraints(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+                    .height(24.dp)
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(gray1)
+            ) {
+                Box(
+                    Modifier
+                        .fillMaxSize()
+                        .shimmeringBackground(
+                            width = this.maxWidth,
+                            shimmerColor = gray3,
+                        )
                 )
             }
         }
@@ -176,13 +222,30 @@ fun ChooseItemScreen(
 @Composable
 private fun ChooseItemPreview() {
     ZveronTheme {
+        val uiState = ChooseItemUiState.Success(
+            listOf(
+                ChooseItem(1, "Собаки"),
+                ChooseItem(2, "Кошки"),
+                ChooseItem(3, "Грызуны"),
+            )
+        )
         ChooseItemScreen(
-            items = listOf(
-                1 to "Собаки",
-                2 to "Кошки",
-                3 to "Грызуны"
-            ),
-            title = "Виды животных",
+            uiState = uiState,
+            title = ZveronText.RawString("Виды животных"),
+            modifier = Modifier.fillMaxSize(),
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun ChooseItemLoadingPreview() {
+    ZveronTheme {
+        val uiState = ChooseItemUiState.Loading
+
+        ChooseItemScreen(
+            uiState = uiState,
+            title = ZveronText.RawString("Виды животных"),
             modifier = Modifier.fillMaxSize(),
         )
     }

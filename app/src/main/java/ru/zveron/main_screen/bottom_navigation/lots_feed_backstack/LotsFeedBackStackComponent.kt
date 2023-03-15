@@ -5,6 +5,8 @@ import org.koin.core.component.KoinScopeComponent
 import org.koin.core.component.createScope
 import org.koin.core.component.get
 import org.koin.core.scope.Scope
+import ru.zveron.lots_feed.choose_item.ChooseItemHolder
+import ru.zveron.lots_feed.choose_item.ChooseItemItemProvider
 
 class LotsFeedBackStackComponent: Destroyable, KoinScopeComponent {
     override val scope: Scope by lazy { createScope(this) }
@@ -15,5 +17,9 @@ class LotsFeedBackStackComponent: Destroyable, KoinScopeComponent {
 
     fun getBackPlugin(): LotsFeedBackPlugin {
         return get()
+    }
+
+    fun getChoseeItemItemProvider(): ChooseItemItemProvider {
+        return scope.get<ChooseItemHolder>().currentItemItemProvider
     }
 }

@@ -8,29 +8,37 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import ru.zveron.lots_feed.filters_screen.FiltersParams
-import ru.zveron.lots_feed.filters_screen.data.ParametersRepository
-import ru.zveron.lots_feed.filters_screen.domain.ParametersHolder
+import ru.zveron.lots_feed.filters_screen.data.parameters.ParametersRepository
+import ru.zveron.lots_feed.filters_screen.data.categories.FiltersSelectedCategoryHolder
+import ru.zveron.lots_feed.filters_screen.data.lot_forms.FiltersSelectedLotFormHolder
+import ru.zveron.lots_feed.filters_screen.data.parameters.FiltersSelectedParametersHolder
 
 internal class FiltersViewModel(
-    private val filtersParams: FiltersParams,
     private val parametersRepository: ParametersRepository,
-    private val parametersHolder: ParametersHolder,
+    private val filtersSelectedParametersHolder: FiltersSelectedParametersHolder,
+    private val filtersSelectedCategoryHolder: FiltersSelectedCategoryHolder,
+    private val filtersSelectedLotFormHolder: FiltersSelectedLotFormHolder,
 ) : ViewModel() {
     private val _parametersUiState =
         MutableStateFlow<FiltersParametersUiState>(FiltersParametersUiState.Loading)
     val parametersUiState = _parametersUiState.asStateFlow()
 
+    init {
+        loadParameters()
+    }
+
     fun loadParameters() {
+        val currentCategory =
+            filtersSelectedCategoryHolder.currentCategorySelection.value.getCurrentCategory() ?: return
         viewModelScope.launch(Dispatchers.IO) {
             _parametersUiState.update { FiltersParametersUiState.Loading }
             try {
                 val parameters = parametersRepository.loadParameters(
-                    filtersParams.selectedCategoryId,
-                    filtersParams.selectedLotFormId,
+                    currentCategory.id,
+                    filtersSelectedLotFormHolder.currentLotForm.value?.id ?: 0,
                 )
 
-                parametersHolder.updateParameters(parameters)
+                filtersSelectedParametersHolder.updateParameters(parameters)
 
                 _parametersUiState.update {
                     FiltersParametersUiState.Success(parameters.map {
