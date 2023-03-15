@@ -14,6 +14,7 @@ import ru.zveron.design.resources.ZveronText
 import ru.zveron.lots_feed.choose_item.ChooseItemNode
 import ru.zveron.lots_feed.feed.LotsFeedNavigator
 import ru.zveron.lots_feed.feed.LotsFeedNode
+import ru.zveron.lots_feed.filters_screen.FiltersNavigator
 import ru.zveron.lots_feed.filters_screen.FiltersNode
 
 class LotsFeedBackStackNode(
@@ -29,7 +30,7 @@ class LotsFeedBackStackNode(
     buildContext = buildContext,
     navModel = backstack,
     plugins = listOf(lotsFeedBackStackComponent),
-), LotsFeedNavigator {
+), LotsFeedNavigator, FiltersNavigator {
     sealed class NavTarget: Parcelable {
         @Parcelize
         object RootCategory: NavTarget()
@@ -38,11 +39,7 @@ class LotsFeedBackStackNode(
         object Filters: NavTarget()
 
         @Parcelize
-        data class PickItem(
-            val items: List<Pair<Int, String>>,
-            val title: ZveronText,
-            val onItemPicked: (Int) -> Unit,
-        ): NavTarget()
+        data class PickItem(val title: ZveronText): NavTarget()
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -56,6 +53,7 @@ class LotsFeedBackStackNode(
             is NavTarget.Filters -> FiltersNode(
                 buildContext,
                 lotsFeedBackStackComponent.scope,
+                this,
             )
 
             is NavTarget.PickItem -> ChooseItemNode(
@@ -84,5 +82,9 @@ class LotsFeedBackStackNode(
 
     override fun goToLot(lotId: Long) {
         TODO("Not yet implemented")
+    }
+
+    override fun chooseItem(title: ZveronText) {
+        backstack.push(NavTarget.PickItem(title))
     }
 }

@@ -6,6 +6,7 @@ import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
 import ru.zveron.lots_feed.BuildConfig
+import ru.zveron.lots_feed.choose_item.ChooseItemHolder
 import ru.zveron.lots_feed.filters_screen.data.categories.FiltersChildrenCategoryHolder
 import ru.zveron.lots_feed.filters_screen.data.categories.FiltersSelectedCategoryHolder
 import ru.zveron.lots_feed.filters_screen.data.lot_forms.FiltersChildrenLotFormHolder
@@ -14,7 +15,9 @@ import ru.zveron.lots_feed.filters_screen.data.parameters.ParametersGrpcSource
 import ru.zveron.lots_feed.filters_screen.data.parameters.ParametersRepository
 import ru.zveron.lots_feed.filters_screen.data.parameters.ParametersSource
 import ru.zveron.lots_feed.filters_screen.data.parameters.FiltersSelectedParametersHolder
+import ru.zveron.lots_feed.filters_screen.domain.ChildCategoryItemProvider
 import ru.zveron.lots_feed.filters_screen.domain.FiltersSetSelectedCategoryInteractor
+import ru.zveron.lots_feed.filters_screen.domain.LotFormItemProvider
 import ru.zveron.lots_feed.filters_screen.ui.FiltersViewModel
 import ru.zveron.lots_feed.filters_screen.ui.categories.FiltersChildrenCategoriesViewModel
 import ru.zveron.lots_feed.filters_screen.ui.categories.FiltersRootCategoriesViewModel
@@ -34,6 +37,9 @@ val filtersModule = module {
 
         scopedOf(::ParametersRepository)
         scopedOf(::ParametersGrpcSource) bind ParametersSource::class
+
+        scopedOf(::LotFormItemProvider)
+        scopedOf(::ChildCategoryItemProvider)
     }
 
     singleOf(::FiltersSelectedParametersHolder)
@@ -65,4 +71,6 @@ val filtersModule = module {
 
     singleOf(::FiltersSelectedCategoryHolder)
     // endregion
+
+    singleOf(::ChooseItemHolder)
 }

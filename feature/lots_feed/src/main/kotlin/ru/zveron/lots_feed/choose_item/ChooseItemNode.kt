@@ -6,14 +6,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
-import com.bumble.appyx.core.node.Node
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
+import ru.zveron.appyx.bottom_navigation.BottomNavigationMode
+import ru.zveron.appyx.viewmodel.ViewModelNode
 import ru.zveron.design.resources.ZveronText
 
 class ChooseItemNode(
     buildContext: BuildContext,
     val title: ZveronText,
     val chooseItemItemProvider: ChooseItemItemProvider
-) : Node(buildContext) {
+) : ViewModelNode(buildContext) {
     @Composable
     override fun View(modifier: Modifier) {
         val uiState by chooseItemItemProvider.uiState.collectAsState()
@@ -33,4 +36,7 @@ class ChooseItemNode(
             onBackClicked = ::navigateUp,
         )
     }
+
+    override val bottomNavigationMode: Flow<BottomNavigationMode> =
+        flowOf(BottomNavigationMode.HIDE_BOTTOM_BAR)
 }
