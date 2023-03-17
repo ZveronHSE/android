@@ -16,6 +16,7 @@
 
     <!-- Filters screen -->
     <string name="root_categories_selector_title">Категория</string>
+    <string name="child_category_selector_title">Подкатегория</string>
     <string name="filters_app_bar_title">Фильтры</string>
     <string name="filters_button_title">Готово</string>
     <string name="lot_form_title">Тип объявления</string>

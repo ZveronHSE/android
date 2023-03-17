@@ -10,14 +10,14 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import ru.zveron.lots_feed.categories.data.CategoryRepository
-import ru.zveron.lots_feed.filters_screen.data.categories.FiltersSelectedCategoryHolder
-import ru.zveron.lots_feed.filters_screen.domain.FiltersSetSelectedCategoryInteractor
+import ru.zveron.lots_feed.filters_screen.data.categories.FiltersSelectedCategoryRepository
+import ru.zveron.lots_feed.filters_screen.domain.categories.FiltersSetSelectedCategoryInteractor
+import ru.zveron.lots_feed.filters_screen.domain.categories.FiltersUpdateCategoriesInteractor
 
-class FiltersRootCategoriesViewModel(
-    private val categoryRepository: CategoryRepository,
-    private val filtersSelectedCategoryHolder: FiltersSelectedCategoryHolder,
+internal class FiltersRootCategoriesViewModel(
+    private val filtersSelectedCategoryRepository: FiltersSelectedCategoryRepository,
     private val filtersSetSelectedCategoryInteractor: FiltersSetSelectedCategoryInteractor,
+    private val filtersUpdateCategoriesInteractor: FiltersUpdateCategoriesInteractor,
 ): ViewModel() {
     private val _rootCategoriesUiState = MutableStateFlow<RootCategoriesUiState>(RootCategoriesUiState.Loading)
     val rootCategoriesState = _rootCategoriesUiState.asStateFlow()
@@ -25,8 +25,7 @@ class FiltersRootCategoriesViewModel(
     init {
         loadRootCategories()
 
-        filtersSelectedCategoryHolder
-            .currentCategorySelection
+        filtersSelectedCategoryRepository.currentCategorySelection
             .onEach {  currentSelection ->
                 _rootCategoriesUiState.update { currentState ->
                     if (currentState is RootCategoriesUiState.Success) {
@@ -37,17 +36,21 @@ class FiltersRootCategoriesViewModel(
                 }
             }
             .launchIn(viewModelScope)
+
+        filtersUpdateCategoriesInteractor.updateRootCategoriesFlow
+            .onEach{ loadRootCategories() }
+            .launchIn(viewModelScope)
     }
 
     private fun loadRootCategories() {
         viewModelScope.launch(Dispatchers.IO) {
             _rootCategoriesUiState.update { RootCategoriesUiState.Loading }
             try {
-                val categories = categoryRepository.loadRootCategories()
+                val categories = filtersUpdateCategoriesInteractor.loadRootCategories()
                 _rootCategoriesUiState.update {
                     RootCategoriesUiState.Success(
                         categories = categories.map { RootCategoryUiState(it.id, it.name) },
-                        selectedCategoryId = filtersSelectedCategoryHolder.currentCategorySelection.value.rootCategory?.id,
+                        selectedCategoryId = filtersSelectedCategoryRepository.currentCategorySelection.value.rootCategory?.id,
                     )
                 }
             } catch (e: Exception) {
@@ -57,8 +60,6 @@ class FiltersRootCategoriesViewModel(
     }
 
     fun rootCategorySelected(categoryId: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
-            filtersSetSelectedCategoryInteractor.setRootCategory(categoryId)
-        }
+        filtersSetSelectedCategoryInteractor.setRootCategory(categoryId)
     }
 }

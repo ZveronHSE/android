@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.update
 import ru.zveron.lots_feed.lot_forms.data.LotFormRepository
 import ru.zveron.lots_feed.models.lot_form.LotForm
 
-class FiltersSelectedLotFormHolder(
+class FiltersSelectedLotFormRepository(
     private val lotFormRepository: LotFormRepository,
 ) {
     private val _currentLotForm = MutableStateFlow<LotForm?>(null)

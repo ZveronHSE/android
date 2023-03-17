@@ -7,18 +7,22 @@ import org.koin.dsl.bind
 import org.koin.dsl.module
 import ru.zveron.lots_feed.BuildConfig
 import ru.zveron.lots_feed.choose_item.ChooseItemHolder
-import ru.zveron.lots_feed.filters_screen.data.categories.FiltersChildrenCategoryHolder
-import ru.zveron.lots_feed.filters_screen.data.categories.FiltersSelectedCategoryHolder
-import ru.zveron.lots_feed.filters_screen.data.lot_forms.FiltersChildrenLotFormHolder
-import ru.zveron.lots_feed.filters_screen.data.lot_forms.FiltersSelectedLotFormHolder
+import ru.zveron.lots_feed.filters_screen.data.categories.FiltersChildrenCategoryRepository
+import ru.zveron.lots_feed.filters_screen.data.categories.FiltersSelectedCategoryRepository
+import ru.zveron.lots_feed.filters_screen.data.lot_forms.FiltersChildrenLotFormRepository
+import ru.zveron.lots_feed.filters_screen.data.lot_forms.FiltersSelectedLotFormRepository
 import ru.zveron.lots_feed.filters_screen.data.parameters.ParametersGrpcSource
 import ru.zveron.lots_feed.filters_screen.data.parameters.ParametersRepository
 import ru.zveron.lots_feed.filters_screen.data.parameters.ParametersSource
 import ru.zveron.lots_feed.filters_screen.data.parameters.FiltersSelectedParametersHolder
-import ru.zveron.lots_feed.filters_screen.domain.ChildCategoryItemProvider
-import ru.zveron.lots_feed.filters_screen.domain.FiltersSetSelectedCategoryInteractor
-import ru.zveron.lots_feed.filters_screen.domain.LotFormItemProvider
-import ru.zveron.lots_feed.filters_screen.ui.FiltersViewModel
+import ru.zveron.lots_feed.filters_screen.domain.categories.ChildCategoryItemProvider
+import ru.zveron.lots_feed.filters_screen.domain.categories.FiltersSetSelectedCategoryInteractor
+import ru.zveron.lots_feed.filters_screen.domain.categories.FiltersUpdateCategoriesInteractor
+import ru.zveron.lots_feed.filters_screen.domain.lot_forms.FiltersSetSelectedLotFormInteractor
+import ru.zveron.lots_feed.filters_screen.domain.lot_forms.FiltersUpdateLotFormsInteractor
+import ru.zveron.lots_feed.filters_screen.domain.lot_forms.LotFormItemProvider
+import ru.zveron.lots_feed.filters_screen.domain.parameters.FiltersUpdateParametersInteractor
+import ru.zveron.lots_feed.filters_screen.ui.parameters.FiltersViewModel
 import ru.zveron.lots_feed.filters_screen.ui.categories.FiltersChildrenCategoriesViewModel
 import ru.zveron.lots_feed.filters_screen.ui.categories.FiltersRootCategoriesViewModel
 import ru.zveron.lots_feed.filters_screen.ui.lot_form.LotFormViewModel
@@ -35,17 +39,22 @@ val filtersModule = module {
         viewModelOf(::FiltersChildrenCategoriesViewModel)
         viewModelOf(::LotFormViewModel)
 
-        scopedOf(::ParametersRepository)
-        scopedOf(::ParametersGrpcSource) bind ParametersSource::class
-
         scopedOf(::LotFormItemProvider)
         scopedOf(::ChildCategoryItemProvider)
     }
 
-    singleOf(::FiltersSelectedParametersHolder)
+    // region categories
+    singleOf(::FiltersSetSelectedCategoryInteractor)
+
+    singleOf(::FiltersChildrenCategoryRepository)
+
+    singleOf(::FiltersSelectedCategoryRepository)
+
+    singleOf(::FiltersUpdateCategoriesInteractor)
+    // endregion
 
     // region lot forms
-    singleOf(::FiltersSelectedLotFormHolder)
+    singleOf(::FiltersSelectedLotFormRepository)
 
     singleOf(::LotFormRepository)
     singleOf(::LotFormLocalSource)
@@ -60,16 +69,20 @@ val filtersModule = module {
         }
     }
 
-    singleOf(::FiltersChildrenLotFormHolder)
+    singleOf(::FiltersChildrenLotFormRepository)
+
+    singleOf(::FiltersUpdateLotFormsInteractor)
+
+    singleOf(::FiltersSetSelectedLotFormInteractor)
     // endregion
 
-    // region categories
+    // region parameters
+    singleOf(::FiltersSelectedParametersHolder)
 
-    singleOf(::FiltersSetSelectedCategoryInteractor)
+    singleOf(::FiltersUpdateParametersInteractor)
 
-    singleOf(::FiltersChildrenCategoryHolder)
-
-    singleOf(::FiltersSelectedCategoryHolder)
+    singleOf(::ParametersRepository)
+    singleOf(::ParametersGrpcSource) bind ParametersSource::class
     // endregion
 
     singleOf(::ChooseItemHolder)

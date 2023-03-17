@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.update
 import ru.zveron.lots_feed.categories.data.CategoryRepository
 import ru.zveron.lots_feed.categories.data.CategorySelection
 
-class FiltersSelectedCategoryHolder(
+class FiltersSelectedCategoryRepository(
     private val categoryRepository: CategoryRepository,
 ) {
     private val _currentCategorySelection = MutableStateFlow(CategorySelection.EMPTY)

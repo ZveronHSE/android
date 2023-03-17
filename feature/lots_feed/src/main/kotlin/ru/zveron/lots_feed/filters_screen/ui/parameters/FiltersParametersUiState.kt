@@ -1,4 +1,4 @@
-package ru.zveron.lots_feed.filters_screen.ui
+package ru.zveron.lots_feed.filters_screen.ui.parameters
 
 import androidx.compose.runtime.Immutable
 

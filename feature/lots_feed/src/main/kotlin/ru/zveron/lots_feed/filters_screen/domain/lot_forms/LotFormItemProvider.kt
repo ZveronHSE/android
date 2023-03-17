@@ -1,4 +1,4 @@
-package ru.zveron.lots_feed.filters_screen.domain
+package ru.zveron.lots_feed.filters_screen.domain.lot_forms
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -10,16 +10,15 @@ import ru.zveron.lots_feed.choose_item.ChooseItem
 import ru.zveron.lots_feed.choose_item.ChooseItemItemProvider
 import ru.zveron.lots_feed.choose_item.ChooseItemUiState
 import ru.zveron.lots_feed.filters_screen.data.lot_forms.ChildLotFormState
-import ru.zveron.lots_feed.filters_screen.data.lot_forms.FiltersChildrenLotFormHolder
-import ru.zveron.lots_feed.filters_screen.data.lot_forms.FiltersSelectedLotFormHolder
+import ru.zveron.lots_feed.filters_screen.data.lot_forms.FiltersChildrenLotFormRepository
 
 class LotFormItemProvider(
-    filtersChildrenLotFormHolder: FiltersChildrenLotFormHolder,
-    private val filtersSelectedLotFormHolder: FiltersSelectedLotFormHolder,
+    filtersChildrenLotFormRepository: FiltersChildrenLotFormRepository,
+    private val filtersSetSelectedLotFormInteractor: FiltersSetSelectedLotFormInteractor,
 ): ChooseItemItemProvider {
     private val scope = CoroutineScope(Dispatchers.IO)
 
-    override val uiState: StateFlow<ChooseItemUiState> = filtersChildrenLotFormHolder.childrenLotFormState.map {
+    override val uiState: StateFlow<ChooseItemUiState> = filtersChildrenLotFormRepository.childrenLotFormState.map {
         when (it) {
             ChildLotFormState.Loading -> ChooseItemUiState.Loading
             is ChildLotFormState.Success -> {
@@ -30,6 +29,6 @@ class LotFormItemProvider(
     }.stateIn(scope, SharingStarted.Lazily, ChooseItemUiState.Loading)
 
     override fun itemPicked(id: Int) {
-        filtersSelectedLotFormHolder.selectLotForm(id)
+        filtersSetSelectedLotFormInteractor.selectLotForm(id)
     }
 }

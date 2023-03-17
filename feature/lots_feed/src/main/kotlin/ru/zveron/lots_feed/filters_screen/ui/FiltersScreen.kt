@@ -34,6 +34,8 @@ import ru.zveron.design.R as DesignR
 import ru.zveron.design.resources.ZveronText
 import ru.zveron.lots_feed.filters_screen.ui.categories.ChildrenCategoriesUiState
 import ru.zveron.lots_feed.filters_screen.ui.lot_form.LotFormUiState
+import ru.zveron.lots_feed.filters_screen.ui.parameters.FiltersParametersUiState
+import ru.zveron.lots_feed.filters_screen.ui.parameters.ParameterUiState
 
 @Composable
 fun FilterScreen(

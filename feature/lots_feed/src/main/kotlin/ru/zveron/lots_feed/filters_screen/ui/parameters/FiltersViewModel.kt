@@ -1,4 +1,4 @@
-package ru.zveron.lots_feed.filters_screen.ui
+package ru.zveron.lots_feed.filters_screen.ui.parameters
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -9,15 +9,15 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ru.zveron.lots_feed.filters_screen.data.parameters.ParametersRepository
-import ru.zveron.lots_feed.filters_screen.data.categories.FiltersSelectedCategoryHolder
-import ru.zveron.lots_feed.filters_screen.data.lot_forms.FiltersSelectedLotFormHolder
+import ru.zveron.lots_feed.filters_screen.data.categories.FiltersSelectedCategoryRepository
+import ru.zveron.lots_feed.filters_screen.data.lot_forms.FiltersSelectedLotFormRepository
 import ru.zveron.lots_feed.filters_screen.data.parameters.FiltersSelectedParametersHolder
 
 internal class FiltersViewModel(
     private val parametersRepository: ParametersRepository,
     private val filtersSelectedParametersHolder: FiltersSelectedParametersHolder,
-    private val filtersSelectedCategoryHolder: FiltersSelectedCategoryHolder,
-    private val filtersSelectedLotFormHolder: FiltersSelectedLotFormHolder,
+    private val filtersSelectedCategoryRepository: FiltersSelectedCategoryRepository,
+    private val filtersSelectedLotFormRepository: FiltersSelectedLotFormRepository,
 ) : ViewModel() {
     private val _parametersUiState =
         MutableStateFlow<FiltersParametersUiState>(FiltersParametersUiState.Loading)
@@ -29,13 +29,13 @@ internal class FiltersViewModel(
 
     fun loadParameters() {
         val currentCategory =
-            filtersSelectedCategoryHolder.currentCategorySelection.value.getCurrentCategory() ?: return
+            filtersSelectedCategoryRepository.currentCategorySelection.value.getCurrentCategory() ?: return
         viewModelScope.launch(Dispatchers.IO) {
             _parametersUiState.update { FiltersParametersUiState.Loading }
             try {
                 val parameters = parametersRepository.loadParameters(
                     currentCategory.id,
-                    filtersSelectedLotFormHolder.currentLotForm.value?.id ?: 0,
+                    filtersSelectedLotFormRepository.currentLotForm.value?.id ?: 0,
                 )
 
                 filtersSelectedParametersHolder.updateParameters(parameters)

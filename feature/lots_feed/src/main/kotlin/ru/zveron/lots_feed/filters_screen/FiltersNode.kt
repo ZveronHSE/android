@@ -13,7 +13,7 @@ import org.koin.core.scope.Scope
 import ru.zveron.appyx.bottom_navigation.BottomNavigationMode
 import ru.zveron.appyx.viewmodel.ViewModelNode
 import ru.zveron.lots_feed.filters_screen.ui.FilterScreen
-import ru.zveron.lots_feed.filters_screen.ui.FiltersViewModel
+import ru.zveron.lots_feed.filters_screen.ui.parameters.FiltersViewModel
 import ru.zveron.lots_feed.filters_screen.ui.categories.FiltersChildrenCategoriesViewModel
 import ru.zveron.lots_feed.filters_screen.ui.categories.FiltersRootCategoriesViewModel
 import ru.zveron.lots_feed.filters_screen.ui.lot_form.LotFormViewModel

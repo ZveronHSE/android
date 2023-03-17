@@ -29,6 +29,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.zveron.design.R
 import ru.zveron.design.shimmering.shimmeringBackground
+import ru.zveron.lots_feed.filters_screen.ui.parameters.FiltersParametersUiState
+import ru.zveron.lots_feed.filters_screen.ui.parameters.ParameterUiState
 
 @Composable
 internal fun Parameters(
