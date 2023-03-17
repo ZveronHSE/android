@@ -72,6 +72,7 @@ class FiltersNode(
             onRootCategorySelected = rootCategoriesViewModel::rootCategorySelected,
             onLotFormClicked = lotFormViewModel::lotFormRowClicked,
             onChildCategoryClicked = childrenCategoriesViewModel::childCategoryClicked,
+            onParameterClicked = filtersViewModel::onParameterRowClicked,
         )
     }
 

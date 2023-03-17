@@ -1,4 +1,4 @@
-package ru.zveron.lots_feed.filters_screen.ui
+package ru.zveron.lots_feed.filters_screen.ui.parameters
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -29,19 +29,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.zveron.design.R
 import ru.zveron.design.shimmering.shimmeringBackground
-import ru.zveron.lots_feed.filters_screen.ui.parameters.FiltersParametersUiState
-import ru.zveron.lots_feed.filters_screen.ui.parameters.ParameterUiState
 
 @Composable
 internal fun Parameters(
     state: FiltersParametersUiState,
     hasTopCorners: Boolean,
+    onParameterClicked: (Int) -> Unit,
 ) {
     when (state) {
         FiltersParametersUiState.Loading -> ParametersLoading(hasTopCorners = hasTopCorners)
         is FiltersParametersUiState.Success -> SuccessParameters(
             parameters = state.parameters,
-            hasTopCorners = hasTopCorners
+            hasTopCorners = hasTopCorners,
+            onClick = onParameterClicked,
         )
 
         FiltersParametersUiState.Hidden -> {}
@@ -52,7 +52,7 @@ internal fun Parameters(
 private fun SuccessParameters(
     parameters: List<ParameterUiState>,
     hasTopCorners: Boolean,
-    // TODO: add on click paramter
+    onClick: (Int) -> Unit = {},
 ) {
     parameters.forEachIndexed { index, parameter ->
         val modifier = when {
@@ -74,6 +74,7 @@ private fun SuccessParameters(
                 parameter = parameter,
                 modifier = modifier,
                 hasDivider = index != parameters.lastIndex,
+                onClick = onClick,
             )
         }
     }

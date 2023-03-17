@@ -1,4 +1,4 @@
-package ru.zveron.lots_feed.filters_screen.data.parameters
+package ru.zveron.lots_feed.parameters.data
 
 import ru.zveron.lots_feed.models.parameters.Parameter
 

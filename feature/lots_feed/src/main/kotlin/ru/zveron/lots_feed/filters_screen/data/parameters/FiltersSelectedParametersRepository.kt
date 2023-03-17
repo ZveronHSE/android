@@ -1,41 +1,42 @@
 package ru.zveron.lots_feed.filters_screen.data.parameters
 
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import ru.zveron.lots_feed.models.parameters.Parameter
 
 internal class FiltersSelectedParametersRepository {
-    private val _currentParameters = MutableStateFlow<List<Parameter>>(emptyList())
-    private val _currentParametersValues = MutableStateFlow<Map<Int, String>>(emptyMap())
+    private var _currentParameters = emptyList<Parameter>()
+    private val _currentParametersValues = mutableMapOf<Int, String>()
+
+    private val _parametersState = MutableStateFlow<List<ParameterState>>(emptyList())
+    val parametersState = _parametersState.asStateFlow()
 
     fun updateParameters(parameters: List<Parameter>) {
-        _currentParametersValues.update {
-            parameters
-                .map { it.id }
-                .associateWith { "" }
-        }
-        _currentParameters.update { parameters }
-    }
-
-    fun getParameters(): List<Pair<Parameter, String?>> {
-        return _currentParameters.value.map { it to getParameterValue(it.id) }
-    }
-
-    fun getParameterValue(id: Int): String? {
-        return _currentParametersValues.value[id]
+        _currentParameters = parameters
+        updateState()
     }
 
     fun setParameterValue(id: Int, value: String) {
-        _currentParametersValues.update { currentMap ->
-            buildMap {
-                this.putAll(currentMap)
-                put(id, value)
-            }
-        }
+        _currentParametersValues[id] = value
+        updateState()
     }
 
     fun resetParamters() {
-        _currentParameters.update { emptyList() }
-        _currentParametersValues.update { emptyMap() }
+        _currentParameters = emptyList()
+        // _currentParametersValues.clear()
+    }
+
+    private fun updateState() {
+        _parametersState.update {
+            _currentParameters.map { parameter ->
+                ParameterState(parameter, _currentParametersValues[parameter.id])
+            }
+        }
     }
 }
+
+data class ParameterState(
+    val parameter: Parameter,
+    val value: String?,
+)

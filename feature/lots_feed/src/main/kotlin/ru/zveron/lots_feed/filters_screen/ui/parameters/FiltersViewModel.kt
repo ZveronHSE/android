@@ -12,23 +12,37 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import ru.zveron.design.resources.ZveronText
+import ru.zveron.lots_feed.choose_item.ChooseItemHolder
+import ru.zveron.lots_feed.filters_screen.FiltersNavigator
 import ru.zveron.lots_feed.filters_screen.data.categories.FiltersSelectedCategoryRepository
+import ru.zveron.lots_feed.filters_screen.data.parameters.FiltersSelectedParametersRepository
+import ru.zveron.lots_feed.filters_screen.data.parameters.ParameterState
 import ru.zveron.lots_feed.filters_screen.domain.parameters.FiltersUpdateParametersInteractor
+import ru.zveron.lots_feed.filters_screen.domain.parameters.ParameterItemProviderFactory
+import ru.zveron.lots_feed.parameters.data.ParametersRepository
 
 internal class FiltersViewModel(
     private val filtersUpdateParametersInteractor: FiltersUpdateParametersInteractor,
     filtersSelectedCategoryRepository: FiltersSelectedCategoryRepository,
+    private val parameterItemProviderFactory: ParameterItemProviderFactory,
+    private val filtersNavigator: FiltersNavigator,
+    private val chooseItemHolder: ChooseItemHolder,
+    private val parametersRepository: ParametersRepository,
+    filtersSelectedParametersRepository: FiltersSelectedParametersRepository,
 ) : ViewModel() {
-    private val _parametersUiState =
-        MutableStateFlow<FiltersParametersUiState>(FiltersParametersUiState.Loading)
+    private val _parametersLoadingUiState = MutableStateFlow(true)
+
     val parametersUiState = combine(
-        _parametersUiState,
-        filtersSelectedCategoryRepository.currentCategorySelection
-    ) { uiState, categorySelection ->
-        if (categorySelection.innerCategory == null) {
-            FiltersParametersUiState.Hidden
-        } else {
-            uiState
+        _parametersLoadingUiState,
+        filtersSelectedCategoryRepository.currentCategorySelection,
+        filtersSelectedParametersRepository.parametersState
+    ) { isLoading, categorySelection, parametersSelection ->
+        when {
+            categorySelection.innerCategory == null -> FiltersParametersUiState.Hidden
+            isLoading -> FiltersParametersUiState.Loading
+            parametersSelection.isEmpty() -> FiltersParametersUiState.Hidden
+            else -> FiltersParametersUiState.Success(mapParameterState(parametersSelection))
         }
     }.stateIn(viewModelScope, SharingStarted.Lazily, FiltersParametersUiState.Hidden)
 
@@ -40,22 +54,28 @@ internal class FiltersViewModel(
 
     private fun loadParameters() {
         viewModelScope.launch(Dispatchers.IO) {
-            _parametersUiState.update { FiltersParametersUiState.Loading }
+            _parametersLoadingUiState.update { true }
             try {
-                val parameters = filtersUpdateParametersInteractor.loadParameters()
-
-                _parametersUiState.update {
-                    if (parameters.isEmpty()) {
-                        FiltersParametersUiState.Hidden
-                    } else {
-                        FiltersParametersUiState.Success(parameters.map {
-                            ParameterUiState(it.id, it.name, false)
-                        })
-                    }
-                }
+                filtersUpdateParametersInteractor.loadParameters()
+                _parametersLoadingUiState.update { false }
             } catch (e: Exception) {
                 Log.e("Parameters", "Error loading parameters", e)
             }
         }
+    }
+
+    private fun mapParameterState(parametersSelection: List<ParameterState>): List<ParameterUiState> {
+        return parametersSelection.map {
+            val title = it.value ?: it.parameter.name
+            ParameterUiState(it.parameter.id, title, it.value != null)
+        }
+    }
+
+    fun onParameterRowClicked(id: Int) {
+        val parameter = parametersRepository.getParameterById(id)
+        val itemProvider = parameterItemProviderFactory.createItemProvider(id)
+
+        chooseItemHolder.setCurrentItemItemProvider(itemProvider)
+        filtersNavigator.chooseItem(ZveronText.RawString(parameter.name))
     }
 }

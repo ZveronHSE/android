@@ -11,10 +11,10 @@ import ru.zveron.lots_feed.filters_screen.data.categories.FiltersSelectedCategor
 import ru.zveron.lots_feed.filters_screen.data.lot_forms.FiltersChildrenLotFormRepository
 import ru.zveron.lots_feed.filters_screen.data.lot_forms.FiltersSelectedLotFormRepository
 import ru.zveron.lots_feed.filters_screen.data.parameters.FiltersSelectedParametersRepository
-import ru.zveron.lots_feed.filters_screen.data.parameters.ParametersGrpcSource
-import ru.zveron.lots_feed.filters_screen.data.parameters.ParametersMockSource
-import ru.zveron.lots_feed.filters_screen.data.parameters.ParametersRepository
-import ru.zveron.lots_feed.filters_screen.data.parameters.ParametersSource
+import ru.zveron.lots_feed.parameters.data.ParametersGrpcSource
+import ru.zveron.lots_feed.parameters.data.ParametersMockSource
+import ru.zveron.lots_feed.parameters.data.ParametersRepository
+import ru.zveron.lots_feed.parameters.data.ParametersSource
 import ru.zveron.lots_feed.filters_screen.domain.categories.ChildCategoryItemProvider
 import ru.zveron.lots_feed.filters_screen.domain.categories.FiltersSetSelectedCategoryInteractor
 import ru.zveron.lots_feed.filters_screen.domain.categories.FiltersUpdateCategoriesInteractor
@@ -22,6 +22,7 @@ import ru.zveron.lots_feed.filters_screen.domain.lot_forms.FiltersSetSelectedLot
 import ru.zveron.lots_feed.filters_screen.domain.lot_forms.FiltersUpdateLotFormsInteractor
 import ru.zveron.lots_feed.filters_screen.domain.lot_forms.LotFormItemProvider
 import ru.zveron.lots_feed.filters_screen.domain.parameters.FiltersUpdateParametersInteractor
+import ru.zveron.lots_feed.filters_screen.domain.parameters.ParameterItemProviderFactory
 import ru.zveron.lots_feed.filters_screen.ui.categories.FiltersChildrenCategoriesViewModel
 import ru.zveron.lots_feed.filters_screen.ui.categories.FiltersRootCategoriesViewModel
 import ru.zveron.lots_feed.filters_screen.ui.lot_form.LotFormViewModel
@@ -31,6 +32,7 @@ import ru.zveron.lots_feed.lot_forms.data.LotFormLocalSource
 import ru.zveron.lots_feed.lot_forms.data.LotFormMockSource
 import ru.zveron.lots_feed.lot_forms.data.LotFormRepository
 import ru.zveron.lots_feed.lot_forms.data.LotFormSource
+import ru.zveron.lots_feed.parameters.data.ParametersLocalCache
 
 val filtersModule = module {
     scope<FiltersComponent> {
@@ -79,7 +81,11 @@ val filtersModule = module {
     // region parameters
     singleOf(::FiltersSelectedParametersRepository)
 
+    singleOf(::ParametersLocalCache)
+
     singleOf(::FiltersUpdateParametersInteractor)
+
+    singleOf(::ParameterItemProviderFactory)
 
     singleOf(::ParametersRepository)
     singleOf(::ParametersGrpcSource)

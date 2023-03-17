@@ -5,8 +5,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import ru.zveron.lots_feed.filters_screen.data.categories.FiltersSelectedCategoryRepository
 import ru.zveron.lots_feed.filters_screen.data.lot_forms.FiltersSelectedLotFormRepository
 import ru.zveron.lots_feed.filters_screen.data.parameters.FiltersSelectedParametersRepository
-import ru.zveron.lots_feed.filters_screen.data.parameters.ParametersRepository
-import ru.zveron.lots_feed.models.parameters.Parameter
+import ru.zveron.lots_feed.parameters.data.ParametersRepository
 
 internal class FiltersUpdateParametersInteractor(
     private val parametersRepository: ParametersRepository,
@@ -28,12 +27,12 @@ internal class FiltersUpdateParametersInteractor(
         _updateFlow.tryEmit(Unit)
     }
 
-    suspend fun loadParameters(): List<Parameter> {
+    suspend fun loadParameters() {
         val currentCategorySelection = filtersSelectedCategoryRepository.currentCategorySelection.value
         val curretnLotFormSelection = filtersSelectedLotFormRepository.currentLotForm.value
 
         if (currentCategorySelection.innerCategory == null) {
-            return emptyList()
+            return
         }
 
         val categoryId = currentCategorySelection.innerCategory.id
@@ -42,7 +41,5 @@ internal class FiltersUpdateParametersInteractor(
         val parameters = parametersRepository.loadParameters(categoryId, lotFormId)
 
         filtersSelectedParametersRepository.updateParameters(parameters)
-
-        return parameters
     }
 }

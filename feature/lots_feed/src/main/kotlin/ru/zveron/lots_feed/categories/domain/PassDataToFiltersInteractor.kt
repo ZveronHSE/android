@@ -21,5 +21,6 @@ internal class PassDataToFiltersInteractor(
         // TODO: pass actual parameter here
         filtersSelectedLotFormRepository.resetLotForm()
         filtersSelectedParametersRepository.updateParameters(emptyList())
+        filtersSelectedParametersRepository.resetParamters()
     }
 }

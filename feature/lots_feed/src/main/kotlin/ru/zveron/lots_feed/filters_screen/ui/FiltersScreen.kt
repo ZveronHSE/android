@@ -37,6 +37,7 @@ import ru.zveron.lots_feed.filters_screen.ui.categories.ChildrenCategoriesUiStat
 import ru.zveron.lots_feed.filters_screen.ui.lot_form.LotFormUiState
 import ru.zveron.lots_feed.filters_screen.ui.parameters.FiltersParametersUiState
 import ru.zveron.lots_feed.filters_screen.ui.parameters.ParameterUiState
+import ru.zveron.lots_feed.filters_screen.ui.parameters.Parameters
 
 @Composable
 fun FilterScreen(
@@ -50,6 +51,7 @@ fun FilterScreen(
     onRootCategorySelected: (Int) -> Unit = {},
     onChildCategoryClicked: () -> Unit = {},
     onLotFormClicked: () -> Unit = {},
+    onParameterClicked: (Int) -> Unit = {},
 ) {
     Column(
         modifier = modifier.background(MaterialTheme.colors.background),
@@ -96,9 +98,11 @@ fun FilterScreen(
                 }
             }
         }
+
         Parameters(
             state = parametersState,
             hasTopCorners = childCategoriesUiState is ChildrenCategoriesUiState.Hidden,
+            onParameterClicked = onParameterClicked,
         )
 
         Spacer(Modifier.weight(1f))
