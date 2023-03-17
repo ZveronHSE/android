@@ -1,4 +1,4 @@
-package ru.zveron.lots_feed.filters_screen.ui
+package ru.zveron.lots_feed.filters_screen.ui.categories
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -21,7 +21,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.zveron.design.R
 import ru.zveron.design.resources.ZveronText
-import ru.zveron.lots_feed.filters_screen.ui.categories.ChildrenCategoriesUiState
 
 @Composable
 internal fun ChildCategory(

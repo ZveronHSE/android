@@ -12,7 +12,7 @@ import ru.zveron.lots_feed.choose_item.ChooseItemUiState
 import ru.zveron.lots_feed.filters_screen.data.lot_forms.ChildLotFormState
 import ru.zveron.lots_feed.filters_screen.data.lot_forms.FiltersChildrenLotFormRepository
 
-class LotFormItemProvider(
+internal class LotFormItemProvider(
     filtersChildrenLotFormRepository: FiltersChildrenLotFormRepository,
     private val filtersSetSelectedLotFormInteractor: FiltersSetSelectedLotFormInteractor,
 ): ChooseItemItemProvider {

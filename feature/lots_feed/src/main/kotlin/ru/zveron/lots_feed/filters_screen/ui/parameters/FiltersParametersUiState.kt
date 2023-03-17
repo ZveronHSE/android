@@ -5,6 +5,9 @@ import androidx.compose.runtime.Immutable
 @Immutable
 sealed class FiltersParametersUiState {
     @Immutable
+    object Hidden: FiltersParametersUiState()
+
+    @Immutable
     object Loading: FiltersParametersUiState()
 
     @Immutable

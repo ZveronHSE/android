@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import ru.zveron.lots_feed.models.parameters.Parameter
 
-internal class FiltersSelectedParametersHolder {
+internal class FiltersSelectedParametersRepository {
     private val _currentParameters = MutableStateFlow<List<Parameter>>(emptyList())
     private val _currentParametersValues = MutableStateFlow<Map<Int, String>>(emptyMap())
 
@@ -32,5 +32,10 @@ internal class FiltersSelectedParametersHolder {
                 put(id, value)
             }
         }
+    }
+
+    fun resetParamters() {
+        _currentParameters.update { emptyList() }
+        _currentParametersValues.update { emptyMap() }
     }
 }

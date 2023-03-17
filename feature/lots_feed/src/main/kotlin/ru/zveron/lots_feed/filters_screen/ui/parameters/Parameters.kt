@@ -43,6 +43,8 @@ internal fun Parameters(
             parameters = state.parameters,
             hasTopCorners = hasTopCorners
         )
+
+        FiltersParametersUiState.Hidden -> {}
     }
 }
 

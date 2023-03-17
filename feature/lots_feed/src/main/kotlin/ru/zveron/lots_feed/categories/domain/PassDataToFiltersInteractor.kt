@@ -3,7 +3,7 @@ package ru.zveron.lots_feed.categories.domain
 import ru.zveron.lots_feed.categories.data.SelectedCategoriesRepository
 import ru.zveron.lots_feed.filters_screen.data.categories.FiltersSelectedCategoryRepository
 import ru.zveron.lots_feed.filters_screen.data.lot_forms.FiltersSelectedLotFormRepository
-import ru.zveron.lots_feed.filters_screen.data.parameters.FiltersSelectedParametersHolder
+import ru.zveron.lots_feed.filters_screen.data.parameters.FiltersSelectedParametersRepository
 
 internal class PassDataToFiltersInteractor(
     private val selectedCategoriesRepository: SelectedCategoriesRepository,
@@ -11,7 +11,7 @@ internal class PassDataToFiltersInteractor(
 
     private val filtersSelectedCategoryRepository: FiltersSelectedCategoryRepository,
     private val filtersSelectedLotFormRepository: FiltersSelectedLotFormRepository,
-    private val filtersSelectedParametersHolder: FiltersSelectedParametersHolder,
+    private val filtersSelectedParametersRepository: FiltersSelectedParametersRepository,
 ) {
     fun passDataToFilters() {
         val currentCategorySelection = selectedCategoriesRepository.currentCategorySelection.value
@@ -20,6 +20,6 @@ internal class PassDataToFiltersInteractor(
 
         // TODO: pass actual parameter here
         filtersSelectedLotFormRepository.resetLotForm()
-        filtersSelectedParametersHolder.updateParameters(emptyList())
+        filtersSelectedParametersRepository.updateParameters(emptyList())
     }
 }

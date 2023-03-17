@@ -32,6 +32,7 @@ import ru.zveron.lots_feed.filters_screen.ui.categories.RootCategoriesUiState
 import ru.zveron.lots_feed.filters_screen.ui.categories.RootCategoryUiState
 import ru.zveron.design.R as DesignR
 import ru.zveron.design.resources.ZveronText
+import ru.zveron.lots_feed.filters_screen.ui.categories.ChildCategory
 import ru.zveron.lots_feed.filters_screen.ui.categories.ChildrenCategoriesUiState
 import ru.zveron.lots_feed.filters_screen.ui.lot_form.LotFormUiState
 import ru.zveron.lots_feed.filters_screen.ui.parameters.FiltersParametersUiState
@@ -90,7 +91,9 @@ fun FilterScreen(
                     onChildCategoryClicked = onChildCategoryClicked,
                 )
 
-                Divider(Modifier.padding(horizontal = 17.dp))
+                if (parametersState !is FiltersParametersUiState.Hidden) {
+                    Divider(Modifier.padding(horizontal = 17.dp))
+                }
             }
         }
         Parameters(
@@ -215,13 +218,36 @@ private fun FilterScreenRootCategoryUnselectedPreview() {
 
     val childCategoriesUiState = ChildrenCategoriesUiState.Hidden
 
-    val filtersState = FiltersParametersUiState.Success(
-        listOf(
-            ParameterUiState(1, "Порода", isUnderlined = false),
-            ParameterUiState(2, "Цвет", isUnderlined = true),
-            ParameterUiState(3, "Возраст", isUnderlined = false),
+    val filtersState = FiltersParametersUiState.Hidden
+
+    val lotFormUiState = LotFormUiState.Show(ZveronText.RawResource(R.string.lot_form_title))
+
+    ZveronTheme {
+        FilterScreen(
+            rootCategoriesUiState = rootCategoriesUiState,
+            childCategoriesUiState = childCategoriesUiState,
+            parametersState = filtersState,
+            lotFormUiState = lotFormUiState,
+            modifier = Modifier.fillMaxSize(),
         )
+    }
+}
+
+@Preview
+@Composable
+private fun FilterScreenRootCategoryNoParametersPreview() {
+    val rootCategoriesUiState = RootCategoriesUiState.Success(
+        categories = listOf(
+            RootCategoryUiState(1, "Животные"),
+            RootCategoryUiState(2, "Товары для животных")
+        ),
+        selectedCategoryId = 1,
     )
+
+    val childCategoriesUiState =
+        ChildrenCategoriesUiState.Show(ZveronText.RawResource(R.string.child_category_selector_title))
+
+    val filtersState = FiltersParametersUiState.Hidden
 
     val lotFormUiState = LotFormUiState.Show(ZveronText.RawResource(R.string.lot_form_title))
 

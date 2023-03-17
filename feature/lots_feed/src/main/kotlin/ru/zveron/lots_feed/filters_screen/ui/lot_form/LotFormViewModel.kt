@@ -18,7 +18,7 @@ import ru.zveron.lots_feed.filters_screen.data.lot_forms.FiltersSelectedLotFormR
 import ru.zveron.lots_feed.filters_screen.domain.lot_forms.FiltersUpdateLotFormsInteractor
 import ru.zveron.lots_feed.filters_screen.domain.lot_forms.LotFormItemProvider
 
-class LotFormViewModel(
+internal class LotFormViewModel(
     filtersSelectedLotFormRepository: FiltersSelectedLotFormRepository,
     filtersSelectedCategoryRepository: FiltersSelectedCategoryRepository,
     private val chooseItemHolder: ChooseItemHolder,
