@@ -55,6 +55,7 @@ val networkModule = module {
         ManagedChannelBuilder
             .forAddress(BuildConfig.host, BuildConfig.port)
             .usePlaintext()
+            .intercept()
             .build()
     }
 

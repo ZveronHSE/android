@@ -199,25 +199,32 @@ private fun LotsFeedSuccessPreview() {
         lots = listOf(
             LotUiState(
                 id = 1,
-                title = "Lot 1",
+                title = "Шапочка вязанная",
                 price = "1$",
                 date = "20.20.20",
                 image = ZveronImage.ResourceImage(ru.zveron.design.R.drawable.cool_dog),
             ),
             LotUiState(
                 id = 2,
-                title = "Lot 2",
+                title = "Щапочка банан",
                 price = "300$",
                 date = "20.20.20",
                 image = ZveronImage.ResourceImage(ru.zveron.design.R.drawable.cool_dog),
             ),
             LotUiState(
                 id = 3,
-                title = "Lot 3",
+                title = "Ошейник с брелком",
                 price = "100500$",
                 date = "20.20.20",
                 image = ZveronImage.ResourceImage(ru.zveron.design.R.drawable.cool_dog),
-            )
+            ),
+            LotUiState(
+                id = 4,
+                title = "Ошейник зеленый",
+                price = "100500$",
+                date = "20.20.20",
+                image = ZveronImage.ResourceImage(ru.zveron.design.R.drawable.cool_dog),
+            ),
         )
     )
 

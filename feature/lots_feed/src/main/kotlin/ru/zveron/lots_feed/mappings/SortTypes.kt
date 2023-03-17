@@ -21,6 +21,8 @@ fun WaterfallRequestKt.Dsl.addSortType(sortType: SortType) {
         SortType.Expensive -> {
             this.sortByPrice = sortByPrice { typeSort = TypeSort.DESC }
         }
-        SortType.Newest -> sortByDate { typeSort = TypeSort.DESC }
+        SortType.Newest -> {
+            this.sortByDate = sortByDate { typeSort = TypeSort.DESC }
+        }
     }
 }

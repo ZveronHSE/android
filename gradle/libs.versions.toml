@@ -36,7 +36,7 @@ moshi = "1.14.0"
 
 coil = "2.2.2"
 
-zveron_contracts = "1.8.5"
+zveron_contracts = "1.9.0"
 
 [libraries]
 #androidx

@@ -1,5 +1,6 @@
 package ru.zveron.lots_feed.feed.data
 
+import com.google.protobuf.kotlin.toByteStringUtf8
 import com.google.protobuf.util.JsonFormat
 import ru.zveron.contract.apigateway.ApigatewayServiceGrpc.ApigatewayServiceBlockingStub
 import ru.zveron.contract.apigateway.apiGatewayRequest
@@ -27,7 +28,7 @@ class LotsFeedGrpcSource(
         }
 
         val request = apiGatewayRequest {
-            this.requestBody = waterfallRequest.toByteString()
+            this.requestBody = JsonFormat.printer().print(waterfallRequest).toByteStringUtf8()
             this.methodAlias = WATERFALL_METHOD_NAME
         }
 

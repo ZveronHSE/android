@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -21,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -77,10 +79,12 @@ fun Category(
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier.clickable(
-            onClickLabel = category.title,
-            onClick = { onCategoryClick.invoke(category) },
-        ),
+        modifier = modifier
+            .clickable(
+                onClickLabel = category.title,
+                onClick = { onCategoryClick.invoke(category) },
+            )
+            .sizeIn(maxWidth = 100.dp),
     ) {
         ZveronImage(
             zveronImage = category.image,
@@ -98,6 +102,7 @@ fun Category(
                 fontSize = 16.sp,
                 lineHeight = 18.96.sp,
             ),
+            textAlign = TextAlign.Center,
         )
     }
 }
@@ -109,7 +114,7 @@ internal fun CategoryPreview() {
         val category = CategoryUiState(
             id = 0,
             image = ZveronImage.ResourceImage(R.drawable.cool_dog),
-            title = "Товары"
+            title = "Товары для животных"
         )
         Category(category)
     }

@@ -1,6 +1,6 @@
 package ru.zveron.lots_feed.mappings
 
-import ru.zveron.contract.lot.model.Lot
+import ru.zveron.contract.core.Lot
 import ru.zveron.design.R
 import ru.zveron.design.resources.ZveronImage
 import ru.zveron.lots_feed.feed.ui.LotUiState

@@ -7,6 +7,8 @@ import ru.zveron.lots_feed.filters_screen.data.lot_forms.FiltersSelectedLotFormR
 import ru.zveron.lots_feed.filters_screen.data.parameters.FiltersSelectedParametersRepository
 import ru.zveron.lots_feed.parameters.data.ParametersRepository
 
+private const val DEFAULT_LOT_FORM_ID = 1
+
 internal class FiltersUpdateParametersInteractor(
     private val parametersRepository: ParametersRepository,
     private val filtersSelectedCategoryRepository: FiltersSelectedCategoryRepository,
@@ -36,7 +38,7 @@ internal class FiltersUpdateParametersInteractor(
         }
 
         val categoryId = currentCategorySelection.innerCategory.id
-        val lotFormId = curretnLotFormSelection?.id ?: 0
+        val lotFormId = curretnLotFormSelection?.id ?: DEFAULT_LOT_FORM_ID
 
         val parameters = parametersRepository.loadParameters(categoryId, lotFormId)
 

@@ -2,6 +2,7 @@ package ru.zveron.lots_feed.categories.data
 
 import com.google.protobuf.empty
 import com.google.protobuf.int32Value
+import com.google.protobuf.kotlin.toByteStringUtf8
 import com.google.protobuf.util.JsonFormat
 import ru.zveron.contract.apigateway.ApigatewayServiceGrpc.ApigatewayServiceBlockingStub
 import ru.zveron.contract.apigateway.apiGatewayRequest
@@ -9,8 +10,8 @@ import ru.zveron.contract.parameter.external.CategoryResponse
 import ru.zveron.lots_feed.mappings.toDomainCategory
 import ru.zveron.lots_feed.models.categories.Category
 
-private const val GET_ROOT_METHOD_NAME = "getRoot"
-private const val GET_CHILD_METHOD_NAME = "categoryGetChild"
+private const val GET_ROOT_METHOD_NAME = "categoryRootGet"
+private const val GET_CHILD_METHOD_NAME = "categoryChildrenGet"
 
 class CategoryGrpcSource(
     private val apigateway: ApigatewayServiceBlockingStub,
@@ -18,7 +19,7 @@ class CategoryGrpcSource(
     override suspend fun loadRootCategories(): List<Category> {
         val getRootRequest = empty {  }
         val request = apiGatewayRequest {
-            this.requestBody = getRootRequest.toByteString()
+            this.requestBody = JsonFormat.printer().print(getRootRequest).toByteStringUtf8()
             this.methodAlias = GET_ROOT_METHOD_NAME
         }
 
@@ -36,7 +37,7 @@ class CategoryGrpcSource(
     override suspend fun loadChildCategories(categoryId: Int): List<Category> {
         val getChildrenRequest = int32Value { this.value = categoryId }
         val request = apiGatewayRequest {
-            this.requestBody = getChildrenRequest.toByteString()
+            this.requestBody = JsonFormat.printer().print(getChildrenRequest).toByteStringUtf8()
             this.methodAlias = GET_CHILD_METHOD_NAME
         }
 

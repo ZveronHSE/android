@@ -62,7 +62,11 @@ private fun ReadyCategories(
             ) {
                 for (category in categories) {
                     key(category.id) {
-                        Category(category = category, onCategoryClick = onCategoryClick)
+                        Category(
+                            category = category,
+                            onCategoryClick = onCategoryClick,
+                            modifier = Modifier.weight(1f),
+                        )
                     }
                 }
             }
@@ -70,9 +74,13 @@ private fun ReadyCategories(
             LazyRow(
                 modifier = modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.Bottom,
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
             ) {
                 items(categories, key = { it.id }) { category ->
-                    Category(category = category, onCategoryClick = onCategoryClick)
+                    Category(
+                        category = category,
+                        onCategoryClick = onCategoryClick,
+                    )
                 }
             }
         }
