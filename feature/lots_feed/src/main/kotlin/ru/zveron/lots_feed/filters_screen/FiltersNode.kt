@@ -17,6 +17,7 @@ import ru.zveron.lots_feed.filters_screen.ui.parameters.FiltersViewModel
 import ru.zveron.lots_feed.filters_screen.ui.categories.FiltersChildrenCategoriesViewModel
 import ru.zveron.lots_feed.filters_screen.ui.categories.FiltersRootCategoriesViewModel
 import ru.zveron.lots_feed.filters_screen.ui.lot_form.LotFormViewModel
+import ru.zveron.lots_feed.filters_screen.ui.sort_types.FiltersSortTypesViewModel
 
 class FiltersNode(
     buildContext: BuildContext,
@@ -57,16 +58,24 @@ class FiltersNode(
             parameters = { parametersOf(filtersNavigator) },
         )
 
+        val sortTypesViewModel = koinViewModel<FiltersSortTypesViewModel>(
+            viewModelStoreOwner = this,
+            scope = filtersComponent.scope,
+            parameters = { parametersOf(filtersNavigator) }
+        )
+
         val parametersState by filtersViewModel.parametersUiState.collectAsState()
         val rootCategoriesState by rootCategoriesViewModel.rootCategoriesState.collectAsState()
         val childCategoriesState by childrenCategoriesViewModel.uiState.collectAsState()
         val lotFormState by lotFormViewModel.uiState.collectAsState()
+        val sortTypes by sortTypesViewModel.uiState.collectAsState()
 
         FilterScreen(
             rootCategoriesUiState = rootCategoriesState,
             childCategoriesUiState = childCategoriesState,
             parametersState = parametersState,
             lotFormUiState = lotFormState,
+            sortTypesUiState = sortTypes,
             modifier = modifier,
             onBackClicked = ::navigateUp,
             onRootCategorySelected = rootCategoriesViewModel::rootCategorySelected,
@@ -74,6 +83,7 @@ class FiltersNode(
             onChildCategoryClicked = childrenCategoriesViewModel::childCategoryClicked,
             onParameterClicked = filtersViewModel::onParameterRowClicked,
             onDoneClicked = ::finishFilters,
+            onSortTypeSelected = sortTypesViewModel::sortTypeSelected,
         )
     }
 

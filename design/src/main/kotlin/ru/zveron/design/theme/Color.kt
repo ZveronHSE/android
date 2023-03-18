@@ -14,3 +14,5 @@ val WhiteSurfaceBackground = Color.White
 val gray1 = Color(0xFFF4F4F5)
 val gray3 = Color(0xFFACAEB4)
 val gray5 = Color(0xFF18191B)
+
+val blackWithAlpha02 = Color.Black.copy(alpha = 0.2f)

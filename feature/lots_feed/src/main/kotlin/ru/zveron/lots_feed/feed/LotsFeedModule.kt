@@ -19,6 +19,9 @@ import ru.zveron.lots_feed.feed.data.feed.LotsFeedGrpcSource
 import ru.zveron.lots_feed.feed.data.feed.LotsFeedMockSource
 import ru.zveron.lots_feed.feed.data.feed.LotsFeedRepository
 import ru.zveron.lots_feed.feed.data.feed.LotsFeedSource
+import ru.zveron.lots_feed.feed.data.sort_type.SelectedSortTypeRepository
+import ru.zveron.lots_feed.feed.domain.LoadFeedInteractor
+import ru.zveron.lots_feed.feed.domain.SelectSortTypeInteractor
 import ru.zveron.lots_feed.feed.domain.UpdateFeedInteractor
 import ru.zveron.lots_feed.feed.ui.LotsFeedViewModel
 
@@ -56,5 +59,9 @@ val lotsFeedModule = module {
     singleOf(::SelectedCategoriesRepository)
     singleOf(::SelectedCategoriesInteractor)
 
+    singleOf(::SelectSortTypeInteractor)
+    singleOf(::SelectedSortTypeRepository)
+
     singleOf(::UpdateFeedInteractor)
+    singleOf(::LoadFeedInteractor)
 }

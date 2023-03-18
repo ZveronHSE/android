@@ -13,6 +13,12 @@ fun UiSortType.toSortType() = when (this) {
     UiSortType.EXPENSIVE -> SortType.Expensive
 }
 
+fun SortType.toUiSortType() = when (this) {
+    SortType.Newest -> UiSortType.DATE
+    SortType.Cheap -> UiSortType.CHEAP
+    SortType.Expensive -> UiSortType.EXPENSIVE
+}
+
 fun WaterfallRequestKt.Dsl.addSortType(sortType: SortType) {
     when (sortType) {
         SortType.Cheap -> {

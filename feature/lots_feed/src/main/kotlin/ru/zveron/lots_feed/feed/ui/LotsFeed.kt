@@ -65,6 +65,7 @@ internal fun LotsFeed(
     categoryTitle: ZveronText,
     feedUiState: LotsFeedUiState,
     categoriesUiState: CategoriesUiState,
+    currentSortType: SortType,
     modifier: Modifier = Modifier,
     onSearchClicked: () -> Unit = {},
     onFiltersClicked: () -> Unit = {},
@@ -137,7 +138,11 @@ internal fun LotsFeed(
             Box(
                 Modifier.fillMaxWidth()
             ) {
-                SortDropdown(modifier = Modifier.align(Alignment.CenterEnd), onSortTypeSelected)
+                SortDropdown(
+                    selectedSortType = currentSortType,
+                    modifier = Modifier.align(Alignment.CenterEnd),
+                    onSortTypeSelected
+                )
             }
         }
 
@@ -187,6 +192,7 @@ private fun LotsFeedLoadingPreview() {
             categoryTitle = ZveronText.RawString("Категории"),
             feedUiState = LotsFeedUiState.Loading,
             categoriesUiState = CategoriesUiState.Loading,
+            currentSortType = SortType.EXPENSIVE,
             modifier = Modifier.fillMaxSize(),
         )
     }
@@ -243,11 +249,14 @@ private fun LotsFeedSuccessPreview() {
         ),
     )
 
+    val selectedSortType = SortType.DATE
+
     ZveronTheme {
         LotsFeed(
             categoryTitle = ZveronText.RawString("Категории"),
             categoriesUiState = categoriesState,
             feedUiState = feedState,
+            currentSortType = selectedSortType,
             modifier = Modifier.fillMaxSize(),
         )
     }
@@ -262,6 +271,7 @@ private fun LotsFeedLoadingWithBackPreview() {
             feedUiState = LotsFeedUiState.Loading,
             categoriesUiState = CategoriesUiState.Loading,
             hasBackButton = true,
+            currentSortType = SortType.DATE,
             modifier = Modifier.fillMaxSize(),
         )
     }

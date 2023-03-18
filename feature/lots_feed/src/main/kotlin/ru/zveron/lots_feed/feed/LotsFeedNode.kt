@@ -3,6 +3,7 @@ package ru.zveron.lots_feed.feed
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import org.koin.androidx.compose.koinViewModel
@@ -10,6 +11,7 @@ import org.koin.core.parameter.parametersOf
 import org.koin.core.scope.Scope
 import ru.zveron.appyx.viewmodel.ViewModelNode
 import ru.zveron.lots_feed.categories.ui.CategoriesViewModel
+import ru.zveron.lots_feed.categories.ui.CategoryUiState
 import ru.zveron.lots_feed.feed.ui.LotsFeed
 import ru.zveron.lots_feed.feed.ui.LotsFeedViewModel
 
@@ -49,19 +51,28 @@ class LotsFeedNode(
 
         val canNavigateBack by categoriesViewModel.canNavigateBack.collectAsState()
 
+        val currentSortType by feedViewModel.currentSortType.collectAsState()
+
+        val categoryClicker = remember {
+            { categoriesUiState: CategoryUiState ->
+                categoriesViewModel.onCategoryClicked(
+                    categoriesUiState.id
+                )
+            }
+        }
+
         LotsFeed(
             categoryTitle = categoryTitle,
             feedUiState = feedUiState,
             categoriesUiState = categoriesUiState,
+            currentSortType = currentSortType,
             modifier = modifier,
             hasBackButton = canNavigateBack,
             onNavigateBack = ::navigateUp,
-            onCategoryClick = {
-                categoriesViewModel.onCategoryClicked(it.id)
-//                lotsFeedNavigator.goToCategory(CategoryArgument(it.id, it.title))
-            },
+            onCategoryClick = categoryClicker,
             onSearchClicked = lotsFeedNavigator::goToSearch,
             onFiltersClicked = feedViewModel::goToFilters,
+            onSortTypeSelected = feedViewModel::sortTypeSelected,
         )
     }
 }

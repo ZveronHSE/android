@@ -32,12 +32,15 @@ import ru.zveron.lots_feed.filters_screen.ui.categories.RootCategoriesUiState
 import ru.zveron.lots_feed.filters_screen.ui.categories.RootCategoryUiState
 import ru.zveron.design.R as DesignR
 import ru.zveron.design.resources.ZveronText
+import ru.zveron.lots_feed.feed.ui.SortType
 import ru.zveron.lots_feed.filters_screen.ui.categories.ChildCategory
 import ru.zveron.lots_feed.filters_screen.ui.categories.ChildrenCategoriesUiState
 import ru.zveron.lots_feed.filters_screen.ui.lot_form.LotFormUiState
 import ru.zveron.lots_feed.filters_screen.ui.parameters.FiltersParametersUiState
 import ru.zveron.lots_feed.filters_screen.ui.parameters.ParameterUiState
 import ru.zveron.lots_feed.filters_screen.ui.parameters.Parameters
+import ru.zveron.lots_feed.filters_screen.ui.sort_types.SortTypes
+import ru.zveron.lots_feed.filters_screen.ui.sort_types.SortTypesUiState
 
 @Composable
 fun FilterScreen(
@@ -45,6 +48,7 @@ fun FilterScreen(
     childCategoriesUiState: ChildrenCategoriesUiState,
     parametersState: FiltersParametersUiState,
     lotFormUiState: LotFormUiState,
+    sortTypesUiState: SortTypesUiState,
     modifier: Modifier = Modifier,
     onBackClicked: () -> Unit = {},
     onDoneClicked: () -> Unit = {},
@@ -52,6 +56,7 @@ fun FilterScreen(
     onChildCategoryClicked: () -> Unit = {},
     onLotFormClicked: () -> Unit = {},
     onParameterClicked: (Int) -> Unit = {},
+    onSortTypeSelected: (SortType) -> Unit = {},
 ) {
     Column(
         modifier = modifier.background(MaterialTheme.colors.background),
@@ -103,6 +108,13 @@ fun FilterScreen(
             state = parametersState,
             hasTopCorners = childCategoriesUiState is ChildrenCategoriesUiState.Hidden,
             onParameterClicked = onParameterClicked,
+        )
+
+        DefaultSectionSpacer()
+
+        SortTypes(
+            sortTypesUiState = sortTypesUiState,
+            onSortTypeSelected = onSortTypeSelected,
         )
 
         Spacer(Modifier.weight(1f))
@@ -170,6 +182,10 @@ private fun FilterScreenLoadingPreview() {
             childCategoriesUiState = ChildrenCategoriesUiState.Hidden,
             parametersState = FiltersParametersUiState.Loading,
             lotFormUiState = LotFormUiState.Hidden,
+            sortTypesUiState = SortTypesUiState(
+                SortType.values().toList(),
+                SortType.DATE,
+            ),
             modifier = Modifier.fillMaxSize(),
         )
     }
@@ -204,6 +220,10 @@ private fun FilterScreenRootCategorySelectedPreview() {
             childCategoriesUiState = childCategoriesUiState,
             parametersState = filtersState,
             lotFormUiState = lotFormUiState,
+            sortTypesUiState = SortTypesUiState(
+                SortType.values().toList(),
+                SortType.DATE,
+            ),
             modifier = Modifier.fillMaxSize(),
         )
     }
@@ -232,6 +252,10 @@ private fun FilterScreenRootCategoryUnselectedPreview() {
             childCategoriesUiState = childCategoriesUiState,
             parametersState = filtersState,
             lotFormUiState = lotFormUiState,
+            sortTypesUiState = SortTypesUiState(
+                SortType.values().toList(),
+                SortType.DATE,
+            ),
             modifier = Modifier.fillMaxSize(),
         )
     }
@@ -261,6 +285,10 @@ private fun FilterScreenRootCategoryNoParametersPreview() {
             childCategoriesUiState = childCategoriesUiState,
             parametersState = filtersState,
             lotFormUiState = lotFormUiState,
+            sortTypesUiState = SortTypesUiState(
+                SortType.values().toList(),
+                SortType.DATE,
+            ),
             modifier = Modifier.fillMaxSize(),
         )
     }

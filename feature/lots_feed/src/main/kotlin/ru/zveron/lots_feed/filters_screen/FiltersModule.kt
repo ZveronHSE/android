@@ -12,6 +12,7 @@ import ru.zveron.lots_feed.filters_screen.data.categories.FiltersSelectedCategor
 import ru.zveron.lots_feed.filters_screen.data.lot_forms.FiltersChildrenLotFormRepository
 import ru.zveron.lots_feed.filters_screen.data.lot_forms.FiltersSelectedLotFormRepository
 import ru.zveron.lots_feed.filters_screen.data.parameters.FiltersSelectedParametersRepository
+import ru.zveron.lots_feed.filters_screen.data.sort_types.FiltersSelectedSortTypeRepository
 import ru.zveron.lots_feed.filters_screen.domain.PassDataToFeedInteractor
 import ru.zveron.lots_feed.filters_screen.domain.PassDataToFeedInteractorImpl
 import ru.zveron.lots_feed.parameters.data.ParametersGrpcSource
@@ -30,6 +31,7 @@ import ru.zveron.lots_feed.filters_screen.ui.categories.FiltersChildrenCategorie
 import ru.zveron.lots_feed.filters_screen.ui.categories.FiltersRootCategoriesViewModel
 import ru.zveron.lots_feed.filters_screen.ui.lot_form.LotFormViewModel
 import ru.zveron.lots_feed.filters_screen.ui.parameters.FiltersViewModel
+import ru.zveron.lots_feed.filters_screen.ui.sort_types.FiltersSortTypesViewModel
 import ru.zveron.lots_feed.lot_forms.data.LotFormGrpcSource
 import ru.zveron.lots_feed.lot_forms.data.LotFormLocalSource
 import ru.zveron.lots_feed.lot_forms.data.LotFormMockSource
@@ -43,6 +45,7 @@ val filtersModule = module {
         viewModelOf(::FiltersRootCategoriesViewModel)
         viewModelOf(::FiltersChildrenCategoriesViewModel)
         viewModelOf(::LotFormViewModel)
+        viewModelOf(::FiltersSortTypesViewModel)
 
         scopedOf(::LotFormItemProvider)
         scopedOf(::ChildCategoryItemProvider)
@@ -101,6 +104,8 @@ val filtersModule = module {
         }
     }
     // endregion
+
+    singleOf(::FiltersSelectedSortTypeRepository)
 
     singleOf(::ChooseItemHolder)
 

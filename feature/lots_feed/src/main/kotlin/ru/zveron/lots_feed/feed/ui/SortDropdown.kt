@@ -30,12 +30,12 @@ import ru.zveron.lots_feed.R
 
 @Composable
 fun SortDropdown(
+    selectedSortType: SortType,
     modifier: Modifier = Modifier,
     onSortTypeSelected: (SortType) -> Unit = {},
 ) {
     var expanded by remember { mutableStateOf(false) }
     val items = SortType.values()
-    var selectedIndex by remember { mutableStateOf(0) }
     Box(
         modifier = modifier.wrapContentSize(Alignment.TopStart)
     ) {
@@ -44,7 +44,7 @@ fun SortDropdown(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                text = stringResource(items[selectedIndex].titleRes),
+                text = stringResource(selectedSortType.titleRes),
                 style = TextStyle(
                     fontFamily = Rubik,
                     fontWeight = FontWeight.Normal,
@@ -67,7 +67,6 @@ fun SortDropdown(
         ) {
             items.forEachIndexed { index, sortType ->
                 DropdownMenuItem(onClick = {
-                    selectedIndex = index
                     expanded = false
                     onSortTypeSelected.invoke(sortType)
                 }) {
@@ -90,6 +89,9 @@ fun SortDropdown(
 @Composable
 fun PreviewSortDropdown() {
     ZveronTheme {
-        SortDropdown()
+        var selectedSortType by remember {
+            mutableStateOf(SortType.EXPENSIVE)
+        }
+        SortDropdown(selectedSortType, Modifier) { selectedSortType = it }
     }
 }
