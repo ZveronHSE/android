@@ -1,4 +1,4 @@
-package ru.zveron.lots_feed.feed.data
+package ru.zveron.lots_feed.feed.data.feed
 
 import ru.zveron.lots_feed.models.filters.Filter
 import ru.zveron.lots_feed.models.sort.SortType

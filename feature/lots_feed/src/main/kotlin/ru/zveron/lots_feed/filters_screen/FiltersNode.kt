@@ -73,7 +73,13 @@ class FiltersNode(
             onLotFormClicked = lotFormViewModel::lotFormRowClicked,
             onChildCategoryClicked = childrenCategoriesViewModel::childCategoryClicked,
             onParameterClicked = filtersViewModel::onParameterRowClicked,
+            onDoneClicked = ::finishFilters,
         )
+    }
+
+    private fun finishFilters() {
+        filtersComponent.getPassDataToFeedInteractor().passDataToLotsFeed()
+        navigateUp()
     }
 
     override val bottomNavigationMode: Flow<BottomNavigationMode> =

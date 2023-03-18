@@ -43,6 +43,10 @@ class SelectedCategoriesRepository {
     fun canResetCategory(): Boolean {
         return !_currentCategorySelection.value.isEmpty()
     }
+
+    internal fun setCategorySelection(categorySelection: CategorySelection) {
+        _currentCategorySelection.update { categorySelection }
+    }
 }
 
 data class CategorySelection(

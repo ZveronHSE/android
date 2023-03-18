@@ -3,6 +3,7 @@ package ru.zveron.lots_feed.filters_screen
 import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.core.module.dsl.scopedOf
 import org.koin.core.module.dsl.singleOf
+import org.koin.dsl.bind
 import org.koin.dsl.module
 import ru.zveron.lots_feed.BuildConfig
 import ru.zveron.lots_feed.choose_item.ChooseItemHolder
@@ -11,6 +12,8 @@ import ru.zveron.lots_feed.filters_screen.data.categories.FiltersSelectedCategor
 import ru.zveron.lots_feed.filters_screen.data.lot_forms.FiltersChildrenLotFormRepository
 import ru.zveron.lots_feed.filters_screen.data.lot_forms.FiltersSelectedLotFormRepository
 import ru.zveron.lots_feed.filters_screen.data.parameters.FiltersSelectedParametersRepository
+import ru.zveron.lots_feed.filters_screen.domain.PassDataToFeedInteractor
+import ru.zveron.lots_feed.filters_screen.domain.PassDataToFeedInteractorImpl
 import ru.zveron.lots_feed.parameters.data.ParametersGrpcSource
 import ru.zveron.lots_feed.parameters.data.ParametersMockSource
 import ru.zveron.lots_feed.parameters.data.ParametersRepository
@@ -100,4 +103,6 @@ val filtersModule = module {
     // endregion
 
     singleOf(::ChooseItemHolder)
+
+    singleOf(::PassDataToFeedInteractorImpl) bind PassDataToFeedInteractor::class
 }

@@ -1,4 +1,4 @@
-package ru.zveron.lots_feed.feed.data
+package ru.zveron.lots_feed.feed.data.feed
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

@@ -1,4 +1,4 @@
-package ru.zveron.lots_feed.feed.data
+package ru.zveron.lots_feed.feed.data.feed
 
 import com.google.protobuf.kotlin.toByteStringUtf8
 import com.google.protobuf.util.JsonFormat

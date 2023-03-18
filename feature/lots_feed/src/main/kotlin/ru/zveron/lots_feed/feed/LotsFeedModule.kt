@@ -15,29 +15,31 @@ import ru.zveron.lots_feed.categories.domain.CategoryInteractor
 import ru.zveron.lots_feed.categories.domain.PassDataToFiltersInteractor
 import ru.zveron.lots_feed.categories.domain.SelectedCategoriesInteractor
 import ru.zveron.lots_feed.categories.ui.CategoriesViewModel
-import ru.zveron.lots_feed.feed.data.LotsFeedGrpcSource
-import ru.zveron.lots_feed.feed.data.LotsFeedMockSource
-import ru.zveron.lots_feed.feed.data.LotsFeedRepository
-import ru.zveron.lots_feed.feed.data.LotsFeedSource
+import ru.zveron.lots_feed.feed.data.feed.LotsFeedGrpcSource
+import ru.zveron.lots_feed.feed.data.feed.LotsFeedMockSource
+import ru.zveron.lots_feed.feed.data.feed.LotsFeedRepository
+import ru.zveron.lots_feed.feed.data.feed.LotsFeedSource
+import ru.zveron.lots_feed.feed.domain.UpdateFeedInteractor
 import ru.zveron.lots_feed.feed.ui.LotsFeedViewModel
 
 val lotsFeedModule = module {
     scope<LotsFeedComponent> {
         viewModelOf(::LotsFeedViewModel)
-        scopedOf(::LotsFeedRepository)
-        scopedOf(::LotsFeedGrpcSource)
-        scoped<LotsFeedSource> {
-            if (BuildConfig.useDebugMocks) {
-                LotsFeedMockSource()
-            } else {
-                get<LotsFeedGrpcSource>()
-            }
-        }
 
         viewModelOf(::CategoriesViewModel)
         scopedOf(::CategoryInteractor)
 
         scopedOf(::PassDataToFiltersInteractor)
+    }
+
+    singleOf(::LotsFeedRepository)
+    singleOf(::LotsFeedGrpcSource)
+    single<LotsFeedSource> {
+        if (BuildConfig.useDebugMocks) {
+            LotsFeedMockSource()
+        } else {
+            get<LotsFeedGrpcSource>()
+        }
     }
 
     singleOf(::CategoryRepository)
@@ -53,4 +55,6 @@ val lotsFeedModule = module {
 
     singleOf(::SelectedCategoriesRepository)
     singleOf(::SelectedCategoriesInteractor)
+
+    singleOf(::UpdateFeedInteractor)
 }

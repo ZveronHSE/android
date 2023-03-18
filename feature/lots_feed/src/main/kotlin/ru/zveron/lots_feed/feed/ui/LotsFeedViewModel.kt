@@ -5,10 +5,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.zveron.lots_feed.categories.domain.PassDataToFiltersInteractor
 import ru.zveron.lots_feed.feed.LotsFeedNavigator
-import ru.zveron.lots_feed.feed.data.LotsFeedRepository
+import ru.zveron.lots_feed.feed.data.feed.LotsFeedRepository
+import ru.zveron.lots_feed.feed.domain.UpdateFeedInteractor
 import ru.zveron.lots_feed.mappings.toSortType
 import ru.zveron.lots_feed.mappings.toUiLot
 import ru.zveron.lots_feed.models.filters.Filter
@@ -17,7 +20,8 @@ internal class LotsFeedViewModel(
     private val lotsFeedRepository: LotsFeedRepository,
     private val passDataToFiltersInteractor: PassDataToFiltersInteractor,
     private val lotsFeedNavigator: LotsFeedNavigator,
-): ViewModel() {
+    private val updateFeedInteractor: UpdateFeedInteractor,
+) : ViewModel() {
     private val _feedUiState = MutableStateFlow<LotsFeedUiState>(LotsFeedUiState.Loading)
     val feedUiState = _feedUiState.asStateFlow()
 
@@ -27,14 +31,18 @@ internal class LotsFeedViewModel(
     private val currentFilters = MutableStateFlow(listOf<Filter>())
 
     init {
-        loadLots()
+        updateFeedInteractor.update()
+
+        updateFeedInteractor.updateFlow
+            .onEach { loadLots() }
+            .launchIn(viewModelScope)
     }
 
     private fun loadLots() {
         viewModelScope.launch {
             try {
                 _feedUiState.value = LotsFeedUiState.Loading
-                val lotsResponse = lotsFeedRepository.loadLots(
+                val lotsResponse = updateFeedInteractor.loadLots(
                     currentFilters.value,
                     _currentSortType.value.toSortType(),
                 )
