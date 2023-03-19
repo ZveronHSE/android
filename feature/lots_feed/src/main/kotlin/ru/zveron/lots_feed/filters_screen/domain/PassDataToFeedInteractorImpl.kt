@@ -1,6 +1,7 @@
 package ru.zveron.lots_feed.filters_screen.domain
 
 import ru.zveron.lots_feed.categories.data.SelectedCategoriesRepository
+import ru.zveron.lots_feed.feed.data.lot_forms.SelectedLotFormRepository
 import ru.zveron.lots_feed.feed.data.parameters.ParametersLoadingRepository
 import ru.zveron.lots_feed.feed.data.parameters.SelectedParametersRepository
 import ru.zveron.lots_feed.feed.data.sort_type.SelectedSortTypeRepository
@@ -19,6 +20,7 @@ internal class PassDataToFeedInteractorImpl(
     private val selectedCategoriesRepository: SelectedCategoriesRepository,
     private val selectedSortTypeRepository: SelectedSortTypeRepository,
     private val selectedParametersRepository: SelectedParametersRepository,
+    private val selectedLotFormRepository: SelectedLotFormRepository,
 
     private val parametersLoadingRepository: ParametersLoadingRepository,
 
@@ -28,7 +30,7 @@ internal class PassDataToFeedInteractorImpl(
         selectedCategoriesRepository.setCategorySelection(filtersSelectedCategoryRepository.currentCategorySelection.value)
         selectedSortTypeRepository.selectSortType(filtersSelectedSortTypeRepository.selectedSortType.value)
         passParameters()
-        // TODO: pass lot form and parameters
+        passLotForm()
 
         updateFeedInteractor.update()
     }
@@ -45,6 +47,15 @@ internal class PassDataToFeedInteractorImpl(
 
         if (parameterState.isNotEmpty()) {
             parametersLoadingRepository.updateIsLoading(false)
+        }
+    }
+
+    private fun passLotForm() {
+        val currentLotForm = filtersSelectedLotFormRepository.currentLotForm.value
+        if (currentLotForm == null) {
+            selectedLotFormRepository.resetLotForm()
+        } else {
+            selectedLotFormRepository.selectLotForm(currentLotForm.id)
         }
     }
 }

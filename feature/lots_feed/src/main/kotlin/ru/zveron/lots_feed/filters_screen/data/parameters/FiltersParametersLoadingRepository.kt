@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class FiltersParametersLoadingRepository {
+internal class FiltersParametersLoadingRepository {
     private val _isLoadingFlow = MutableStateFlow(true)
     val isLoadingFlow = _isLoadingFlow.asStateFlow()
 

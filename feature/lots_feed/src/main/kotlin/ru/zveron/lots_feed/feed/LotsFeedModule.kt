@@ -20,6 +20,7 @@ import ru.zveron.lots_feed.feed.data.feed.LotsFeedGrpcSource
 import ru.zveron.lots_feed.feed.data.feed.LotsFeedMockSource
 import ru.zveron.lots_feed.feed.data.feed.LotsFeedRepository
 import ru.zveron.lots_feed.feed.data.feed.LotsFeedSource
+import ru.zveron.lots_feed.feed.data.lot_forms.SelectedLotFormRepository
 import ru.zveron.lots_feed.feed.data.parameters.ParametersLoadingRepository
 import ru.zveron.lots_feed.feed.data.parameters.SelectedParametersRepository
 import ru.zveron.lots_feed.feed.data.sort_type.SelectedSortTypeRepository
@@ -40,7 +41,22 @@ val lotsFeedModule = module {
         viewModelOf(::CategoriesViewModel)
         scopedOf(::CategoryInteractor)
 
-        scopedOf(::PassDataToFiltersInteractor)
+        // scoped of for some reason doesn't compile(some generics build error with inferring variable types)
+        scoped {
+            PassDataToFiltersInteractor(
+                get(),
+                get(),
+                get(),
+                get(),
+                get(),
+                get(),
+                get(),
+                get(),
+                get(),
+                get(),
+                get(),
+            )
+        }
 
         scopedOf(::ParameterItemProviderFactory)
     }
@@ -78,4 +94,6 @@ val lotsFeedModule = module {
     singleOf(::SelectedParametersRepository)
     singleOf(::UpdateParametersInteractorImpl) bind UpdateParametersInteractor::class
     singleOf(::ParametersLoadingRepository)
+
+    singleOf(::SelectedLotFormRepository)
 }

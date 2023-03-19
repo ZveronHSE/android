@@ -1,6 +1,7 @@
 package ru.zveron.lots_feed.categories.domain
 
 import ru.zveron.lots_feed.categories.data.SelectedCategoriesRepository
+import ru.zveron.lots_feed.feed.data.lot_forms.SelectedLotFormRepository
 import ru.zveron.lots_feed.feed.data.parameters.SelectedParametersRepository
 import ru.zveron.lots_feed.feed.data.sort_type.SelectedSortTypeRepository
 import ru.zveron.lots_feed.filters_screen.data.categories.FiltersSelectedCategoryRepository
@@ -15,7 +16,7 @@ internal class PassDataToFiltersInteractor(
     private val selectedCategoriesRepository: SelectedCategoriesRepository,
     private val selectedSortTypeRepository: SelectedSortTypeRepository,
     private val selectedParametersRepository: SelectedParametersRepository,
-    // TODO: add holders for parameters and lot forms
+    private val selectedLotFormRepository: SelectedLotFormRepository,
 
     private val filtersSelectedCategoryRepository: FiltersSelectedCategoryRepository,
     private val filtersSelectedLotFormRepository: FiltersSelectedLotFormRepository,
@@ -34,8 +35,12 @@ internal class PassDataToFiltersInteractor(
         filtersSelectedCategoryRepository.selectCategory(currentCategorySelection.innerCategory?.id)
         filtersSelectedSortTypeRepository.selectSortType(selectedSortTypeRepository.currentSortType.value)
 
-        // TODO: pass actual parameter here
-        filtersSelectedLotFormRepository.resetLotForm()
+        val currentLotForm = selectedLotFormRepository.currentLotForm.value
+        if (currentLotForm == null) {
+            filtersSelectedLotFormRepository.resetLotForm()
+        } else {
+            filtersSelectedLotFormRepository.selectLotForm(currentLotForm.id)
+        }
 
         val currentFilters = selectedParametersRepository.parametersState.value
         filtersSelectedParametersRepository.updateParameters(currentFilters.map { it.parameter })
