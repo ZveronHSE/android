@@ -82,12 +82,12 @@ private fun SelectorPreview() {
         Column(verticalArrangement = Arrangement.spacedBy(4.dp), modifier = Modifier.padding(10.dp)) {
             Selector(
                 selected = true,
-                onClick = { /*TODO*/ },
+                onClick = {},
             )
 
             Selector(
                 selected = false,
-                onClick = { /*TODO*/ },
+                onClick = {},
             )
         }
     }

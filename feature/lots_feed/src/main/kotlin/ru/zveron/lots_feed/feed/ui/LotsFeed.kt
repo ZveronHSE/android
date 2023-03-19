@@ -44,6 +44,8 @@ import ru.zveron.lots_feed.R
 import ru.zveron.lots_feed.categories.ui.Categories
 import ru.zveron.lots_feed.categories.ui.CategoriesUiState
 import ru.zveron.lots_feed.categories.ui.CategoryUiState
+import ru.zveron.lots_feed.feed.ui.parameters.ParametersRow
+import ru.zveron.lots_feed.feed.ui.parameters.ParametersUiState
 
 private const val LOADING_STUBS_COUNT = 12
 
@@ -65,6 +67,7 @@ internal fun LotsFeed(
     categoryTitle: ZveronText,
     feedUiState: LotsFeedUiState,
     categoriesUiState: CategoriesUiState,
+    parametersUiState: ParametersUiState,
     currentSortType: SortType,
     modifier: Modifier = Modifier,
     onSearchClicked: () -> Unit = {},
@@ -73,6 +76,7 @@ internal fun LotsFeed(
     onNavigateBack: () -> Unit = {},
     onSortTypeSelected: (SortType) -> Unit = {},
     onCategoryClick: (CategoryUiState) -> Unit = {},
+    onParameterClick: (Int) -> Unit = {},
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -123,13 +127,26 @@ internal fun LotsFeed(
             )
         }
 
-        fullWidthItem { Spacer(Modifier.height(24.dp)) }
+        if (categoriesUiState !is CategoriesUiState.Hidden) {
+            fullWidthItem { Spacer(Modifier.height(24.dp)) }
 
-        fullWidthItem {
-            Categories(
-                categoriesUiState = categoriesUiState,
-                onCategoryClick = onCategoryClick,
-            )
+            fullWidthItem {
+                Categories(
+                    categoriesUiState = categoriesUiState,
+                    onCategoryClick = onCategoryClick,
+                )
+            }
+        }
+
+        if (parametersUiState !is ParametersUiState.Hidden) {
+            fullWidthItem { Spacer(Modifier.height(6.dp)) }
+
+            fullWidthItem {
+                ParametersRow(
+                    uiState = parametersUiState,
+                    onParameterClick = onParameterClick,
+                )
+            }
         }
 
         fullWidthItem { Spacer(Modifier.height(32.dp)) }
@@ -192,6 +209,7 @@ private fun LotsFeedLoadingPreview() {
             categoryTitle = ZveronText.RawString("Категории"),
             feedUiState = LotsFeedUiState.Loading,
             categoriesUiState = CategoriesUiState.Loading,
+            parametersUiState = ParametersUiState.Hidden,
             currentSortType = SortType.EXPENSIVE,
             modifier = Modifier.fillMaxSize(),
         )
@@ -249,6 +267,8 @@ private fun LotsFeedSuccessPreview() {
         ),
     )
 
+    val parametersUiState = ParametersUiState.Hidden
+
     val selectedSortType = SortType.DATE
 
     ZveronTheme {
@@ -256,6 +276,7 @@ private fun LotsFeedSuccessPreview() {
             categoryTitle = ZveronText.RawString("Категории"),
             categoriesUiState = categoriesState,
             feedUiState = feedState,
+            parametersUiState = parametersUiState,
             currentSortType = selectedSortType,
             modifier = Modifier.fillMaxSize(),
         )
@@ -270,6 +291,7 @@ private fun LotsFeedLoadingWithBackPreview() {
             categoryTitle = ZveronText.RawString("Категории"),
             feedUiState = LotsFeedUiState.Loading,
             categoriesUiState = CategoriesUiState.Loading,
+            parametersUiState = ParametersUiState.Hidden,
             hasBackButton = true,
             currentSortType = SortType.DATE,
             modifier = Modifier.fillMaxSize(),

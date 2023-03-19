@@ -28,6 +28,7 @@ internal fun Categories(
             modifier,
             onCategoryClick
         )
+        CategoriesUiState.Hidden -> {}
     }
 }
 

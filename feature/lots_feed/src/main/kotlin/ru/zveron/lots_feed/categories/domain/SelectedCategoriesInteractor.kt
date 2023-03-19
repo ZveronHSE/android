@@ -3,12 +3,14 @@ package ru.zveron.lots_feed.categories.domain
 import ru.zveron.lots_feed.categories.data.CategoryRepository
 import ru.zveron.lots_feed.categories.data.SelectedCategoriesRepository
 import ru.zveron.lots_feed.feed.domain.UpdateFeedInteractor
+import ru.zveron.lots_feed.feed.domain.UpdateParametersInteractor
 import ru.zveron.lots_feed.models.categories.Category
 
 class SelectedCategoriesInteractor(
     private val selectedCategoriesRepository: SelectedCategoriesRepository,
     private val categoryRepository: CategoryRepository,
     private val updateFeedInteractor: UpdateFeedInteractor,
+    private val updateParametersInteractor: UpdateParametersInteractor,
 ) {
     val currentCategorySelection = selectedCategoriesRepository.currentCategorySelection
 
@@ -38,6 +40,7 @@ class SelectedCategoriesInteractor(
             selectedCategoriesRepository.setRootCategory(category)
         } else if(currentSelection.innerCategory == null) {
             selectedCategoriesRepository.setInnerCategory(category)
+            updateParametersInteractor.update()
         }
     }
 }

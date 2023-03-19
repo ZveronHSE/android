@@ -10,9 +10,11 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ru.zveron.design.resources.ZveronText
 import ru.zveron.lots_feed.R
+import ru.zveron.lots_feed.categories.data.CategorySelection
 import ru.zveron.lots_feed.categories.domain.CategoryInteractor
 import ru.zveron.lots_feed.categories.domain.SelectedCategoriesInteractor
 import ru.zveron.lots_feed.mappings.toUiState
@@ -40,18 +42,26 @@ internal class CategoriesViewModel(
 
     init {
         selectedCategoriesInteractor.currentCategorySelection
-            .onEach { loadCategories(it.getCurrentCategory()?.id) }
+            .onEach(::categorySelectionUpdated)
             .launchIn(viewModelScope)
 
         loadCategories(null)
     }
 
-    fun loadCategories(categoryId: Int?) {
+    private fun categorySelectionUpdated(categorySelection: CategorySelection) {
+        if (categorySelection.innerCategory == null) {
+            loadCategories(categorySelection.getCurrentCategory()?.id)
+        } else {
+            _uiState.update { CategoriesUiState.Hidden }
+        }
+    }
+
+    private fun loadCategories(categoryId: Int?) {
         viewModelScope.launch {
             try {
-                _uiState.value = CategoriesUiState.Loading
+                _uiState.update{ CategoriesUiState.Loading }
                 val categories = categoryInteractor.loadChildrenCategories(categoryId)
-                _uiState.value = CategoriesUiState.Success(categories.map { it.toUiState() })
+                _uiState.update { CategoriesUiState.Success(categories.map { it.toUiState() }) }
             } catch (e: Exception) {
                 Log.e("Categories", "Error loading child categories", e)
             }

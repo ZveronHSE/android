@@ -14,6 +14,7 @@ import ru.zveron.lots_feed.categories.ui.CategoriesViewModel
 import ru.zveron.lots_feed.categories.ui.CategoryUiState
 import ru.zveron.lots_feed.feed.ui.LotsFeed
 import ru.zveron.lots_feed.feed.ui.LotsFeedViewModel
+import ru.zveron.lots_feed.feed.ui.parameters.ParametersViewModel
 
 class LotsFeedNode(
     buildContext: BuildContext,
@@ -43,6 +44,12 @@ class LotsFeedNode(
             parameters = { parametersOf(lotsFeedNavigator) },
         )
 
+        val parametersViewModel = koinViewModel<ParametersViewModel>(
+            viewModelStoreOwner = this,
+            scope = lotsFeedComponent.scope,
+            parameters = { parametersOf(lotsFeedNavigator) },
+        )
+
         val feedUiState by feedViewModel.feedUiState.collectAsState()
 
         val categoriesUiState by categoriesViewModel.uiState.collectAsState()
@@ -52,6 +59,8 @@ class LotsFeedNode(
         val canNavigateBack by categoriesViewModel.canNavigateBack.collectAsState()
 
         val currentSortType by feedViewModel.currentSortType.collectAsState()
+
+        val parametersUiState by parametersViewModel.uiState.collectAsState()
 
         val categoryClicker = remember {
             { categoriesUiState: CategoryUiState ->
@@ -65,6 +74,7 @@ class LotsFeedNode(
             categoryTitle = categoryTitle,
             feedUiState = feedUiState,
             categoriesUiState = categoriesUiState,
+            parametersUiState = parametersUiState,
             currentSortType = currentSortType,
             modifier = modifier,
             hasBackButton = canNavigateBack,

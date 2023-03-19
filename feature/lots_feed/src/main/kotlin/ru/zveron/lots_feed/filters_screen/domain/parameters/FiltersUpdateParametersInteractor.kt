@@ -31,14 +31,14 @@ internal class FiltersUpdateParametersInteractor(
 
     suspend fun loadParameters() {
         val currentCategorySelection = filtersSelectedCategoryRepository.currentCategorySelection.value
-        val curretnLotFormSelection = filtersSelectedLotFormRepository.currentLotForm.value
+        val currentLotFormSelection = filtersSelectedLotFormRepository.currentLotForm.value
 
         if (currentCategorySelection.innerCategory == null) {
             return
         }
 
         val categoryId = currentCategorySelection.innerCategory.id
-        val lotFormId = curretnLotFormSelection?.id ?: DEFAULT_LOT_FORM_ID
+        val lotFormId = currentLotFormSelection?.id ?: DEFAULT_LOT_FORM_ID
 
         val parameters = parametersRepository.loadParameters(categoryId, lotFormId)
 
