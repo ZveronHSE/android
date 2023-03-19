@@ -1,6 +1,8 @@
 package ru.zveron.lots_feed.feed.data.feed
 
 import kotlinx.coroutines.delay
+import ru.zveron.lots_feed.filters_screen.data.parameters.ParameterState
+import ru.zveron.lots_feed.models.categories.Category
 import ru.zveron.lots_feed.models.filters.Filter
 import ru.zveron.lots_feed.models.sort.SortType
 import ru.zveron.lots_feed.models.waterfall.Lot
@@ -9,7 +11,10 @@ class LotsFeedMockSource: LotsFeedSource {
     override suspend fun loadLots(
         filters: List<Filter>,
         sortType: SortType,
-        pageSize: Int
+        pageSize: Int,
+        parameters: List<ParameterState>?,
+        category: Category?,
+        query: String?
     ): List<Lot> {
         delay(1000L)
 
