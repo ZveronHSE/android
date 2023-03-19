@@ -48,6 +48,7 @@ import ru.zveron.lots_feed.feed.ui.parameters.ParametersRow
 import ru.zveron.lots_feed.feed.ui.parameters.ParametersUiState
 
 private const val LOADING_STUBS_COUNT = 12
+private const val BOTTOM_BAR_HEIGHT = 98
 
 private fun LazyGridScope.fullWidthItem(
     key: Any? = null,
@@ -199,6 +200,8 @@ private fun LazyGridScope.LotsGrid(
             date = lotUiState.date,
         )
     }
+
+    fullWidthItem { Spacer(Modifier.height(BOTTOM_BAR_HEIGHT.dp)) }
 }
 
 @Preview(showBackground = true, backgroundColor = 0xFFF9F9F9)
