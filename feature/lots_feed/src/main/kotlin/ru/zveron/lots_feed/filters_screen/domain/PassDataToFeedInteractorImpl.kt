@@ -1,6 +1,8 @@
 package ru.zveron.lots_feed.filters_screen.domain
 
 import ru.zveron.lots_feed.categories.data.SelectedCategoriesRepository
+import ru.zveron.lots_feed.feed.data.parameters.ParametersLoadingRepository
+import ru.zveron.lots_feed.feed.data.parameters.SelectedParametersRepository
 import ru.zveron.lots_feed.feed.data.sort_type.SelectedSortTypeRepository
 import ru.zveron.lots_feed.feed.domain.UpdateFeedInteractor
 import ru.zveron.lots_feed.filters_screen.data.categories.FiltersSelectedCategoryRepository
@@ -16,14 +18,33 @@ internal class PassDataToFeedInteractorImpl(
 
     private val selectedCategoriesRepository: SelectedCategoriesRepository,
     private val selectedSortTypeRepository: SelectedSortTypeRepository,
+    private val selectedParametersRepository: SelectedParametersRepository,
+
+    private val parametersLoadingRepository: ParametersLoadingRepository,
 
     private val updateFeedInteractor: UpdateFeedInteractor,
 ): PassDataToFeedInteractor {
     override fun passDataToLotsFeed() {
         selectedCategoriesRepository.setCategorySelection(filtersSelectedCategoryRepository.currentCategorySelection.value)
         selectedSortTypeRepository.selectSortType(filtersSelectedSortTypeRepository.selectedSortType.value)
+        passParameters()
         // TODO: pass lot form and parameters
 
         updateFeedInteractor.update()
+    }
+
+    private fun passParameters() {
+        val parameterState = filtersSelectedParametersRepository.parametersState.value
+        selectedParametersRepository.updateParameters(parameterState.map { it.parameter })
+
+        filtersSelectedParametersRepository.parametersState.value.forEach { state ->
+            state.value?.let {
+                selectedParametersRepository.setParameterValue(state.parameter.id, it)
+            }
+        }
+
+        if (parameterState.isNotEmpty()) {
+            parametersLoadingRepository.updateIsLoading(false)
+        }
     }
 }

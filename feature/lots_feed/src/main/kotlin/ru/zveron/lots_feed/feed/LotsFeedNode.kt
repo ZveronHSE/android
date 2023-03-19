@@ -83,6 +83,7 @@ class LotsFeedNode(
             onSearchClicked = lotsFeedNavigator::goToSearch,
             onFiltersClicked = feedViewModel::goToFilters,
             onSortTypeSelected = feedViewModel::sortTypeSelected,
+            onParameterClick = parametersViewModel::parameterClicked,
         )
     }
 }

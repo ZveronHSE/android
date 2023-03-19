@@ -11,6 +11,7 @@ import ru.zveron.lots_feed.filters_screen.data.categories.FiltersChildrenCategor
 import ru.zveron.lots_feed.filters_screen.data.categories.FiltersSelectedCategoryRepository
 import ru.zveron.lots_feed.filters_screen.data.lot_forms.FiltersChildrenLotFormRepository
 import ru.zveron.lots_feed.filters_screen.data.lot_forms.FiltersSelectedLotFormRepository
+import ru.zveron.lots_feed.filters_screen.data.parameters.FiltersParametersLoadingRepository
 import ru.zveron.lots_feed.filters_screen.data.parameters.FiltersSelectedParametersRepository
 import ru.zveron.lots_feed.filters_screen.data.sort_types.FiltersSelectedSortTypeRepository
 import ru.zveron.lots_feed.filters_screen.domain.PassDataToFeedInteractor
@@ -26,7 +27,7 @@ import ru.zveron.lots_feed.filters_screen.domain.lot_forms.FiltersSetSelectedLot
 import ru.zveron.lots_feed.filters_screen.domain.lot_forms.FiltersUpdateLotFormsInteractor
 import ru.zveron.lots_feed.filters_screen.domain.lot_forms.LotFormItemProvider
 import ru.zveron.lots_feed.filters_screen.domain.parameters.FiltersUpdateParametersInteractor
-import ru.zveron.lots_feed.filters_screen.domain.parameters.ParameterItemProviderFactory
+import ru.zveron.lots_feed.filters_screen.domain.parameters.FiltersParameterItemProviderFactory
 import ru.zveron.lots_feed.filters_screen.ui.categories.FiltersChildrenCategoriesViewModel
 import ru.zveron.lots_feed.filters_screen.ui.categories.FiltersRootCategoriesViewModel
 import ru.zveron.lots_feed.filters_screen.ui.lot_form.LotFormViewModel
@@ -91,7 +92,9 @@ val filtersModule = module {
 
     singleOf(::FiltersUpdateParametersInteractor)
 
-    singleOf(::ParameterItemProviderFactory)
+    singleOf(::FiltersParameterItemProviderFactory)
+
+    singleOf(::FiltersParametersLoadingRepository)
 
     singleOf(::ParametersRepository)
     singleOf(::ParametersGrpcSource)
