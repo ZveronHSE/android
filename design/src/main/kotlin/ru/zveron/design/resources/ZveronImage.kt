@@ -49,6 +49,7 @@ fun ZveronImage(
         .size(LocalLoadingImageSize.current)
         .clip(CircleShape)
         .background(Color.LightGray),
+    readyImageModifier: Modifier = Modifier,
 ) {
     when (zveronImage) {
         is ZveronImage.RemoteImage -> {
@@ -73,7 +74,7 @@ fun ZveronImage(
                         )
                     }
                 } else {
-                    SubcomposeAsyncImageContent()
+                    SubcomposeAsyncImageContent(modifier = readyImageModifier)
                 }
             }
         }
@@ -81,7 +82,7 @@ fun ZveronImage(
             Image(
                 painter = painterResource(zveronImage.resId),
                 contentDescription = contentDescription,
-                modifier = modifier,
+                modifier = modifier.then(readyImageModifier),
                 alignment = alignment,
                 contentScale = contentScale,
                 alpha = alpha,

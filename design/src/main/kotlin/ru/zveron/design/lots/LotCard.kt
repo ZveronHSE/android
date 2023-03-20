@@ -57,7 +57,8 @@ fun LotCard(
                 loadingImageModifier = Modifier
                     .size(104.dp)
                     .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
-                    .background(Color.LightGray)
+                    .background(Color.LightGray),
+                readyImageModifier = Modifier.height(104.dp),
             )
 
             Row(
