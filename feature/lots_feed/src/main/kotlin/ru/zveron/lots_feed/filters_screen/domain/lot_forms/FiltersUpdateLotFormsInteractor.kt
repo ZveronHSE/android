@@ -25,8 +25,8 @@ class FiltersUpdateLotFormsInteractor(
 
     suspend fun loadChildrenLotForms() {
         val categorySelection = filtersSelectedCategoryRepository.currentCategorySelection.value
-        val currentCategoryId = categorySelection.getCurrentCategory()?.id ?: return
+        val categoryId = categorySelection.rootCategory?.id ?: return
 
-        filtersChildrenLotFormRepository.updateChildrenLotForms(currentCategoryId)
+        filtersChildrenLotFormRepository.updateChildrenLotForms(categoryId)
     }
 }

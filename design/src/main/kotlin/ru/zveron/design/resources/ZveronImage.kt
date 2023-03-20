@@ -45,6 +45,10 @@ fun ZveronImage(
     alpha: Float = DefaultAlpha,
     colorFilter: ColorFilter? = null,
     contentDescription: String? = null,
+    loadingImageModifier: Modifier = Modifier
+        .size(LocalLoadingImageSize.current)
+        .clip(CircleShape)
+        .background(Color.LightGray),
 ) {
     when (zveronImage) {
         is ZveronImage.RemoteImage -> {
@@ -60,10 +64,7 @@ fun ZveronImage(
                 val state = painter.state
                 if (state is AsyncImagePainter.State.Loading || state is AsyncImagePainter.State.Error) {
                     BoxWithConstraints(
-                        modifier = Modifier
-                            .size(LocalLoadingImageSize.current)
-                            .clip(CircleShape)
-                            .background(Color.LightGray)
+                        modifier = loadingImageModifier,
                     ) {
                         Box(
                             Modifier

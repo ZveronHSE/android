@@ -29,7 +29,6 @@ internal class FiltersSetSelectedCategoryInteractor(
         filtersSelectedLotFormRepository.resetLotForm()
         filtersSelectedParametersRepository.resetParamters()
 
-        filtersUpdateLotFormsInteractor.update()
         filtersUpdateParametersInteractor.update()
     }
 }

@@ -55,6 +55,7 @@ val lotsFeedModule = module {
                 get(),
                 get(),
                 get(),
+                get(),
             )
         }
 
