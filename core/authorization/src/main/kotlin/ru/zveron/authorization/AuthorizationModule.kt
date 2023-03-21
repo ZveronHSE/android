@@ -40,7 +40,7 @@ val interceptorsModule = module {
             .build()
 
         val retrofit = Retrofit.Builder()
-            .baseUrl(BuildConfig.host)
+            .baseUrl(BuildConfig.baseUrl)
             .client(ohHttpClient)
             .build()
         retrofit.create(RefreshTokenApi::class.java)

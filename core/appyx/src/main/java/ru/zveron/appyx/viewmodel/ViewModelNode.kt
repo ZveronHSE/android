@@ -12,6 +12,9 @@ import com.bumble.appyx.core.node.EmptyNodeView
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.node.NodeView
 import com.bumble.appyx.core.plugin.Plugin
+import kotlinx.coroutines.flow.flowOf
+import ru.zveron.appyx.bottom_navigation.BottomNavigationMode
+import ru.zveron.appyx.bottom_navigation.BottomNavigationModeHolder
 
 open class ViewModelNode(
     buildContext: BuildContext,
@@ -21,7 +24,7 @@ open class ViewModelNode(
     buildContext = buildContext,
     view = view,
     plugins = plugins,
-), ViewModelStoreOwner {
+), ViewModelStoreOwner, BottomNavigationModeHolder {
     private val containerViewModel: NodeContainerViewModel
         get() = (integrationPoint as ViewModelActivityIntegrationPoint).viewModel
 
@@ -51,4 +54,6 @@ open class ViewModelNode(
             content.invoke()
         }
     }
+
+    override val bottomNavigationMode = flowOf(BottomNavigationMode.SHOW_BOTTOM_BAR)
 }

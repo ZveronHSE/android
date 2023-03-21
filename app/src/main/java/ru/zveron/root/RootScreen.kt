@@ -3,12 +3,26 @@ package ru.zveron.root
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ModalBottomSheetLayout
+import androidx.compose.material.ModalBottomSheetState
+import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.rememberModalBottomSheetState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.bumble.appyx.core.composable.Children
@@ -56,6 +70,7 @@ class RootScreen(
             RootScreenNavTarget.AuthorizationBottomSheet -> SocialsSheetScreen(buildContext) {
                 backStack.push(RootScreenNavTarget.PhoneAuthorization)
             }
+
             RootScreenNavTarget.PhoneAuthorization -> RootPhoneNode(buildContext)
         }
     }
@@ -122,7 +137,11 @@ class RootScreen(
                         }
                     }
 
-                    child()
+                    child(
+                        modifier = Modifier.windowInsetsPadding(
+                            WindowInsets.navigationBars.union(WindowInsets.ime)
+                        )
+                    )
                 }
             }
         }

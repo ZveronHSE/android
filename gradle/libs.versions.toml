@@ -34,6 +34,10 @@ okHttp_logging = "4.10.0"
 
 moshi = "1.14.0"
 
+coil = "2.2.2"
+
+zveron_contracts = "1.9.0"
+
 [libraries]
 #androidx
 androidx_coreKtx = { module = "androidx.core:core-ktx", version.ref = "androidx"}
@@ -61,13 +65,14 @@ test_compose_ui_uiTestManifest = { module = "androidx.compose.ui:ui-test-manifes
 kotlinx_coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 
 # grpc and protobuf
+grpc_protobuf_javaUtil = { module = "com.google.protobuf:protobuf-java-util", version.ref = "protobuf" }
 grpc_okhttp = { module = "io.grpc:grpc-okhttp", version.ref = "grpc" }
-grpc_grpcStub = { module = "io.grpc:grpc-stub", version.ref = "grpc" }
-grpc_protobuf_lite = { module = "io.grpc:grpc-protobuf-lite", version.ref = "grpc" }
-grpc_grpcKotlinStub = { module = "io.grpc:grpc-kotlin-stub", version.ref = "grpc_kotlin" }
-grpc_protobuf_kotlinLite = { module = "com.google.protobuf:protobuf-kotlin-lite", version.ref = "protobuf" }
-grpc_protobuf_protocJavaGen = { module = "io.grpc:protoc-gen-grpc-java", version.ref = "grpc" }
-grpc_protobuf_protoc = { module = "com.google.protobuf:protoc", version.ref = "protobuf" }
+#grpc_grpcStub = { module = "io.grpc:grpc-stub", version.ref = "grpc" }
+#grpc_protobuf_lite = { module = "io.grpc:grpc-protobuf-lite", version.ref = "grpc" }
+#grpc_grpcKotlinStub = { module = "io.grpc:grpc-kotlin-stub", version.ref = "grpc_kotlin" }
+#grpc_protobuf_kotlinLite = { module = "com.google.protobuf:protobuf-kotlin-lite", version.ref = "protobuf" }
+#grpc_protobuf_protocJavaGen = { module = "io.grpc:protoc-gen-grpc-java", version.ref = "grpc" }
+#grpc_protobuf_protoc = { module = "com.google.protobuf:protoc", version.ref = "protobuf" }
 
 # appyx navigation
 appyx_core = { module = "com.bumble.appyx:core", version.ref = "appyx" }
@@ -88,6 +93,11 @@ okHttp_loggingInterceptor = { module = "com.squareup.okhttp3:logging-interceptor
 moshi = { module = "com.squareup.moshi:moshi", version.ref = "moshi" }
 moshi_adapters = { module = "com.squareup.moshi:moshi-adapters", version.ref = "moshi" }
 moshi_codegen = { module = "com.squareup.moshi:moshi-kotlin-codegen", version.ref = "moshi" }
+
+# coil
+coil_compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
+
+zveronContracts = { module = "com.github.zveronHSe:contract", version.ref = "zveron_contracts" }
 
 android_gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "android_gradle_plugin" }
 kotlin_gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
