@@ -1,9 +1,9 @@
 package ru.zveron.lots_feed.mappings
 
+import ru.zveron.contract.lot.Sort
 import ru.zveron.contract.lot.TypeSort
 import ru.zveron.contract.lot.WaterfallRequestKt
-import ru.zveron.contract.lot.sortByDate
-import ru.zveron.contract.lot.sortByPrice
+import ru.zveron.contract.lot.sort
 import ru.zveron.lots_feed.models.sort.SortType
 import ru.zveron.lots_feed.feed.ui.SortType as UiSortType
 
@@ -22,13 +22,22 @@ fun SortType.toUiSortType() = when (this) {
 fun WaterfallRequestKt.Dsl.addSortType(sortType: SortType) {
     when (sortType) {
         SortType.Cheap -> {
-            this.sortByPrice = sortByPrice { typeSort = TypeSort.ASC }
+            this.sort = sort {
+                this.sortBy = Sort.SortBy.PRICE
+                this.typeSort = TypeSort.ASC
+            }
         }
         SortType.Expensive -> {
-            this.sortByPrice = sortByPrice { typeSort = TypeSort.DESC }
+            this.sort = sort {
+                this.sortBy = Sort.SortBy.PRICE
+                this.typeSort = TypeSort.DESC
+            }
         }
         SortType.Newest -> {
-            this.sortByDate = sortByDate { typeSort = TypeSort.DESC }
+            this.sort = sort {
+                this.sortBy = Sort.SortBy.DATE
+                this.typeSort = TypeSort.DESC
+            }
         }
     }
 }
