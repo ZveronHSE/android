@@ -1,11 +1,12 @@
 package ru.zveron.network
 
+import com.google.protobuf.Message
 import com.google.protobuf.MessageOrBuilder
-import ru.zveron.contract.apigateway.ApigatewayResponse
 
 interface ApigatewayDelegate {
-    suspend fun <T: MessageOrBuilder> callApiGateway(
+    suspend fun <ReqT: MessageOrBuilder, RespT: Message> callApiGateway(
         methodName: String,
-        body: T,
-    ): ApigatewayResponse
+        body: ReqT,
+        responseBuilder: Message.Builder,
+    ): RespT
 }

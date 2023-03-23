@@ -1,9 +1,6 @@
 package ru.zveron.lots_feed.feed.data.feed
 
-import com.google.protobuf.kotlin.toByteStringUtf8
-import com.google.protobuf.util.JsonFormat
-import ru.zveron.contract.apigateway.ApigatewayServiceGrpc.ApigatewayServiceBlockingStub
-import ru.zveron.contract.apigateway.apiGatewayRequest
+import ru.zveron.contract.lot.WaterfallRequest
 import ru.zveron.contract.lot.WaterfallResponse
 import ru.zveron.contract.lot.model.parameter
 import ru.zveron.contract.lot.waterfallRequest
@@ -15,11 +12,12 @@ import ru.zveron.lots_feed.models.categories.Category
 import ru.zveron.lots_feed.models.filters.Filter
 import ru.zveron.lots_feed.models.sort.SortType
 import ru.zveron.lots_feed.models.waterfall.Lot
+import ru.zveron.network.ApigatewayDelegate
 
 private const val WATERFALL_METHOD_NAME = "waterfallGet"
 
 class LotsFeedGrpcSource(
-    private val apiGateway: ApigatewayServiceBlockingStub,
+    private val apiGateway: ApigatewayDelegate,
 ): LotsFeedSource {
     override suspend fun loadLots(
         filters: List<Filter>,
@@ -29,7 +27,6 @@ class LotsFeedGrpcSource(
         category: Category?,
         query: String?
     ): List<Lot> {
-        // TOOD: add all new parameters
         val waterfallRequest = waterfallRequest {
             category?.let {
                 this.categoryId = it.id
@@ -56,20 +53,12 @@ class LotsFeedGrpcSource(
             this.addSortType(sortType)
         }
 
-        val request = apiGatewayRequest {
-            this.requestBody = JsonFormat.printer().print(waterfallRequest).toByteStringUtf8()
-            this.methodAlias = WATERFALL_METHOD_NAME
-        }
+        val response = apiGateway.callApiGateway<WaterfallRequest, WaterfallResponse>(
+            WATERFALL_METHOD_NAME,
+            waterfallRequest,
+            WaterfallResponse.newBuilder(),
+        )
 
-
-        val response = apiGateway.callApiGateway(request)
-
-        val responseBuilder = WaterfallResponse.newBuilder()
-        JsonFormat.parser().merge(response.responseBody.toStringUtf8(), responseBuilder)
-
-        return responseBuilder
-            .build()
-            .lotsList
-            .map { it.toDomainLot() }
+        return response.lotsList.map { it.toDomainLot() }
     }
 }

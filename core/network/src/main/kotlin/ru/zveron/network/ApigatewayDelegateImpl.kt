@@ -1,5 +1,6 @@
 package ru.zveron.network
 
+import com.google.protobuf.Message
 import com.google.protobuf.MessageOrBuilder
 import com.google.protobuf.kotlin.toByteStringUtf8
 import com.google.protobuf.util.JsonFormat
@@ -16,13 +17,15 @@ internal class ApigatewayDelegateImpl(
     private val authorizationStorage: AuthorizationStorage,
     private val refreshTokenInteractor: RefreshTokenInteractor,
     private val jsonFormatPrinter: JsonFormat.Printer,
-): ApigatewayDelegate {
+    private val jsonFormatParser: JsonFormat.Parser,
+) : ApigatewayDelegate {
     private val accessTokenKey = Metadata.Key.of("access_token", Metadata.ASCII_STRING_MARSHALLER)
 
-    override suspend fun <T: MessageOrBuilder> callApiGateway(
+    override suspend fun <ReqT : MessageOrBuilder, RespT : Message> callApiGateway(
         methodName: String,
-        body: T,
-    ): ApigatewayResponse {
+        body: ReqT,
+        responseBuilder: Message.Builder,
+    ): RespT {
         val requestBody = jsonFormatPrinter.print(body).toByteStringUtf8()
 
         val request = apiGatewayRequest {
@@ -31,13 +34,18 @@ internal class ApigatewayDelegateImpl(
         }
 
         return try {
-            apigatewayServiceCoroutineStub.callApiGateway(request, buildMetadata())
+            val apigatewayResponse =
+                apigatewayServiceCoroutineStub.callApiGateway(request, buildMetadata())
+            processResponse(apigatewayResponse, responseBuilder)
         } catch (e: io.grpc.StatusRuntimeException) {
             if (e.status.code != Status.Code.UNAUTHENTICATED) {
                 throw e
             }
             refreshTokenInteractor.refreshToken()
-            apigatewayServiceCoroutineStub.callApiGateway(request, buildMetadata())
+            processResponse(
+                apigatewayServiceCoroutineStub.callApiGateway(request, buildMetadata()),
+                responseBuilder
+            )
         }
     }
 
@@ -47,5 +55,14 @@ internal class ApigatewayDelegateImpl(
                 this.put(accessTokenKey, it)
             }
         }
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    private fun <T> processResponse(
+        apigatewayResponse: ApigatewayResponse,
+        builder: Message.Builder,
+    ): T {
+        jsonFormatParser.merge(apigatewayResponse.responseBody.toStringUtf8(), builder)
+        return builder.build() as T
     }
 }
