@@ -21,6 +21,8 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -78,6 +80,7 @@ internal fun LotsFeed(
     onSortTypeSelected: (SortType) -> Unit = {},
     onCategoryClick: (CategoryUiState) -> Unit = {},
     onParameterClick: (Int) -> Unit = {},
+    onLotLikeClick: (Long) -> Unit = {},
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -168,7 +171,10 @@ internal fun LotsFeed(
 
         when (feedUiState) {
             LotsFeedUiState.Loading -> LoadingLots()
-            is LotsFeedUiState.Success -> LotsGrid(feedUiState.lots)
+            is LotsFeedUiState.Success -> LotsGrid(
+                feedUiState.lots,
+                onLotLikeClick,
+            )
         }
     }
 }
@@ -191,13 +197,20 @@ private fun LazyGridScope.LoadingLots() {
 
 private fun LazyGridScope.LotsGrid(
     items: List<LotUiState>,
+    onLotLikeClick: (Long) -> Unit,
 ) {
     items(items, key = { it.id }) { lotUiState ->
+        val clicker = remember {
+            { onLotLikeClick.invoke(lotUiState.id) }
+        }
+
         LotCard(
             zveronImage = lotUiState.image,
             title = lotUiState.title,
             price = lotUiState.price,
             date = lotUiState.date,
+            isLiked = lotUiState.isLiked.value,
+            onLikeClick = clicker,
         )
     }
 
@@ -230,6 +243,7 @@ private fun LotsFeedSuccessPreview() {
                 price = "1$",
                 date = "20.20.20",
                 image = ZveronImage.ResourceImage(ru.zveron.design.R.drawable.cool_dog),
+                isLiked = remember { mutableStateOf(true) },
             ),
             LotUiState(
                 id = 2,
@@ -237,6 +251,8 @@ private fun LotsFeedSuccessPreview() {
                 price = "300$",
                 date = "20.20.20",
                 image = ZveronImage.ResourceImage(ru.zveron.design.R.drawable.cool_dog),
+                isLiked = remember { mutableStateOf(false) },
+
             ),
             LotUiState(
                 id = 3,
@@ -244,6 +260,7 @@ private fun LotsFeedSuccessPreview() {
                 price = "100500$",
                 date = "20.20.20",
                 image = ZveronImage.ResourceImage(ru.zveron.design.R.drawable.cool_dog),
+                isLiked = remember { mutableStateOf(true) },
             ),
             LotUiState(
                 id = 4,
@@ -251,6 +268,7 @@ private fun LotsFeedSuccessPreview() {
                 price = "100500$",
                 date = "20.20.20",
                 image = ZveronImage.ResourceImage(ru.zveron.design.R.drawable.cool_dog),
+                isLiked = remember { mutableStateOf(true) },
             ),
         )
     )

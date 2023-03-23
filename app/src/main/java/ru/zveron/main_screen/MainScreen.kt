@@ -1,22 +1,15 @@
 package ru.zveron.main_screen
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.bumble.appyx.core.composable.Children
 import com.bumble.appyx.core.modality.BuildContext
@@ -24,8 +17,6 @@ import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.navmodel.spotlight.Spotlight
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
-import ru.zveron.BuildConfig
-import ru.zveron.R
 import ru.zveron.appyx.bottom_navigation.BottomNavigationMode
 import ru.zveron.appyx.viewmodel.ViewModelParentNode
 import ru.zveron.design.components.BottomNavigation
@@ -62,7 +53,9 @@ internal class MainScreen(
 
     override fun resolve(navTarget: BottomNavigationNavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
-            BottomNavigationNavTarget.LotsFeed -> LotsFeedBackStackNode(buildContext)
+            BottomNavigationNavTarget.LotsFeed -> LotsFeedBackStackNode(buildContext) {
+                mainScreenNavigator.openAuthorization()
+            }
         }
     }
 
@@ -97,25 +90,4 @@ internal class MainScreen(
         }
     }
 
-    @Composable
-    private fun LegacyMainScreen(
-        onButtonClick: () -> Unit = {},
-    ) {
-        Column(
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxSize(),
-        ) {
-            Button(
-                onClick = onButtonClick,
-            ) {
-                Text(text = stringResource(id = R.string.registration_button))
-            }
-
-            Spacer(Modifier.height(8.dp))
-
-            Text(text = BuildConfig.baseUrl)
-        }
-
-    }
 }

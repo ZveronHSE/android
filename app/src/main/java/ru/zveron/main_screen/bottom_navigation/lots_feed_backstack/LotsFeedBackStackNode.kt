@@ -26,6 +26,7 @@ class LotsFeedBackStackNode(
         savedStateMap = buildContext.savedStateMap,
         backPressHandler = lotsFeedBackPlugin,
     ),
+    private val lotsFeedBackStackNavigator: LotsFeedBackStackNavigator,
 ): ViewModelParentNode<LotsFeedBackStackNode.NavTarget>(
     buildContext = buildContext,
     navModel = backstack,
@@ -86,5 +87,9 @@ class LotsFeedBackStackNode(
 
     override fun chooseItem(title: ZveronText) {
         backstack.push(NavTarget.PickItem(title))
+    }
+
+    override fun startAuthorization() {
+        lotsFeedBackStackNavigator.goToAuthorization()
     }
 }

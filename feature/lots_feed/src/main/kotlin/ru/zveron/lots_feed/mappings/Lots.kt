@@ -1,5 +1,6 @@
 package ru.zveron.lots_feed.mappings
 
+import androidx.compose.runtime.mutableStateOf
 import ru.zveron.contract.core.Lot
 import ru.zveron.design.R
 import ru.zveron.design.resources.ZveronImage
@@ -23,7 +24,7 @@ fun DomainLot.toUiLot(): LotUiState {
         title = this.title,
         price = this.price,
         date = this.publicationDate,
-//        image = ZveronImage.ResourceImage(R.drawable.cool_dog),
-        image = ZveronImage.RemoteImage("https://storage.yandexcloud.net/zveron-order-test/236cd2f1-341a-4a65-8dde-753ecd751a76.jpeg"),
+        image = ZveronImage.ResourceImage(R.drawable.cool_dog),
+        isLiked = mutableStateOf(this.isFavorite),
     )
 }
