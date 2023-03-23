@@ -1,20 +1,21 @@
 package ru.zveron.authorization.phone.password.ui
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import ru.zveron.authorization.phone.password.data.PasswordRepository
-import ru.zveron.authorization.phone.password.deps.PasswordNavigator
+import ru.zveron.authorization.phone.password.domain.PasswordLoginInteractor
 
 private const val PHONE_LENGTH = 10
 
 class PasswordViewModel(
-    private val passwordNavigator: PasswordNavigator,
-    private val passwordRepository: PasswordRepository,
+    private val passwordLoginInteractor: PasswordLoginInteractor,
 ): ViewModel() {
     private val _stateFlow = MutableStateFlow(PasswordUiState())
     val stateFlow = _stateFlow.asStateFlow()
@@ -22,15 +23,20 @@ class PasswordViewModel(
     val phoneState = mutableStateOf("")
     val passwordState = mutableStateOf("")
 
+    private val _finishRegistrationFlow = MutableSharedFlow<Unit>()
+    val finishRegistrationFlow = _finishRegistrationFlow.asSharedFlow()
+
     fun login() {
         _stateFlow.update { it.copy(isLoading = true) }
 
         viewModelScope.launch {
-            val result = passwordRepository.loginWithPassword(phoneState.value, passwordState.value)
-            if (!result) {
-                _stateFlow.update { it.copy(isError = true, isLoading = false) }
-            } else {
+            try {
+                passwordLoginInteractor.loginWithPassword(phoneState.value, passwordState.value)
                 _stateFlow.update { it.copy(isError = false, isLoading = false) }
+                _finishRegistrationFlow.emit(Unit)
+            } catch (e: Exception) {
+                Log.e("Password", "Error login with password", e)
+                _stateFlow.update { it.copy(isError = true, isLoading = false) }
             }
         }
     }

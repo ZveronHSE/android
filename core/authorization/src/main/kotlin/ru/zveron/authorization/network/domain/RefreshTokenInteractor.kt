@@ -7,7 +7,7 @@ class RefreshTokenInteractor(
     private val refreshTokenRepository: RefreshTokenRepository,
     private val authorizationStorage: AuthorizationStorage,
 ) {
-    fun refreshToken() {
+    suspend fun refreshToken() {
         val fingerprint = authorizationStorage.deviceFingerPrint ?: return
 
         val refreshToken = authorizationStorage.refreshToken ?: return

@@ -3,7 +3,7 @@ package ru.zveron.authorization.storage
 internal class AuthorizationStorageImpl(
     private val authorizationPreferencesWrapper: AuthorizationPreferencesWrapper,
 ): AuthorizationStorage {
-    override fun isAuthorizaed(): Boolean {
+    override fun isAuthorized(): Boolean {
         return accessToken != null && refreshToken != null
     }
 
