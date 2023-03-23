@@ -1,5 +1,6 @@
 package ru.zveron.authorization.phone.sms_code.ui
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -21,6 +22,7 @@ import ru.zveron.authorization.phone.formatting.PhoneFormatter
 import ru.zveron.authorization.phone.phone_input.data.PhoneSendRepository
 import ru.zveron.authorization.phone.sms_code.deps.SmsCodeNavigator
 import ru.zveron.authorization.phone.sms_code.domain.CheckCodeInteractor
+import ru.zveron.authorization.phone.sms_code.domain.CheckCodeResult
 
 internal const val DESIRED_CODE_LENGTH = 4
 private const val CODE_DELAY_IN_SECONDS = 30
@@ -29,6 +31,7 @@ class SmsCodeViewModel(
     private val smsCodeNavigator: SmsCodeNavigator,
     phoneFormatter: PhoneFormatter,
     private val phoneNumber: String,
+    sessionId: String,
     private val phoneSendRepository: PhoneSendRepository,
     private val checkCodeInteractor: CheckCodeInteractor,
 ) : ViewModel() {
@@ -46,18 +49,21 @@ class SmsCodeViewModel(
 
     val codeState = mutableStateOf("")
 
+    private var currentSessionId = sessionId
+
     private fun smsCodeInputted() {
         _stateFlow.update { it.copy(isLoading = true) }
         viewModelScope.launch {
-            val result = checkCodeInteractor.checkCode(codeState.value, phoneNumber)
-            if (result != null) {
+            try {
+                val result = checkCodeInteractor.checkCode(currentSessionId, codeState.value)
                 _stateFlow.update { it.copy(isLoading = false, isError = false) }
-                if (result.isNewUser) {
-                    smsCodeNavigator.navigateToRegistration(phoneNumber)
-                } else {
-                    // TODO: think of how to finish registration
+                when (result) {
+                    is CheckCodeResult.NeedRegister -> smsCodeNavigator.navigateToRegistration(result.sessionId)
+                    CheckCodeResult.Ready -> _finishRegistrationFlow.emit(Unit)
                 }
-            } else {
+            } catch (e: Exception) {
+                Log.e("Sms", "Error verifying sms code", e)
+
                 codeState.value = ""
                 _stateFlow.update { it.copy(isLoading = false, isError = true) }
             }
@@ -83,7 +89,12 @@ class SmsCodeViewModel(
     fun requestCodeClicked() {
         launchTicker()
         viewModelScope.launch {
-            phoneSendRepository.sendPhone(phoneNumber)
+            try {
+                val sessionId = phoneSendRepository.sendPhone(phoneNumber, currentSessionId)
+                currentSessionId = sessionId
+            } catch (e: Exception) {
+                Log.e("Sms", "Error requesting sms code again", e)
+            }
         }
     }
 

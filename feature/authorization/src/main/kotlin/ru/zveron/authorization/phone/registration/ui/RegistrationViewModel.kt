@@ -1,5 +1,6 @@
 package ru.zveron.authorization.phone.registration.ui
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,7 +13,7 @@ import kotlinx.coroutines.launch
 import ru.zveron.authorization.phone.registration.domain.RegistrationInteractor
 
 class RegistrationViewModel(
-    private val phone: String,
+    private val sessionId: String,
     private val registrationInteractor: RegistrationInteractor,
 ): ViewModel() {
     val usernameState = mutableStateOf("")
@@ -27,14 +28,17 @@ class RegistrationViewModel(
     fun register() {
         _registrationStateFlow.update { it.copy(isLoading = true) }
         viewModelScope.launch {
-            val isSuccessFullRegistration = registrationInteractor.register(
-                phone = phone,
-                name = usernameState.value,
-                password = passwordState.value,
-            )
-            _registrationStateFlow.update { it.copy(isLoading = false) }
-            if (isSuccessFullRegistration) {
+            try {
+                registrationInteractor.register(
+                    sessionId = sessionId,
+                    name = usernameState.value,
+                    password = passwordState.value,
+                )
+                _registrationStateFlow.update { it.copy(isLoading = false) }
                 _finishRegistrationFlow.emit(Unit)
+            } catch (e: Exception) {
+                Log.e("Registration", "Error registering with password", e)
+                _registrationStateFlow.update { it.copy(isLoading = false) }
             }
         }
     }

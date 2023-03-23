@@ -13,7 +13,8 @@ dependencies {
     implementation(libs.okHttp.loggingInterceptor)
     implementation(libs.moshi)
 
-    implementation(project(":core:network"))
+    implementation(libs.zveronContracts)
+    implementation(libs.grpc.protobuf.javaUtil)
 
     ksp(libs.moshi.codegen)
 }

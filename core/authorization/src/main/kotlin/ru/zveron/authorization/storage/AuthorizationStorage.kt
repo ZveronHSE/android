@@ -1,7 +1,7 @@
 package ru.zveron.authorization.storage
 
 interface AuthorizationStorage {
-    fun isAuthorizaed(): Boolean
+    fun isAuthorized(): Boolean
 
     val accessToken: String?
 

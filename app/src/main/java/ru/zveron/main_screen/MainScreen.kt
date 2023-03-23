@@ -23,6 +23,7 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.navmodel.spotlight.Spotlight
 import org.koin.androidx.compose.koinViewModel
+import org.koin.core.parameter.parametersOf
 import ru.zveron.BuildConfig
 import ru.zveron.R
 import ru.zveron.appyx.bottom_navigation.BottomNavigationMode
@@ -51,6 +52,7 @@ internal class MainScreen(
         val viewModel = koinViewModel<MainScreenViewModel>(
             scope = mainScreenComponent.scope,
             viewModelStoreOwner = this,
+            parameters = { parametersOf(mainScreenNavigator) },
         )
 
         val items by viewModel.state.collectAsState()

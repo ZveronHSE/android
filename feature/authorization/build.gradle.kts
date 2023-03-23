@@ -26,9 +26,13 @@ dependencies {
     implementation(libs.compose.material)
     implementation(libs.compose.ui.uiToolingPreview)
 
+    implementation(libs.zveronContracts)
+    implementation(libs.grpc.protobuf.javaUtil)
+
     debugImplementation(libs.compose.ui.uiTooling)
 
     implementation(project(":design"))
     implementation(project(":core:appyx"))
     implementation(project(":core:authorization"))
+    implementation(project(":core:network"))
 }

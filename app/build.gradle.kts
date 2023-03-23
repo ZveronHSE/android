@@ -55,6 +55,10 @@ dependencies {
     implementation(libs.retrofit.moshiConverter)
     implementation(libs.okHttp.loggingInterceptor)
 
+    implementation(libs.grpc.okhttp)
+    implementation(libs.zveronContracts)
+    implementation(libs.grpc.protobuf.javaUtil)
+
     testImplementation(libs.junit.junit)
     testImplementation(libs.koin.test.junit4)
     androidTestImplementation(libs.test.ext.junit)

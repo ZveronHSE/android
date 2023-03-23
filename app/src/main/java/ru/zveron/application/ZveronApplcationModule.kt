@@ -9,6 +9,7 @@ import ru.zveron.lots_feed.feed.lotsFeedModule
 import ru.zveron.lots_feed.filters_screen.filtersModule
 import ru.zveron.main_screen.bottom_navigation.lots_feed_backstack.lotsFeedBackStackModule
 import ru.zveron.main_screen.mainScreenModule
+import ru.zveron.network.apigatewayModule
 
 private val applicationSingletonModule = module {
     single<Moshi> {
@@ -22,6 +23,7 @@ internal val appModule = module {
         networkModule,
         authorizationModule,
         interceptorsModule,
+        apigatewayModule,
 
         rootPhoneModule,
 

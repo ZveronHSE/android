@@ -8,11 +8,11 @@ sealed class RootPhoneNavTarget: Parcelable {
     object PhoneInput: RootPhoneNavTarget()
 
     @Parcelize
-    data class SmsCodeInput(val phoneNumber: String): RootPhoneNavTarget()
+    data class SmsCodeInput(val phoneNumber: String, val sessionId: String): RootPhoneNavTarget()
 
     @Parcelize
     object PasswordInput: RootPhoneNavTarget()
 
     @Parcelize
-    data class Registration(val phoneNumber: String): RootPhoneNavTarget()
+    data class Registration(val sessionId: String): RootPhoneNavTarget()
 }

@@ -39,6 +39,7 @@ class RootPhoneNode(
     override fun onChildFinished(child: Node) {
         super.onChildFinished(child)
 
+        // TODO: finish registration here
         navigateUp()
     }
 
@@ -51,13 +52,13 @@ class RootPhoneNode(
             )
             is RootPhoneNavTarget.SmsCodeInput -> SmsCodeNode(
                 buildContext,
-                SmsCodeDeps(navTarget.phoneNumber, this),
+                SmsCodeDeps(navTarget.phoneNumber, navTarget.sessionId, this),
                 scope,
             )
-            RootPhoneNavTarget.PasswordInput -> PasswordInputNode(buildContext, scope) {
-                navigateToRegistration(it)
+            is RootPhoneNavTarget.PasswordInput -> PasswordInputNode(buildContext, scope) { sessionId ->
+                navigateToRegistration(sessionId)
             }
-            is RootPhoneNavTarget.Registration -> RegistrationNode(navTarget.phoneNumber, buildContext, scope)
+            is RootPhoneNavTarget.Registration -> RegistrationNode(navTarget.sessionId, buildContext, scope)
         }
     }
 
@@ -80,17 +81,17 @@ class RootPhoneNode(
         }
     }
 
-    override fun navigateToRegistration(phone: String) = backStack.push(RootPhoneNavTarget.Registration(phone))
-
-//    suspend fun attachRootRegistration(): RegistrationNode {
-//        return attachChild { backStack.newRoot(RootPhoneNavTarget.Registration) }
-//    }
+    override fun navigateToRegistration(
+        sessionId: String,
+    ) {
+        backStack.push(RootPhoneNavTarget.Registration(sessionId))
+    }
 
     override fun navigateToPasswordScreen() {
         navigateToPassword()
     }
 
-    override fun navigateToSmsScreen(phone: String) {
-        backStack.push(RootPhoneNavTarget.SmsCodeInput(phone))
+    override fun navigateToSmsScreen(phone: String, sessionId: String) {
+        backStack.push(RootPhoneNavTarget.SmsCodeInput(phone, sessionId))
     }
 }

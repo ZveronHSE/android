@@ -12,7 +12,7 @@ import ru.zveron.main_screen.bottom_navigation.BottomNavigationItem
 import ru.zveron.design.components.BottomNavigationItem as DesignBottomNavigationItem
 
 class MainScreenViewModel(
-
+    private val mainScreenNavigator: MainScreenNavigator,
 ) : ViewModel() {
     private val currentSelectedTab = MutableStateFlow(BottomNavigationItem.LOTS_FEED)
     private val handlers = mapOf(
@@ -59,7 +59,8 @@ class MainScreenViewModel(
     }
 
     private fun favouritesTapped() {
-        currentSelectedTab.value = BottomNavigationItem.FAVORITES
+//        currentSelectedTab.value = BottomNavigationItem.FAVORITES
+        mainScreenNavigator.openAuthorization()
     }
 
     private fun createLotTapped() {

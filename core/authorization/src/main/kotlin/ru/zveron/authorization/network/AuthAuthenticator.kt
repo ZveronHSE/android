@@ -1,5 +1,6 @@
 package ru.zveron.authorization.network
 
+import kotlinx.coroutines.runBlocking
 import okhttp3.Authenticator
 import okhttp3.Request
 import okhttp3.Response
@@ -13,7 +14,7 @@ class AuthAuthenticator(
 ): Authenticator {
     override fun authenticate(route: Route?, response: Response): Request? {
         return route?.let {
-            refreshTokenInteractor.refreshToken()
+            runBlocking{ refreshTokenInteractor.refreshToken() }
             authorizationStorage.accessToken?.let { token ->
                 response.request.newBuilder()
                     .header("Authorization", token)

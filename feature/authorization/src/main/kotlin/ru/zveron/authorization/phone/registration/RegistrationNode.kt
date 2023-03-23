@@ -43,7 +43,7 @@ import ru.zveron.design.shimmering.shimmeringBackground
 import ru.zveron.design.theme.ZveronTheme
 
 internal class RegistrationNode(
-    private val phone: String,
+    private val sessionId: String,
     buildContext: BuildContext,
     scope: Scope,
     private val registrationComponent: RegistrationComponent = RegistrationComponent(),
@@ -60,7 +60,7 @@ internal class RegistrationNode(
     override fun View(modifier: Modifier) {
         val viewModel = koinViewModel<RegistrationViewModel>(
             scope = registrationComponent.scope,
-            parameters = { parametersOf(phone) },
+            parameters = { parametersOf(sessionId) },
             viewModelStoreOwner = this,
         )
 

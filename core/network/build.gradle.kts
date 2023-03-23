@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.konan.properties.loadProperties
-
 plugins {
     id("zveron.android.library")
     id("kotlin-parcelize")
@@ -12,4 +10,10 @@ android {
 dependencies {
     implementation(libs.koin.android)
     implementation(libs.retrofit)
+
+    implementation(libs.grpc.protobuf.javaUtil)
+    implementation(libs.grpc.okhttp)
+    implementation(libs.zveronContracts)
+
+    implementation(project(":core:authorization"))
 }

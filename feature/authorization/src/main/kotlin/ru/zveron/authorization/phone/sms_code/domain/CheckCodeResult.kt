@@ -1,5 +1,8 @@
 package ru.zveron.authorization.phone.sms_code.domain
 
-data class CheckCodeResult(
-    val isNewUser: Boolean,
-)
+sealed class CheckCodeResult {
+    object Ready: CheckCodeResult()
+
+    data class NeedRegister(val sessionId: String): CheckCodeResult()
+}
+
