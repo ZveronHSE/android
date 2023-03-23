@@ -1,6 +1,5 @@
 package ru.zveron.application
 
-import com.squareup.moshi.Moshi
 import org.koin.dsl.module
 import ru.zveron.authorization.authorizationModule
 import ru.zveron.authorization.interceptorsModule
@@ -11,15 +10,8 @@ import ru.zveron.main_screen.bottom_navigation.lots_feed_backstack.lotsFeedBackS
 import ru.zveron.main_screen.mainScreenModule
 import ru.zveron.network.apigatewayModule
 
-private val applicationSingletonModule = module {
-    single<Moshi> {
-        Moshi.Builder().build()
-    }
-}
-
 internal val appModule = module {
     includes(
-        applicationSingletonModule,
         networkModule,
         authorizationModule,
         interceptorsModule,

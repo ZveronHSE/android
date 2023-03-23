@@ -9,7 +9,6 @@ android {
 
 dependencies {
     implementation(libs.koin.android)
-    implementation(libs.retrofit)
 
     implementation(libs.grpc.protobuf.javaUtil)
     implementation(libs.grpc.okhttp)

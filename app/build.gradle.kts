@@ -51,10 +51,6 @@ dependencies {
 
     implementation(libs.appyx.core)
 
-    implementation(libs.retrofit)
-    implementation(libs.retrofit.moshiConverter)
-    implementation(libs.okHttp.loggingInterceptor)
-
     implementation(libs.grpc.okhttp)
     implementation(libs.zveronContracts)
     implementation(libs.grpc.protobuf.javaUtil)
@@ -71,8 +67,6 @@ dependencies {
 
     implementation(libs.koin.android)
     implementation(libs.koin.android.compose)
-
-    implementation(libs.moshi)
 
     implementation(libs.zveronContracts)
 
