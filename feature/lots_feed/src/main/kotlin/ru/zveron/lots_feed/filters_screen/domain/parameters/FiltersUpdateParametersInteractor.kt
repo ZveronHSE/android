@@ -33,11 +33,9 @@ internal class FiltersUpdateParametersInteractor(
         val currentCategorySelection = filtersSelectedCategoryRepository.currentCategorySelection.value
         val currentLotFormSelection = filtersSelectedLotFormRepository.currentLotForm.value
 
-        if (currentCategorySelection.innerCategory == null) {
-            return
-        }
+        val innerCategory = currentCategorySelection.innerCategory ?: return
 
-        val categoryId = currentCategorySelection.innerCategory.id
+        val categoryId = innerCategory.id
         val lotFormId = currentLotFormSelection?.id ?: DEFAULT_LOT_FORM_ID
 
         val parameters = parametersRepository.loadParameters(categoryId, lotFormId)

@@ -1,4 +1,4 @@
-package ru.zveron.lots_feed.models.categories
+package ru.zveron.categories.models
 
 data class Category(
     val id: Int,

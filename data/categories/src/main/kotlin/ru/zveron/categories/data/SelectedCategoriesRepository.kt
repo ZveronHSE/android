@@ -1,9 +1,9 @@
-package ru.zveron.lots_feed.categories.data
+package ru.zveron.categories.data
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import ru.zveron.lots_feed.models.categories.Category
+import ru.zveron.categories.models.Category
 
 class SelectedCategoriesRepository {
     private val _currentCategorySelection = MutableStateFlow(CategorySelection(null, null))
@@ -44,7 +44,7 @@ class SelectedCategoriesRepository {
         return !_currentCategorySelection.value.isEmpty()
     }
 
-    internal fun setCategorySelection(categorySelection: CategorySelection) {
+    fun setCategorySelection(categorySelection: CategorySelection) {
         _currentCategorySelection.update { categorySelection }
     }
 }

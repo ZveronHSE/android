@@ -1,7 +1,7 @@
-package ru.zveron.lots_feed.categories.data
+package ru.zveron.categories.data
 
 import kotlinx.coroutines.delay
-import ru.zveron.lots_feed.models.categories.Category
+import ru.zveron.categories.models.Category
 
 class CategoryMockSource: CategorySource {
     override suspend fun loadRootCategories(): List<Category> {

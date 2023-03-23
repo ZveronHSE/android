@@ -1,12 +1,12 @@
-package ru.zveron.lots_feed.categories.data
+package ru.zveron.categories.data
 
 import com.google.protobuf.Empty
 import com.google.protobuf.Int32Value
 import com.google.protobuf.empty
 import com.google.protobuf.int32Value
+import ru.zveron.categories.mappings.toDomainCategory
+import ru.zveron.categories.models.Category
 import ru.zveron.contract.parameter.external.CategoryResponse
-import ru.zveron.lots_feed.mappings.toDomainCategory
-import ru.zveron.lots_feed.models.categories.Category
 import ru.zveron.network.ApigatewayDelegate
 
 private const val GET_ROOT_METHOD_NAME = "categoryRootGet"

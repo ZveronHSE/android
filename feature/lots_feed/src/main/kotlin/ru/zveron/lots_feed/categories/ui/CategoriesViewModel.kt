@@ -12,9 +12,9 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import ru.zveron.categories.data.CategorySelection
 import ru.zveron.design.resources.ZveronText
 import ru.zveron.lots_feed.R
-import ru.zveron.lots_feed.categories.data.CategorySelection
 import ru.zveron.lots_feed.categories.domain.CategoryInteractor
 import ru.zveron.lots_feed.categories.domain.SelectedCategoriesInteractor
 import ru.zveron.lots_feed.mappings.toUiState

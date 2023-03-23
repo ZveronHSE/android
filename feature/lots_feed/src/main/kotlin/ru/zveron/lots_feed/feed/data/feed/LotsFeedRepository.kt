@@ -2,8 +2,8 @@ package ru.zveron.lots_feed.feed.data.feed
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import ru.zveron.categories.models.Category
 import ru.zveron.lots_feed.filters_screen.data.parameters.ParameterState
-import ru.zveron.lots_feed.models.categories.Category
 import ru.zveron.lots_feed.models.filters.Filter
 import ru.zveron.lots_feed.models.sort.SortType
 import ru.zveron.lots_feed.models.waterfall.Lot

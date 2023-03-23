@@ -34,10 +34,11 @@ internal class FiltersChildrenCategoriesViewModel(
         if (categorySelection.rootCategory == null) {
             ChildrenCategoriesUiState.Hidden
         } else {
-            val text = if (categorySelection.innerCategory == null) {
+            val innerCategory = categorySelection.innerCategory
+            val text = if (innerCategory == null) {
                 ZveronText.RawResource(R.string.child_category_selector_title)
             } else {
-                ZveronText.RawString(categorySelection.innerCategory.name)
+                ZveronText.RawString(innerCategory.name)
             }
             ChildrenCategoriesUiState.Show(text)
         }

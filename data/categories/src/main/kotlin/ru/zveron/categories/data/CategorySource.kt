@@ -1,6 +1,6 @@
-package ru.zveron.lots_feed.categories.data
+package ru.zveron.categories.data
 
-import ru.zveron.lots_feed.models.categories.Category
+import ru.zveron.categories.models.Category
 
 interface CategorySource {
     suspend fun loadRootCategories(): List<Category>

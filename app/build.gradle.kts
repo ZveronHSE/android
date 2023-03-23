@@ -75,6 +75,8 @@ dependencies {
     implementation(project(":core:network"))
     implementation(project(":design"))
 
+    implementation(project(":data:categories"))
+
     implementation(project(":feature:authorization"))
     implementation(project(":feature:lots_feed"))
 }

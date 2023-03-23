@@ -1,6 +1,6 @@
 package ru.zveron.lots_feed.feed.domain
 
-import ru.zveron.lots_feed.categories.data.SelectedCategoriesRepository
+import ru.zveron.categories.data.SelectedCategoriesRepository
 import ru.zveron.lots_feed.feed.data.feed.LotsFeedRepository
 import ru.zveron.lots_feed.feed.data.lot_forms.SelectedLotFormRepository
 import ru.zveron.lots_feed.feed.data.parameters.SelectedParametersRepository
