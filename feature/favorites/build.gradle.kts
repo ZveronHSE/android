@@ -29,6 +29,7 @@ dependencies {
     implementation(project(":design"))
     implementation(project(":core:appyx"))
     implementation(project(":core:network"))
+    implementation(project(":core:models"))
 
     implementation(project(":data:categories"))
     implementation(project(":data:favorites"))

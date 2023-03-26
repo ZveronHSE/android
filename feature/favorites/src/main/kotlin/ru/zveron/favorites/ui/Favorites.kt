@@ -54,7 +54,10 @@ fun Favorites(
 
         Spacer(Modifier.height(32.dp))
 
-        SelectorRow(categoriesUiState = categoryState)
+        SelectorRow(
+            categoriesUiState = categoryState,
+            onCategoryClick = onCategoryTabClicked,
+        )
 
         Spacer(Modifier.height(16.dp))
 

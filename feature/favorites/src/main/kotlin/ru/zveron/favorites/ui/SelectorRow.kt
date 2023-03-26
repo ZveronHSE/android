@@ -42,6 +42,7 @@ internal fun SelectorRow(
                     Chip(
                         title = ZveronText.RawString(category.title),
                         onClick = clicker,
+                        isActive = category.id == categoriesUiState.selectedCategoryId,
                     )
                 }
             }
@@ -74,7 +75,8 @@ internal fun SelectorRowSuccessPreview() {
                     id = 2,
                     title = "Товары для животных"
                 )
-            )
+            ),
+            1,
         )
 
         SelectorRow(categoriesUiState = state)
