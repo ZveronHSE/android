@@ -6,13 +6,20 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
+import ru.zveron.authorization.domain.AuthorizationEventsEmitter
+import ru.zveron.authorization.storage.AuthorizationStorage
 import ru.zveron.design.resources.ZveronImage
 import ru.zveron.design.resources.ZveronText
 import ru.zveron.main_screen.bottom_navigation.BottomNavigationItem
+import ru.zveron.main_screen.bottom_navigation.BottomTabsNavigator
 import ru.zveron.design.components.BottomNavigationItem as DesignBottomNavigationItem
 
 class MainScreenViewModel(
     private val mainScreenNavigator: MainScreenNavigator,
+    private val authorizationStorage: AuthorizationStorage,
+    private val bottomTabsNavigator: BottomTabsNavigator,
+    private val authorizationEventsEmitter: AuthorizationEventsEmitter,
 ) : ViewModel() {
     private val currentSelectedTab = MutableStateFlow(BottomNavigationItem.LOTS_FEED)
     private val handlers = mapOf(
@@ -56,11 +63,26 @@ class MainScreenViewModel(
 
     private fun lotsFeedTapped() {
         currentSelectedTab.value = BottomNavigationItem.LOTS_FEED
+        bottomTabsNavigator.openLotsFeedBackstack()
     }
 
     private fun favouritesTapped() {
-//        currentSelectedTab.value = BottomNavigationItem.FAVORITES
-        mainScreenNavigator.openAuthorization()
+        if (authorizationStorage.isAuthorized()) {
+            openFavorites()
+        } else {
+            mainScreenNavigator.openAuthorization()
+            viewModelScope.launch {
+                val success = authorizationEventsEmitter.waitForAuthorization()
+                if (success) {
+                    openFavorites()
+                }
+            }
+        }
+    }
+
+    private fun openFavorites() {
+        currentSelectedTab.value = BottomNavigationItem.FAVORITES
+        bottomTabsNavigator.openFavoritesBackstack()
     }
 
     private fun createLotTapped() {

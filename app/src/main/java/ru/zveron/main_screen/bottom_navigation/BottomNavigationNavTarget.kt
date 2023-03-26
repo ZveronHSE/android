@@ -6,4 +6,7 @@ import kotlinx.parcelize.Parcelize
 sealed class BottomNavigationNavTarget: Parcelable {
     @Parcelize
     object LotsFeed: BottomNavigationNavTarget()
+
+    @Parcelize
+    object Favorites: BottomNavigationNavTarget()
 }

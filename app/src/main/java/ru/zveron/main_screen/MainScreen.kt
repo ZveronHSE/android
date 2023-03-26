@@ -18,10 +18,13 @@ import com.bumble.appyx.navmodel.spotlight.Spotlight
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 import ru.zveron.appyx.bottom_navigation.BottomNavigationMode
+import ru.zveron.appyx.spotlight.activate
 import ru.zveron.appyx.viewmodel.ViewModelParentNode
 import ru.zveron.design.components.BottomNavigation
 import ru.zveron.design.components.BottomNavigationItem
 import ru.zveron.main_screen.bottom_navigation.BottomNavigationNavTarget
+import ru.zveron.main_screen.bottom_navigation.BottomTabsNavigator
+import ru.zveron.main_screen.bottom_navigation.favorites_backstack.FavoritesBackstackNode
 import ru.zveron.main_screen.bottom_navigation.lots_feed_backstack.LotsFeedBackStackNode
 
 internal class MainScreen(
@@ -29,21 +32,21 @@ internal class MainScreen(
     private val mainScreenNavigator: MainScreenNavigator,
     private val mainScreenComponent: MainScreenComponent = MainScreenComponent(),
     private val spotlight: Spotlight<BottomNavigationNavTarget> = Spotlight(
-        items = listOf(BottomNavigationNavTarget.LotsFeed),
+        items = listOf(BottomNavigationNavTarget.LotsFeed, BottomNavigationNavTarget.Favorites),
         savedStateMap = buildContext.savedStateMap,
     ),
 ) : ViewModelParentNode<BottomNavigationNavTarget>(
     buildContext = buildContext,
     navModel = spotlight,
     plugins = listOf(mainScreenComponent),
-) {
+), BottomTabsNavigator {
 
     @Composable
     override fun View(modifier: Modifier) {
         val viewModel = koinViewModel<MainScreenViewModel>(
             scope = mainScreenComponent.scope,
             viewModelStoreOwner = this,
-            parameters = { parametersOf(mainScreenNavigator) },
+            parameters = { parametersOf(mainScreenNavigator, this as BottomTabsNavigator) },
         )
 
         val items by viewModel.state.collectAsState()
@@ -56,6 +59,8 @@ internal class MainScreen(
             BottomNavigationNavTarget.LotsFeed -> LotsFeedBackStackNode(buildContext) {
                 mainScreenNavigator.openAuthorization()
             }
+
+            BottomNavigationNavTarget.Favorites -> FavoritesBackstackNode(buildContext)
         }
     }
 
@@ -88,6 +93,14 @@ internal class MainScreen(
             }
 
         }
+    }
+
+    override fun openLotsFeedBackstack() {
+        spotlight.activate(BottomNavigationNavTarget.LotsFeed)
+    }
+
+    override fun openFavoritesBackstack() {
+        spotlight.activate(BottomNavigationNavTarget.Favorites)
     }
 
 }

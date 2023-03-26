@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "ru.zveron.favorites"
+    namespace = "ru.zveron.data.favorites"
 }
 
 dependencies {
