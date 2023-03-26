@@ -1,15 +1,15 @@
 package ru.zveron.lots_feed.feed.domain
 
-import ru.zveron.lots_feed.feed.data.favorites.FeedFavoritesRepository
+import ru.zveron.favorites.data.FavoritesRepository
 
 class LikeLotInteractor(
-    private val feedFavoritesRepository: FeedFavoritesRepository,
+    private val favoritesRepository: FavoritesRepository,
 ) {
     suspend fun setLotFavoriteStatus(lotId: Long, newFavoriteStatus: Boolean) {
         if (newFavoriteStatus) {
-            feedFavoritesRepository.addLotToFavorites(lotId)
+            favoritesRepository.addLotToFavorites(lotId)
         } else {
-            feedFavoritesRepository.removeLotFromFavorites(lotId)
+            favoritesRepository.removeLotFromFavorites(lotId)
         }
     }
 }

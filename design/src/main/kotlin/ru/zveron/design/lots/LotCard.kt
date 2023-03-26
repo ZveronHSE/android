@@ -3,10 +3,13 @@ package ru.zveron.design.lots
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -31,7 +34,25 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.zveron.design.R
 import ru.zveron.design.resources.ZveronImage
+import ru.zveron.design.shimmering.shimmeringBackground
 import ru.zveron.design.theme.ZveronTheme
+
+@Composable
+fun LoadingLotCard(
+    modifier: Modifier = Modifier,
+) {
+    BoxWithConstraints(
+        modifier
+            .height(180.dp)
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(16.dp))
+            .background(Color(0xFF717171))
+    ) {
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .shimmeringBackground(maxWidth))
+    }
+}
 
 @Composable
 fun LotCard(
@@ -47,7 +68,9 @@ fun LotCard(
     Card(
         shape = RoundedCornerShape(16.dp),
         elevation = 8.dp,
-        modifier = modifier.fillMaxWidth().clickable(onClick = onCardClick),
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable(onClick = onCardClick),
     ) {
         Column(modifier.fillMaxWidth()) {
             ZveronImage(

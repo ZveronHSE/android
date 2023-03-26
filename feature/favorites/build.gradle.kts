@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "ru.zveron.lots_feed"
+    namespace = "ru.zveron.favorites"
 }
 
 dependencies {
@@ -28,11 +28,8 @@ dependencies {
 
     implementation(project(":design"))
     implementation(project(":core:appyx"))
-    implementation(project(":core:authorization"))
     implementation(project(":core:network"))
 
     implementation(project(":data:categories"))
     implementation(project(":data:favorites"))
-
-    implementation(project(":feature:authorization"))
 }

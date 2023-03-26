@@ -16,7 +16,6 @@ import ru.zveron.lots_feed.categories.domain.CategoryInteractor
 import ru.zveron.lots_feed.categories.domain.PassDataToFiltersInteractor
 import ru.zveron.lots_feed.categories.domain.SelectedCategoriesInteractor
 import ru.zveron.lots_feed.categories.ui.CategoriesViewModel
-import ru.zveron.lots_feed.feed.data.favorites.FeedFavoritesRepository
 import ru.zveron.lots_feed.feed.data.feed.LotsFeedGrpcSource
 import ru.zveron.lots_feed.feed.data.feed.LotsFeedMockSource
 import ru.zveron.lots_feed.feed.data.feed.LotsFeedRepository
@@ -27,11 +26,11 @@ import ru.zveron.lots_feed.feed.data.parameters.SelectedParametersRepository
 import ru.zveron.lots_feed.feed.data.sort_type.SelectedSortTypeRepository
 import ru.zveron.lots_feed.feed.domain.LikeLotInteractor
 import ru.zveron.lots_feed.feed.domain.LoadFeedInteractor
-import ru.zveron.lots_feed.feed.domain.parameters.ParameterItemProviderFactory
 import ru.zveron.lots_feed.feed.domain.SelectSortTypeInteractor
 import ru.zveron.lots_feed.feed.domain.UpdateFeedInteractor
 import ru.zveron.lots_feed.feed.domain.UpdateParametersInteractor
 import ru.zveron.lots_feed.feed.domain.UpdateParametersInteractorImpl
+import ru.zveron.lots_feed.feed.domain.parameters.ParameterItemProviderFactory
 import ru.zveron.lots_feed.feed.ui.LotsFeedViewModel
 import ru.zveron.lots_feed.feed.ui.parameters.ParametersViewModel
 
@@ -64,8 +63,6 @@ val lotsFeedModule = module {
         scopedOf(::ParameterItemProviderFactory)
 
         scopedOf(::LikeLotInteractor)
-
-        scopedOf(::FeedFavoritesRepository)
     }
 
     singleOf(::LotsFeedRepository)

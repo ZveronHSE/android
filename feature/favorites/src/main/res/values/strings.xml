@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="favorites_screen_title">Избранное</string>
+
+    <string name="favorites_error_title">Не удалось загрузить избранное</string>
+    <string name="favorites_error_button_title">Попробовать еще раз</string>
+
+    <string name="favorites_empty_title">В избранном пока пусто</string>
+</resources>
