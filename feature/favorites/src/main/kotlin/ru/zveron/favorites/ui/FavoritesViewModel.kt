@@ -88,7 +88,7 @@ internal class FavoritesViewModel(
                         price = it.price,
                         date = it.publicationDate,
                         image = ZveronImage.ResourceImage(DesignR.drawable.cool_dog),
-                        isLiked = mutableStateOf(it.isFavorite),
+                        isLiked = mutableStateOf(true),
                     )
                 }
                 val successState = FavoritesLotsUiState.Success(uiLots)
@@ -113,6 +113,12 @@ internal class FavoritesViewModel(
 
     fun categorySelected(categoryId: Int) {
         _selectedCategoryId.update { categoryId }
+        _categoriesUiState.update { state ->
+            when (state) {
+                FavoritesCategoriesUiState.Loading -> state
+                is FavoritesCategoriesUiState.Success -> state.copy(selectedCategoryId = categoryId)
+            }
+        }
         if (_contentStates.value[categoryId] == null) {
             loadFavoriteLotsForCategory(categoryId)
         }

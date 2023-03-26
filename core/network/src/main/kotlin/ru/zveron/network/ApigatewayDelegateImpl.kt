@@ -37,7 +37,7 @@ internal class ApigatewayDelegateImpl(
             val apigatewayResponse =
                 apigatewayServiceCoroutineStub.callApiGateway(request, buildMetadata())
             processResponse(apigatewayResponse, responseBuilder)
-        } catch (e: io.grpc.StatusRuntimeException) {
+        } catch (e: io.grpc.StatusException) {
             if (e.status.code != Status.Code.UNAUTHENTICATED) {
                 throw e
             }
