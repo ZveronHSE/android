@@ -21,3 +21,7 @@ plugins {
 tasks.register("clean", Delete::class) {
     delete(rootProject.buildDir)
 }
+
+apply {
+    from(file("gradle/projectDependencyGraph.gradle"))
+}

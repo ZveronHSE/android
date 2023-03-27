@@ -11,6 +11,7 @@ fun GrpcLot.toDomainLot(): Lot {
         title = this.title,
         price = this.price,
         publicationDate = this.publicationDate,
+        photoUrl = this.imageUrl,
         isFavorite = this.favorite,
         status = this.status.toDomainStatus(),
         categoryId = if (this.hasCategoryId()) this.categoryId else null,

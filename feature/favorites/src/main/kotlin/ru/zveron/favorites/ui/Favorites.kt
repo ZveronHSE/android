@@ -16,6 +16,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import ru.zveron.design.lots.EditableSearchBar
 import ru.zveron.design.theme.ZveronTheme
 import ru.zveron.design.theme.gray5
 import ru.zveron.favorites.R
@@ -51,6 +52,15 @@ fun Favorites(
             ),
             modifier = Modifier.padding(start = 16.dp, top = 32.dp),
         )
+
+//        if (contentState is FavoritesLotsUiState.Success && contentState.lots.isNotEmpty()) {
+//            Spacer(Modifier.height(16.dp))
+//
+//            EditableSearchBar(
+//                value = searchFilter.value,
+//                onValueChange = { searchFilter.value = it },
+//            )
+//        }
 
         Spacer(Modifier.height(32.dp))
 

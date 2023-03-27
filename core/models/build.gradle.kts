@@ -12,6 +12,4 @@ dependencies {
 
     implementation(libs.grpc.protobuf.javaUtil)
     implementation(libs.zveronContracts)
-
-    implementation(project(":core:authorization"))
 }

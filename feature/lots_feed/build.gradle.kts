@@ -30,6 +30,7 @@ dependencies {
     implementation(project(":core:appyx"))
     implementation(project(":core:authorization"))
     implementation(project(":core:network"))
+    implementation(project(":core:models"))
 
     implementation(project(":data:categories"))
     implementation(project(":data:favorites"))

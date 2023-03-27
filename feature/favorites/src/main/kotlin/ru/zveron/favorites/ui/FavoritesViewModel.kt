@@ -15,7 +15,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ru.zveron.categories.data.CategoryRepository
 import ru.zveron.design.resources.ZveronImage
-import ru.zveron.design.R as DesignR
 import ru.zveron.favorites.domain.LoadCategoryFavoriteLotsInteractor
 import ru.zveron.favorites.domain.RemoveLotFromFavoritesInteractor
 import ru.zveron.favorites.ui.state.CategoryUiState
@@ -87,7 +86,7 @@ internal class FavoritesViewModel(
                         title = it.title,
                         price = it.price,
                         date = it.publicationDate,
-                        image = ZveronImage.ResourceImage(DesignR.drawable.cool_dog),
+                        image = ZveronImage.RemoteImage(it.photoUrl),
                         isLiked = mutableStateOf(true),
                     )
                 }

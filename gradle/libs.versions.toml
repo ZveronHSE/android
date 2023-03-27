@@ -31,7 +31,7 @@ koin_android_compose = "3.4.1"
 
 coil = "2.2.2"
 
-zveron_contracts = "1.9.2"
+zveron_contracts = "1.9.4"
 
 [libraries]
 #androidx

@@ -5,7 +5,7 @@ data class Lot(
     val title: String,
     val price: String,
     val publicationDate: String,
-    // TODO: Add photo link
+    val photoUrl: String,
     val isFavorite: Boolean,
     val status: Status,
     val categoryId: Int?,

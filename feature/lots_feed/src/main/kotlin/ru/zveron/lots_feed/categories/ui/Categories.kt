@@ -58,8 +58,8 @@ private fun ReadyCategories(
         if (categories.size <= CATEGORIES_COUNT) {
             Row(
                 modifier = modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceAround,
-                verticalAlignment = Alignment.Bottom,
+                horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterHorizontally),
+                verticalAlignment = Alignment.Top,
             ) {
                 for (category in categories) {
                     key(category.id) {
@@ -74,7 +74,7 @@ private fun ReadyCategories(
         } else {
             LazyRow(
                 modifier = modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.Bottom,
+                verticalAlignment = Alignment.Top,
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
             ) {
                 items(categories, key = { it.id }) { category ->

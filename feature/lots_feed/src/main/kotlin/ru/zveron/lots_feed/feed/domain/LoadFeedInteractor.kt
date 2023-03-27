@@ -7,7 +7,7 @@ import ru.zveron.lots_feed.feed.data.parameters.SelectedParametersRepository
 import ru.zveron.lots_feed.models.filters.Filter
 import ru.zveron.lots_feed.models.filters.FilterField
 import ru.zveron.lots_feed.models.filters.FilterOperation
-import ru.zveron.lots_feed.models.waterfall.Lot
+import ru.zveron.models.lots.Lot
 
 class LoadFeedInteractor(
     private val lotsFeedRepository: LotsFeedRepository,
