@@ -22,6 +22,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -30,7 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.zveron.design.fonts.Rubik
-import ru.zveron.design.lots.EditableSearchBar
+import ru.zveron.design.lots.SearchBar
 import ru.zveron.design.theme.ZveronTheme
 import ru.zveron.design.theme.gray5
 import ru.zveron.favorites.R
@@ -63,7 +64,9 @@ fun Favorites(
         modifier = modifier,
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth().padding(top = 32.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 32.dp),
             horizontalArrangement = Arrangement.Center,
         ) {
             Text(
@@ -97,10 +100,20 @@ fun Favorites(
         if (contentState is FavoritesLotsUiState.Success && contentState.lots.isNotEmpty()) {
             Spacer(Modifier.height(16.dp))
 
-            EditableSearchBar(
+            SearchBar(
                 value = searchFilter.value,
                 onValueChange = { searchFilter.value = it },
-                inputHint = stringResource(R.string.favorites_search_hint)
+                inputHint = stringResource(R.string.favorites_search_hint),
+                modifier = Modifier.padding(horizontal = 16.dp),
+                trailFrame = {
+                    IconButton(onClick = { searchFilter.value = "" }) {
+                        Icon(
+                            painter = painterResource(DesignR.drawable.ic_close_gradient),
+                            contentDescription = stringResource(DesignR.string.search_clear_hint),
+                            tint = Color.Unspecified,
+                        )
+                    }
+                }
             )
         }
 

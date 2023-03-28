@@ -6,14 +6,15 @@ import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 
-private val DarkColorScheme = darkColors(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-)
+// TODO: support dark theme
+//private val DarkColorScheme = darkColors(
+//    primary = Purple80,
+//    secondary = PurpleGrey80,
+//)
 
 private val LightColorScheme = lightColors(
-    primary = Purple40,
-    secondary = PurpleGrey40,
+    primary = orangeGradientStart,
+    secondary = orangeGradientEnd,
     background = GreyBackground,
     surface = WhiteSurfaceBackground,
     /* Other default colors to override
@@ -32,13 +33,13 @@ fun ZveronTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
-    }
+//    val colorScheme = when {
+//        darkTheme -> DarkColorScheme
+//        else -> LightColorScheme
+//    }
 
     MaterialTheme(
-        colors = colorScheme,
+        colors = LightColorScheme,
         typography = Typography,
         content = content
     )
