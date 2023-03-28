@@ -53,14 +53,15 @@ fun Favorites(
             modifier = Modifier.padding(start = 16.dp, top = 32.dp),
         )
 
-//        if (contentState is FavoritesLotsUiState.Success && contentState.lots.isNotEmpty()) {
-//            Spacer(Modifier.height(16.dp))
-//
-//            EditableSearchBar(
-//                value = searchFilter.value,
-//                onValueChange = { searchFilter.value = it },
-//            )
-//        }
+        if (contentState is FavoritesLotsUiState.Success && contentState.lots.isNotEmpty()) {
+            Spacer(Modifier.height(16.dp))
+
+            EditableSearchBar(
+                value = searchFilter.value,
+                onValueChange = { searchFilter.value = it },
+                inputHint = stringResource(R.string.favorites_search_hint)
+            )
+        }
 
         Spacer(Modifier.height(32.dp))
 

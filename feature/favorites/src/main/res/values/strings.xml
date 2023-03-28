@@ -2,8 +2,11 @@
 <resources>
     <string name="favorites_screen_title">Избранное</string>
 
+    <string name="favorites_search_hint">Поиск</string>
+
     <string name="favorites_error_title">Не удалось загрузить избранное</string>
     <string name="favorites_error_button_title">Попробовать еще раз</string>
 
     <string name="favorites_empty_title">В избранном пока пусто</string>
+    <string name="favorites_empty_by_search_title">Не удалось найти избранные по вашему запросу</string>
 </resources>

@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -40,6 +41,7 @@ import ru.zveron.design.theme.ZveronTheme
 import ru.zveron.design.theme.enabledButtonGradient
 import ru.zveron.design.theme.gray3
 import ru.zveron.favorites.R
+import ru.zveron.design.R as DesignR
 import ru.zveron.favorites.ui.state.FavoritesLotsUiState
 import ru.zveron.favorites.ui.state.LotUiState
 
@@ -139,68 +141,118 @@ private fun ColumnScope.SuccessFavoriteLots(
     onLotLikeClick: (Long) -> Unit = {},
     onLotClick: (Long) -> Unit,
 ) {
+    val notEmpty by remember(lots) {
+        // TODO: wrap this with [derivedStateOf]
+        mutableStateOf(lots.isNotEmpty())
+    }
+
     val visibleItems by remember(lots) {
         derivedStateOf {
             lots.filter { it.title.contains(searchFilter.value, true) }
         }
     }
 
-    val notEmpty by remember(visibleItems) {
+    val visibleNotEmpty by remember(visibleItems) {
         derivedStateOf {
             visibleItems.isNotEmpty()
         }
     }
 
-    if (notEmpty) {
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
-            modifier = modifier
-                .weight(1f)
-                .fillMaxWidth(),
-            contentPadding = PaddingValues(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            items(lots, { it.id }) { lot ->
-                val likeClicker = remember {
-                    { onLotLikeClick.invoke(lot.id) }
-                }
-
-                val lotClicker = remember {
-                    { onLotClick.invoke(lot.id) }
-                }
-
-                LotCard(
-                    zveronImage = lot.image,
-                    title = lot.title,
-                    price = lot.price,
-                    date = lot.date,
-                    isLiked = lot.isLiked.value,
-                    onLikeClick = likeClicker,
-                    onCardClick = lotClicker,
-                )
-            }
-
-            item(span = { GridItemSpan(3) }) {
-                Spacer(Modifier.height(BOTTOM_BAR_HEIGHT.dp))
-            }
-        }
-    } else {
-        Spacer(modifier = Modifier.weight(1f))
-
-        Text(
-            text = stringResource(R.string.favorites_empty_title),
-            style = TextStyle(
-                fontWeight = FontWeight.Normal,
-                fontSize = 16.sp,
-                color = gray3,
-            ),
-            modifier = Modifier.align(Alignment.CenterHorizontally),
+    when {
+        visibleNotEmpty && notEmpty -> LotsNotEmpty(
+            lots = visibleItems,
+            modifier = modifier,
+            onLotClick = onLotClick,
+            onLotLikeClick = onLotLikeClick,
         )
-
-        Spacer(modifier = Modifier.weight(2f))
+        !visibleNotEmpty && notEmpty -> LotsEmptyBySearch()
+        else -> LotsEmpty()
     }
+}
 
+@Composable
+private fun ColumnScope.LotsNotEmpty(
+    lots: List<LotUiState>,
+    modifier: Modifier,
+    onLotLikeClick: (Long) -> Unit = {},
+    onLotClick: (Long) -> Unit = {},
+) {
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
+        modifier = modifier
+            .weight(1f)
+            .fillMaxWidth(),
+        contentPadding = PaddingValues(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        items(lots, { it.id }) { lot ->
+            val likeClicker = remember {
+                { onLotLikeClick.invoke(lot.id) }
+            }
+
+            val lotClicker = remember {
+                { onLotClick.invoke(lot.id) }
+            }
+
+            LotCard(
+                zveronImage = lot.image,
+                title = lot.title,
+                price = lot.price,
+                date = lot.date,
+                isLiked = lot.isLiked.value,
+                onLikeClick = likeClicker,
+                onCardClick = lotClicker,
+            )
+        }
+
+        item(span = { GridItemSpan(3) }) {
+            Spacer(Modifier.height(BOTTOM_BAR_HEIGHT.dp))
+        }
+    }
+}
+
+@Composable
+private fun ColumnScope.LotsEmpty() {
+    Spacer(modifier = Modifier.weight(1f))
+
+    Text(
+        text = stringResource(R.string.favorites_empty_title),
+        style = TextStyle(
+            fontWeight = FontWeight.Normal,
+            fontSize = 16.sp,
+            color = gray3,
+        ),
+        modifier = Modifier.align(Alignment.CenterHorizontally),
+    )
+
+    Spacer(modifier = Modifier.weight(2f))
+}
+
+@Composable
+private fun ColumnScope.LotsEmptyBySearch() {
+    Spacer(modifier = Modifier.weight(1f))
+
+    Icon(
+        painterResource(DesignR.drawable.ic_question),
+        null,
+        modifier = Modifier.align(Alignment.CenterHorizontally),
+    )
+
+    Spacer(Modifier.height(8.dp))
+
+    Text(
+        text = stringResource(R.string.favorites_empty_by_search_title),
+        style = TextStyle(
+            fontWeight = FontWeight.Normal,
+            fontSize = 16.sp,
+            color = gray3,
+            textAlign = TextAlign.Center,
+        ),
+        modifier = Modifier.align(Alignment.CenterHorizontally).padding(horizontal = 32.dp),
+    )
+
+    Spacer(modifier = Modifier.weight(2f))
 }
 
 @Preview(showBackground = true)
