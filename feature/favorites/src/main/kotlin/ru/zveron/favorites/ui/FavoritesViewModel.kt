@@ -21,6 +21,7 @@ import ru.zveron.favorites.ui.state.CategoryUiState
 import ru.zveron.favorites.ui.state.FavoritesCategoriesUiState
 import ru.zveron.favorites.ui.state.FavoritesLotsUiState
 import ru.zveron.favorites.ui.state.LotUiState
+import ru.zveron.models.lots.Status
 
 internal class FavoritesViewModel(
     private val loadCategoryFavoriteLotsInteractor: LoadCategoryFavoriteLotsInteractor,
@@ -88,6 +89,7 @@ internal class FavoritesViewModel(
                         date = it.publicationDate,
                         image = ZveronImage.RemoteImage(it.photoUrl),
                         isLiked = mutableStateOf(true),
+                        isActive = it.status == Status.ACTIVE || it.status == Status.UNKNOWN,
                     )
                 }
                 val successState = FavoritesLotsUiState.Success(uiLots)
@@ -148,6 +150,55 @@ internal class FavoritesViewModel(
         }
         viewModelScope.launch {
             removeLotFromFavoritesInteractor.removeLotFromFavorites(lotId)
+        }
+    }
+
+    fun onRemoveAllClicked() {
+        val currentCategoryId = _selectedCategoryId.value ?: return
+        _contentStates.update { states ->
+            val newCategoryState = states[currentCategoryId]?.let { lotsState ->
+                when (lotsState) {
+                    FavoritesLotsUiState.Loading, FavoritesLotsUiState.Error -> lotsState
+                    is FavoritesLotsUiState.Success -> FavoritesLotsUiState.Success(emptyList())
+                }
+            }
+
+            buildMap {
+                putAll(states)
+                newCategoryState?.let {
+                    put(currentCategoryId, newCategoryState)
+                }
+            }
+        }
+
+        viewModelScope.launch {
+            removeLotFromFavoritesInteractor.removeAllFromCategory(currentCategoryId)
+        }
+    }
+
+    fun onRemoveUnactiveClicked() {
+        val currentCategoryId = _selectedCategoryId.value ?: return
+        _contentStates.update { states ->
+            val newCategoryState = states[currentCategoryId]?.let { lotsState ->
+                when (lotsState) {
+                    FavoritesLotsUiState.Loading, FavoritesLotsUiState.Error -> lotsState
+                    is FavoritesLotsUiState.Success -> {
+                        val newLots = lotsState.lots.filter { it.isActive }
+                        FavoritesLotsUiState.Success(newLots)
+                    }
+                }
+            }
+
+            buildMap {
+                putAll(states)
+                newCategoryState?.let {
+                    put(currentCategoryId, newCategoryState)
+                }
+            }
+        }
+
+        viewModelScope.launch {
+            removeLotFromFavoritesInteractor.removeUnactiveFromCategory(currentCategoryId)
         }
     }
 

@@ -298,6 +298,7 @@ private fun FavoriteLotsSuccessPreview() {
                 date = "Сегодня",
                 image = ZveronImage.ResourceImage(ru.zveron.design.R.drawable.cool_dog),
                 isLiked = remember { mutableStateOf(true) },
+                isActive = true,
             ),
             LotUiState(
                 id = 2,
@@ -306,6 +307,7 @@ private fun FavoriteLotsSuccessPreview() {
                 date = "Сегодня",
                 image = ZveronImage.ResourceImage(ru.zveron.design.R.drawable.cool_dog),
                 isLiked = remember { mutableStateOf(true) },
+                isActive = true,
             ),
             LotUiState(
                 id = 3,
@@ -314,6 +316,7 @@ private fun FavoriteLotsSuccessPreview() {
                 date = "Сегодня",
                 image = ZveronImage.ResourceImage(ru.zveron.design.R.drawable.cool_dog),
                 isLiked = remember { mutableStateOf(true) },
+                isActive = true,
             ),
         )
     )

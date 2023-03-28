@@ -36,6 +36,8 @@ class FavoritesNode(
             // TODO: replace with real navigation
             onLotClick = {},
             onLotLikeClick = viewModel::onLotLikeClick,
+            onDeleteAllClicked = viewModel::onRemoveAllClicked,
+            onDeleteUnactiveClicked = viewModel::onRemoveUnactiveClicked,
         )
     }
 }

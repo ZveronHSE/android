@@ -20,4 +20,5 @@ data class LotUiState(
     val date: String,
     val image: ZveronImage,
     val isLiked: MutableState<Boolean>,
+    val isActive: Boolean,
 )

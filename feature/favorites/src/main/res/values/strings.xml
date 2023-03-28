@@ -9,4 +9,8 @@
 
     <string name="favorites_empty_title">В избранном пока пусто</string>
     <string name="favorites_empty_by_search_title">Не удалось найти избранные по вашему запросу</string>
+
+    <string name="favorites_delete_description">Удалить</string>
+    <string name="favorites_remove_all_title">Удалить все</string>
+    <string name="favorites_remove_unactive_title">Удалить неактивные</string>
 </resources>
