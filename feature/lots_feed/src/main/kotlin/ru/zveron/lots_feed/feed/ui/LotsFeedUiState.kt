@@ -1,5 +1,6 @@
 package ru.zveron.lots_feed.feed.ui
 
+import androidx.compose.runtime.MutableState
 import ru.zveron.design.resources.ZveronImage
 
 sealed class LotsFeedUiState {
@@ -15,4 +16,5 @@ data class LotUiState(
     val price: String,
     val date: String,
     val image: ZveronImage,
+    val isLiked: MutableState<Boolean>,
 )

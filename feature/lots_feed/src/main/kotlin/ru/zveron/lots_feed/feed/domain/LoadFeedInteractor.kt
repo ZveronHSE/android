@@ -1,13 +1,13 @@
 package ru.zveron.lots_feed.feed.domain
 
-import ru.zveron.lots_feed.categories.data.SelectedCategoriesRepository
+import ru.zveron.categories.data.SelectedCategoriesRepository
 import ru.zveron.lots_feed.feed.data.feed.LotsFeedRepository
 import ru.zveron.lots_feed.feed.data.lot_forms.SelectedLotFormRepository
 import ru.zveron.lots_feed.feed.data.parameters.SelectedParametersRepository
 import ru.zveron.lots_feed.models.filters.Filter
 import ru.zveron.lots_feed.models.filters.FilterField
 import ru.zveron.lots_feed.models.filters.FilterOperation
-import ru.zveron.lots_feed.models.waterfall.Lot
+import ru.zveron.models.lots.Lot
 
 class LoadFeedInteractor(
     private val lotsFeedRepository: LotsFeedRepository,

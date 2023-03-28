@@ -1,7 +1,6 @@
 plugins {
     id("zveron.android.library")
     id("zveron.android.library.compose")
-    id("kotlin-parcelize")
 }
 
 android {
@@ -31,4 +30,10 @@ dependencies {
     implementation(project(":core:appyx"))
     implementation(project(":core:authorization"))
     implementation(project(":core:network"))
+    implementation(project(":core:models"))
+
+    implementation(project(":data:categories"))
+    implementation(project(":data:favorites"))
+
+    implementation(project(":feature:authorization"))
 }

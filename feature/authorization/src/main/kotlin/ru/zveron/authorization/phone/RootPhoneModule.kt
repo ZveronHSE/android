@@ -1,7 +1,9 @@
 package ru.zveron.authorization.phone
 
 import org.koin.core.module.dsl.scopedOf
+import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
+import ru.zveron.authorization.domain.AuthorizationEventsEmitter
 import ru.zveron.authorization.phone.formatting.PhoneFormatter
 import ru.zveron.authorization.phone.password.passwordModule
 import ru.zveron.authorization.phone.phone_input.phoneInputModule
@@ -19,4 +21,6 @@ val rootPhoneModule = module {
         smsCodeModule,
         registrationModule,
     )
+
+    singleOf(::AuthorizationEventsEmitter)
 }

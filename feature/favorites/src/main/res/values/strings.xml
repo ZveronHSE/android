@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="favorites_screen_title">Избранное</string>
+
+    <string name="favorites_search_hint">Поиск</string>
+
+    <string name="favorites_error_title">Не удалось загрузить избранное</string>
+    <string name="favorites_error_button_title">Попробовать еще раз</string>
+
+    <string name="favorites_empty_title">В избранном пока пусто</string>
+    <string name="favorites_empty_by_search_title">Не удалось найти избранные по вашему запросу</string>
+
+    <string name="favorites_delete_description">Удалить</string>
+    <string name="favorites_remove_all_title">Удалить все</string>
+    <string name="favorites_remove_unactive_title">Удалить неактивные</string>
+</resources>

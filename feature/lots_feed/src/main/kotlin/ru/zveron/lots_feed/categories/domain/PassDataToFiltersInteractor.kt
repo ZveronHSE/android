@@ -1,7 +1,7 @@
 package ru.zveron.lots_feed.categories.domain
 
-import ru.zveron.lots_feed.categories.data.CategorySelection
-import ru.zveron.lots_feed.categories.data.SelectedCategoriesRepository
+import ru.zveron.categories.data.CategorySelection
+import ru.zveron.categories.data.SelectedCategoriesRepository
 import ru.zveron.lots_feed.feed.data.lot_forms.SelectedLotFormRepository
 import ru.zveron.lots_feed.feed.data.parameters.SelectedParametersRepository
 import ru.zveron.lots_feed.feed.data.sort_type.SelectedSortTypeRepository

@@ -89,7 +89,7 @@ fun Category(
         ZveronImage(
             zveronImage = category.image,
             contentScale = ContentScale.Crop,
-            modifier = Modifier.clip(CircleShape)
+            modifier = Modifier.size(84.dp).clip(CircleShape)
         )
 
         Spacer(Modifier.height(8.dp))

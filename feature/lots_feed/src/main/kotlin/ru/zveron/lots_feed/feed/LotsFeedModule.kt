@@ -5,13 +5,13 @@ import org.koin.core.module.dsl.scopedOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
+import ru.zveron.categories.data.CategoryGrpcSource
+import ru.zveron.categories.data.CategoryLocalCacheSource
+import ru.zveron.categories.data.CategoryMockSource
+import ru.zveron.categories.data.CategoryRepository
+import ru.zveron.categories.data.CategorySource
+import ru.zveron.categories.data.SelectedCategoriesRepository
 import ru.zveron.lots_feed.BuildConfig
-import ru.zveron.lots_feed.categories.data.CategoryGrpcSource
-import ru.zveron.lots_feed.categories.data.CategoryLocalCacheSource
-import ru.zveron.lots_feed.categories.data.CategoryMockSource
-import ru.zveron.lots_feed.categories.data.CategoryRepository
-import ru.zveron.lots_feed.categories.data.CategorySource
-import ru.zveron.lots_feed.categories.data.SelectedCategoriesRepository
 import ru.zveron.lots_feed.categories.domain.CategoryInteractor
 import ru.zveron.lots_feed.categories.domain.PassDataToFiltersInteractor
 import ru.zveron.lots_feed.categories.domain.SelectedCategoriesInteractor
@@ -24,12 +24,13 @@ import ru.zveron.lots_feed.feed.data.lot_forms.SelectedLotFormRepository
 import ru.zveron.lots_feed.feed.data.parameters.ParametersLoadingRepository
 import ru.zveron.lots_feed.feed.data.parameters.SelectedParametersRepository
 import ru.zveron.lots_feed.feed.data.sort_type.SelectedSortTypeRepository
+import ru.zveron.lots_feed.feed.domain.LikeLotInteractor
 import ru.zveron.lots_feed.feed.domain.LoadFeedInteractor
-import ru.zveron.lots_feed.feed.domain.parameters.ParameterItemProviderFactory
 import ru.zveron.lots_feed.feed.domain.SelectSortTypeInteractor
 import ru.zveron.lots_feed.feed.domain.UpdateFeedInteractor
 import ru.zveron.lots_feed.feed.domain.UpdateParametersInteractor
 import ru.zveron.lots_feed.feed.domain.UpdateParametersInteractorImpl
+import ru.zveron.lots_feed.feed.domain.parameters.ParameterItemProviderFactory
 import ru.zveron.lots_feed.feed.ui.LotsFeedViewModel
 import ru.zveron.lots_feed.feed.ui.parameters.ParametersViewModel
 
@@ -60,6 +61,8 @@ val lotsFeedModule = module {
         }
 
         scopedOf(::ParameterItemProviderFactory)
+
+        scopedOf(::LikeLotInteractor)
     }
 
     singleOf(::LotsFeedRepository)

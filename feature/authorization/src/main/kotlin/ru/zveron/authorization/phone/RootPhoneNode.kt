@@ -2,6 +2,7 @@ package ru.zveron.authorization.phone
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.Lifecycle
 import com.bumble.appyx.core.composable.Children
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
@@ -15,6 +16,7 @@ import org.koin.core.component.KoinScopeComponent
 import org.koin.core.component.createScope
 import org.koin.core.scope.Scope
 import ru.zveron.appyx.combine.combineOperations
+import ru.zveron.authorization.domain.AuthorizationEventsEmitter
 import ru.zveron.authorization.phone.password.PasswordInputNode
 import ru.zveron.authorization.phone.phone_input.PhoneInputNode
 import ru.zveron.authorization.phone.phone_input.deps.PhoneInputNavigator
@@ -34,12 +36,24 @@ class RootPhoneNode(
     navModel = backStack,
 ), PhoneInputNavigator, SmsCodeNavigator, KoinScopeComponent {
 
+    private val authorizationEventsEmitter by lazy {
+        scope.get<AuthorizationEventsEmitter>()
+    }
+
+    override fun updateLifecycleState(state: Lifecycle.State) {
+        super.updateLifecycleState(state)
+
+        if (state == Lifecycle.State.DESTROYED) {
+            authorizationEventsEmitter.authorizationFinished(false)
+        }
+    }
+
     override val scope: Scope by lazy { createScope(this) }
 
     override fun onChildFinished(child: Node) {
         super.onChildFinished(child)
 
-        // TODO: finish registration here
+        authorizationEventsEmitter.authorizationFinished(true)
         navigateUp()
     }
 

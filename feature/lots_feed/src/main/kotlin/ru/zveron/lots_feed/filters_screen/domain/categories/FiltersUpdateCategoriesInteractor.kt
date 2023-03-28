@@ -2,10 +2,10 @@ package ru.zveron.lots_feed.filters_screen.domain.categories
 
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import ru.zveron.lots_feed.categories.data.CategoryRepository
+import ru.zveron.categories.data.CategoryRepository
+import ru.zveron.categories.models.Category
 import ru.zveron.lots_feed.filters_screen.data.categories.FiltersChildrenCategoryRepository
 import ru.zveron.lots_feed.filters_screen.data.categories.FiltersSelectedCategoryRepository
-import ru.zveron.lots_feed.models.categories.Category
 
 class FiltersUpdateCategoriesInteractor(
     private val categoryRepository: CategoryRepository,

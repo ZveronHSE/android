@@ -1,11 +1,11 @@
 package ru.zveron.lots_feed.categories.domain
 
-import ru.zveron.lots_feed.categories.data.CategoryRepository
-import ru.zveron.lots_feed.categories.data.SelectedCategoriesRepository
+import ru.zveron.categories.data.CategoryRepository
+import ru.zveron.categories.data.SelectedCategoriesRepository
+import ru.zveron.categories.models.Category
 import ru.zveron.lots_feed.feed.data.parameters.SelectedParametersRepository
 import ru.zveron.lots_feed.feed.domain.UpdateFeedInteractor
 import ru.zveron.lots_feed.feed.domain.UpdateParametersInteractor
-import ru.zveron.lots_feed.models.categories.Category
 
 class SelectedCategoriesInteractor(
     private val selectedCategoriesRepository: SelectedCategoriesRepository,

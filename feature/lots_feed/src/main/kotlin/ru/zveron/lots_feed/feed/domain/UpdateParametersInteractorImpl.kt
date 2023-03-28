@@ -2,7 +2,7 @@ package ru.zveron.lots_feed.feed.domain
 
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import ru.zveron.lots_feed.categories.data.SelectedCategoriesRepository
+import ru.zveron.categories.data.SelectedCategoriesRepository
 import ru.zveron.lots_feed.feed.data.lot_forms.SelectedLotFormRepository
 import ru.zveron.lots_feed.feed.data.parameters.SelectedParametersRepository
 import ru.zveron.lots_feed.parameters.data.ParametersRepository
@@ -23,11 +23,9 @@ internal class UpdateParametersInteractorImpl(
     override suspend fun loadParameters() {
         val currentCategorySelection = selectedCategoryRepository.currentCategorySelection.value
 
-        if (currentCategorySelection.innerCategory == null) {
-            return
-        }
+        val innerCategory = currentCategorySelection.innerCategory ?: return
 
-        val categoryId = currentCategorySelection.innerCategory.id
+        val categoryId = innerCategory.id
         val lotFormId = selectedLotFormRepository.currentLotForm.value?.id ?: 1
 
         val parameters = parametersRepository.loadParameters(categoryId, lotFormId)

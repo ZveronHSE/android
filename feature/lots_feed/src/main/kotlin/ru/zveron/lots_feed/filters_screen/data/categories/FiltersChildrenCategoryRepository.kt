@@ -3,8 +3,8 @@ package ru.zveron.lots_feed.filters_screen.data.categories
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import ru.zveron.lots_feed.categories.data.CategoryRepository
-import ru.zveron.lots_feed.models.categories.Category
+import ru.zveron.categories.data.CategoryRepository
+import ru.zveron.categories.models.Category
 
 class FiltersChildrenCategoryRepository(
     private val categoryRepository: CategoryRepository,

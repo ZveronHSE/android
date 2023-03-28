@@ -10,4 +10,6 @@ interface LotsFeedNavigator {
     fun goToLot(lotId: Long)
 
     fun chooseItem(title: ZveronText)
+
+    fun startAuthorization()
 }
