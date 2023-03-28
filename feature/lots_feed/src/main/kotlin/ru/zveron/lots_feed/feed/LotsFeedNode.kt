@@ -1,10 +1,12 @@
 package ru.zveron.lots_feed.feed
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import com.bumble.appyx.core.modality.BuildContext
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -70,17 +72,27 @@ class LotsFeedNode(
             }
         }
 
+        val query = remember { feedViewModel.queryState }
+
+        val focusManager = LocalFocusManager.current
+        LaunchedEffect(feedViewModel) {
+            feedViewModel.clearFocusFlow.collect {
+                focusManager.clearFocus()
+            }
+        }
+
         LotsFeed(
             categoryTitle = categoryTitle,
             feedUiState = feedUiState,
             categoriesUiState = categoriesUiState,
             parametersUiState = parametersUiState,
             currentSortType = currentSortType,
+            query = query.value,
+            setQuery = feedViewModel::setQuery,
             modifier = modifier,
             hasBackButton = canNavigateBack,
             onNavigateBack = ::navigateUp,
             onCategoryClick = categoryClicker,
-            onSearchClicked = lotsFeedNavigator::goToSearch,
             onFiltersClicked = feedViewModel::goToFilters,
             onSortTypeSelected = feedViewModel::sortTypeSelected,
             onParameterClick = parametersViewModel::parameterClicked,

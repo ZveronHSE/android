@@ -1,11 +1,17 @@
 package ru.zveron.lots_feed.feed.ui
 
 import android.util.Log
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -17,12 +23,12 @@ import ru.zveron.lots_feed.categories.domain.PassDataToFiltersInteractor
 import ru.zveron.lots_feed.feed.LotsFeedNavigator
 import ru.zveron.lots_feed.feed.domain.LikeLotInteractor
 import ru.zveron.lots_feed.feed.domain.LoadFeedInteractor
+import ru.zveron.lots_feed.feed.domain.QueryInteractor
 import ru.zveron.lots_feed.feed.domain.SelectSortTypeInteractor
 import ru.zveron.lots_feed.feed.domain.UpdateFeedInteractor
 import ru.zveron.lots_feed.mappings.toSortType
 import ru.zveron.lots_feed.mappings.toUiLot
 import ru.zveron.lots_feed.mappings.toUiSortType
-import ru.zveron.lots_feed.models.filters.Filter
 
 internal class LotsFeedViewModel(
     private val passDataToFiltersInteractor: PassDataToFiltersInteractor,
@@ -34,7 +40,10 @@ internal class LotsFeedViewModel(
     // TODO: replace with more generic interactor
     private val authorizationStorage: AuthorizationStorage,
     private val authorizationEventsEmitter: AuthorizationEventsEmitter,
+    private val queryInteractor: QueryInteractor,
 ) : ViewModel() {
+    private var loadLotsJob: Job? = null
+
     private val _feedUiState = MutableStateFlow<LotsFeedUiState>(LotsFeedUiState.Loading)
     val feedUiState = _feedUiState.asStateFlow()
 
@@ -42,7 +51,10 @@ internal class LotsFeedViewModel(
         .map { it.toUiSortType() }
         .stateIn(viewModelScope, SharingStarted.Lazily, SortType.DATE)
 
-    private val currentFilters = MutableStateFlow(listOf<Filter>())
+    val queryState = mutableStateOf("")
+
+    private val _clearFocusFlow = MutableSharedFlow<Unit>(replay = 1 , extraBufferCapacity = 1)
+    val clearFocusFlow = _clearFocusFlow.asSharedFlow()
 
     init {
         updateFeedInteractor.update()
@@ -50,13 +62,31 @@ internal class LotsFeedViewModel(
         updateFeedInteractor.updateFlow
             .onEach { loadLots() }
             .launchIn(viewModelScope)
+
+        queryInteractor.updateQueryFlow
+            .onEach { (value, _) -> queryState.value = value }
+            .distinctUntilChanged { old, new ->
+                // UPDATE FEED IF INPUTS ARE DIFFERENT NOT BLANK OR IF NEW IS FORCED BY NOT USER
+                new.second && (old.first == new.first || old.first.isBlank() && new.first.isBlank())
+            }
+            .debounce(100)
+            .onEach { (_, byUser) ->
+                if (byUser) {
+                    updateFeedInteractor.update()
+                } else {
+                    _clearFocusFlow.tryEmit(Unit)
+                }
+            }
+            .launchIn(viewModelScope)
     }
 
     private fun loadLots() {
-        viewModelScope.launch {
+        loadLotsJob?.cancel()
+
+        loadLotsJob = viewModelScope.launch {
             try {
                 _feedUiState.value = LotsFeedUiState.Loading
-                val lotsResponse = loadFeedInteractor.loadLots(currentFilters.value)
+                val lotsResponse = loadFeedInteractor.loadLots(queryState.value)
                 val newLots = lotsResponse.map { it.toUiLot() }
 
                 _feedUiState.value = LotsFeedUiState.Success(newLots)
@@ -110,5 +140,9 @@ internal class LotsFeedViewModel(
             LotsFeedUiState.Loading -> null
             is LotsFeedUiState.Success -> currentState.lots.find { it.id == id }
         }
+    }
+
+    fun setQuery(value: String) {
+        queryInteractor.updateQuery(value)
     }
 }

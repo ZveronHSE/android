@@ -26,6 +26,7 @@ import ru.zveron.lots_feed.feed.data.parameters.SelectedParametersRepository
 import ru.zveron.lots_feed.feed.data.sort_type.SelectedSortTypeRepository
 import ru.zveron.lots_feed.feed.domain.LikeLotInteractor
 import ru.zveron.lots_feed.feed.domain.LoadFeedInteractor
+import ru.zveron.lots_feed.feed.domain.QueryInteractor
 import ru.zveron.lots_feed.feed.domain.SelectSortTypeInteractor
 import ru.zveron.lots_feed.feed.domain.UpdateFeedInteractor
 import ru.zveron.lots_feed.feed.domain.UpdateParametersInteractor
@@ -100,4 +101,6 @@ val lotsFeedModule = module {
     singleOf(::ParametersLoadingRepository)
 
     singleOf(::SelectedLotFormRepository)
+
+    singleOf(::QueryInteractor)
 }

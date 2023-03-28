@@ -40,10 +40,6 @@ class SelectedCategoriesRepository {
         return true
     }
 
-    fun canResetCategory(): Boolean {
-        return !_currentCategorySelection.value.isEmpty()
-    }
-
     fun setCategorySelection(categorySelection: CategorySelection) {
         _currentCategorySelection.update { categorySelection }
     }

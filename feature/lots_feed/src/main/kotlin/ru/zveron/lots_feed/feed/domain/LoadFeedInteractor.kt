@@ -18,7 +18,8 @@ class LoadFeedInteractor(
     private val selectedLotFormRepository: SelectedLotFormRepository,
 ) {
     suspend fun loadLots(
-        filters: List<Filter>,
+        query: String,
+        filters: List<Filter> = emptyList(),
     ): List<Lot> {
         val sortType = selectedSortTypeInteractor.selectedSortType.value
 
@@ -47,8 +48,7 @@ class LoadFeedInteractor(
             sortType = sortType,
             parameters = parameters,
             category = category,
-            // TODO: add query
-            query = null,
+            query = query.takeIf { it.isNotBlank() },
         )
     }
 }

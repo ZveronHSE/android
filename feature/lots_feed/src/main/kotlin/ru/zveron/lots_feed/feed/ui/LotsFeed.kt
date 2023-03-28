@@ -69,8 +69,9 @@ internal fun LotsFeed(
     categoriesUiState: CategoriesUiState,
     parametersUiState: ParametersUiState,
     currentSortType: SortType,
+    query: String,
+    setQuery: (String) -> Unit,
     modifier: Modifier = Modifier,
-    onSearchClicked: () -> Unit = {},
     onFiltersClicked: () -> Unit = {},
     hasBackButton: Boolean = false,
     onNavigateBack: () -> Unit = {},
@@ -103,10 +104,6 @@ internal fun LotsFeed(
                     )
 
                     Spacer(Modifier.width(8.dp))
-                }
-
-                val (query, setQuery) = remember {
-                    mutableStateOf("")
                 }
 
                 SearchBar(
@@ -224,6 +221,10 @@ private fun LazyGridScope.LotsGrid(
 @Composable
 private fun LotsFeedLoadingPreview() {
     ZveronTheme {
+        val (query, setQuery) = remember {
+            mutableStateOf("")
+        }
+
         LotsFeed(
             categoryTitle = ZveronText.RawString("Категории"),
             feedUiState = LotsFeedUiState.Loading,
@@ -231,6 +232,8 @@ private fun LotsFeedLoadingPreview() {
             parametersUiState = ParametersUiState.Hidden,
             currentSortType = SortType.EXPENSIVE,
             modifier = Modifier.fillMaxSize(),
+            query = query,
+            setQuery = setQuery,
         )
     }
 }
@@ -295,6 +298,10 @@ private fun LotsFeedSuccessPreview() {
 
     val selectedSortType = SortType.DATE
 
+    val (query, setQuery) = remember {
+        mutableStateOf("")
+    }
+
     ZveronTheme {
         LotsFeed(
             categoryTitle = ZveronText.RawString("Категории"),
@@ -303,6 +310,8 @@ private fun LotsFeedSuccessPreview() {
             parametersUiState = parametersUiState,
             currentSortType = selectedSortType,
             modifier = Modifier.fillMaxSize(),
+            query = query,
+            setQuery = setQuery,
         )
     }
 }
@@ -311,6 +320,10 @@ private fun LotsFeedSuccessPreview() {
 @Composable
 private fun LotsFeedLoadingWithBackPreview() {
     ZveronTheme {
+        val (query, setQuery) = remember {
+            mutableStateOf("")
+        }
+
         LotsFeed(
             categoryTitle = ZveronText.RawString("Категории"),
             feedUiState = LotsFeedUiState.Loading,
@@ -319,6 +332,8 @@ private fun LotsFeedLoadingWithBackPreview() {
             hasBackButton = true,
             currentSortType = SortType.DATE,
             modifier = Modifier.fillMaxSize(),
+            query = query,
+            setQuery = setQuery,
         )
     }
 }
