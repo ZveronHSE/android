@@ -4,10 +4,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
@@ -81,7 +84,7 @@ internal class PhoneInputNode(
             state = state.value,
             text = textState.value,
             onTextChanged = { textState.value = it },
-            modifier = modifier,
+            modifier = modifier.windowInsetsPadding(WindowInsets.safeDrawing),
             onBackClicked = ::navigateUp,
             onContinueClicked = viewModel::continueClicked,
             onPasswordClicked = phoneInputNavigator::navigateToPasswordScreen,
