@@ -22,6 +22,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
@@ -31,13 +32,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.zveron.design.fonts.Rubik
+import ru.zveron.design.lots.SearchBar
 import ru.zveron.design.lots.LoadingLotCard
 import ru.zveron.design.lots.LotCard
-import ru.zveron.design.lots.SearchBar
 import ru.zveron.design.resources.ZveronImage
 import ru.zveron.design.resources.ZveronText
 import ru.zveron.design.theme.ZveronTheme
 import ru.zveron.lots_feed.R
+import ru.zveron.design.R as DesignR
 import ru.zveron.lots_feed.categories.ui.Categories
 import ru.zveron.lots_feed.categories.ui.CategoriesUiState
 import ru.zveron.lots_feed.categories.ui.CategoryUiState
@@ -67,8 +69,9 @@ internal fun LotsFeed(
     categoriesUiState: CategoriesUiState,
     parametersUiState: ParametersUiState,
     currentSortType: SortType,
+    query: String,
+    setQuery: (String) -> Unit,
     modifier: Modifier = Modifier,
-    onSearchClicked: () -> Unit = {},
     onFiltersClicked: () -> Unit = {},
     hasBackButton: Boolean = false,
     onNavigateBack: () -> Unit = {},
@@ -104,10 +107,22 @@ internal fun LotsFeed(
                 }
 
                 SearchBar(
-                    searchTitle = stringResource(R.string.search_input_hint),
-                    filterContentDescription = stringResource(R.string.filter_content_description),
-                    onSearchClick = onSearchClicked,
-                    onOptions = onFiltersClicked,
+                    value = query,
+                    onValueChange = setQuery,
+                    inputHint = stringResource(R.string.search_input_hint),
+                    alwaysKeepTrail = true,
+                    trailFrame = {
+                        Icon(
+                            painter = painterResource(DesignR.drawable.ic_filter),
+                            contentDescription = stringResource(R.string.filter_content_description),
+                            tint = Color.Unspecified,
+                            modifier = Modifier.clickable(
+                                onClickLabel = stringResource(R.string.filter_content_description),
+                                role = Role.Button,
+                                onClick = onFiltersClicked,
+                            ),
+                        )
+                    }
                 )
             }
         }
@@ -206,6 +221,10 @@ private fun LazyGridScope.LotsGrid(
 @Composable
 private fun LotsFeedLoadingPreview() {
     ZveronTheme {
+        val (query, setQuery) = remember {
+            mutableStateOf("")
+        }
+
         LotsFeed(
             categoryTitle = ZveronText.RawString("Категории"),
             feedUiState = LotsFeedUiState.Loading,
@@ -213,6 +232,8 @@ private fun LotsFeedLoadingPreview() {
             parametersUiState = ParametersUiState.Hidden,
             currentSortType = SortType.EXPENSIVE,
             modifier = Modifier.fillMaxSize(),
+            query = query,
+            setQuery = setQuery,
         )
     }
 }
@@ -277,6 +298,10 @@ private fun LotsFeedSuccessPreview() {
 
     val selectedSortType = SortType.DATE
 
+    val (query, setQuery) = remember {
+        mutableStateOf("")
+    }
+
     ZveronTheme {
         LotsFeed(
             categoryTitle = ZveronText.RawString("Категории"),
@@ -285,6 +310,8 @@ private fun LotsFeedSuccessPreview() {
             parametersUiState = parametersUiState,
             currentSortType = selectedSortType,
             modifier = Modifier.fillMaxSize(),
+            query = query,
+            setQuery = setQuery,
         )
     }
 }
@@ -293,6 +320,10 @@ private fun LotsFeedSuccessPreview() {
 @Composable
 private fun LotsFeedLoadingWithBackPreview() {
     ZveronTheme {
+        val (query, setQuery) = remember {
+            mutableStateOf("")
+        }
+
         LotsFeed(
             categoryTitle = ZveronText.RawString("Категории"),
             feedUiState = LotsFeedUiState.Loading,
@@ -301,6 +332,8 @@ private fun LotsFeedLoadingWithBackPreview() {
             hasBackButton = true,
             currentSortType = SortType.DATE,
             modifier = Modifier.fillMaxSize(),
+            query = query,
+            setQuery = setQuery,
         )
     }
 }

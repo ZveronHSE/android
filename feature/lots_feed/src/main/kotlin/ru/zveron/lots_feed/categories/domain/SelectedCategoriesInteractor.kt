@@ -4,6 +4,7 @@ import ru.zveron.categories.data.CategoryRepository
 import ru.zveron.categories.data.SelectedCategoriesRepository
 import ru.zveron.categories.models.Category
 import ru.zveron.lots_feed.feed.data.parameters.SelectedParametersRepository
+import ru.zveron.lots_feed.feed.domain.QueryInteractor
 import ru.zveron.lots_feed.feed.domain.UpdateFeedInteractor
 import ru.zveron.lots_feed.feed.domain.UpdateParametersInteractor
 
@@ -13,6 +14,7 @@ class SelectedCategoriesInteractor(
     private val updateFeedInteractor: UpdateFeedInteractor,
     private val updateParametersInteractor: UpdateParametersInteractor,
     private val selectedParametersRepository: SelectedParametersRepository,
+    private val queryInteractor: QueryInteractor,
 ) {
     val currentCategorySelection = selectedCategoriesRepository.currentCategorySelection
 
@@ -20,6 +22,7 @@ class SelectedCategoriesInteractor(
         val category = categoryRepository.getCategoryById(categoryId)
         setNextLevelCategory(category)
 
+        queryInteractor.resetQuery()
         updateFeedInteractor.update()
     }
 
@@ -27,13 +30,10 @@ class SelectedCategoriesInteractor(
         val success = selectedCategoriesRepository.resetCurrentCategory()
         if (success) {
             selectedParametersRepository.resetParamters()
+            queryInteractor.resetQuery()
             updateFeedInteractor.update()
         }
         return success
-    }
-
-    fun canResetCurrentCategory(): Boolean {
-        return selectedCategoriesRepository.canResetCategory()
     }
 
     private fun setNextLevelCategory(category: Category) {

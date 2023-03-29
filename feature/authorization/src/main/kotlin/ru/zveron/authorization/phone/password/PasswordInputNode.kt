@@ -3,10 +3,13 @@ package ru.zveron.authorization.phone.password
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
@@ -100,7 +103,7 @@ internal class PasswordInputNode(
             onBackClicked = ::navigateUp,
             onContinueClicked = viewModel::login,
             continueButtonEnabled = continueButtonEnabled,
-            modifier = modifier,
+            modifier = modifier.windowInsetsPadding(WindowInsets.safeDrawing),
         )
     }
 }

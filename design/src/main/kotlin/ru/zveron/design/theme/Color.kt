@@ -16,3 +16,6 @@ val gray3 = Color(0xFFACAEB4)
 val gray5 = Color(0xFF18191B)
 
 val blackWithAlpha02 = Color.Black.copy(alpha = 0.2f)
+
+val orangeGradientStart = Color(0xFFE28213)
+val orangeGradientEnd = Color(0xFFFFBC37)

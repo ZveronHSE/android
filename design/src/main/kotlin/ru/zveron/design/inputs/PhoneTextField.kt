@@ -2,7 +2,9 @@ package ru.zveron.design.inputs
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -27,6 +29,7 @@ import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import ru.zveron.design.theme.ZveronTheme
 import kotlin.math.min
 
@@ -133,20 +136,22 @@ internal class PhoneVisualTransformation(
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun PhoneTextFieldPreview() {
     ZveronTheme {
-        var text by remember {
-            mutableStateOf("")
+        Box(Modifier.height(200.dp)) {
+            var text by remember {
+                mutableStateOf("")
+            }
+            PhoneTextField(
+                text = text,
+                countryCodePrefix = "+7 ",
+                onTextChanged = { text = it },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colors.background),
+            )
         }
-        PhoneTextField(
-            text = text,
-            countryCodePrefix = "+7 ",
-            onTextChanged = { text = it },
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(MaterialTheme.colors.background),
-        )
     }
 }

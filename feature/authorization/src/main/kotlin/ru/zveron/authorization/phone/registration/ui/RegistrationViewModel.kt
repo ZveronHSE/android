@@ -17,6 +17,7 @@ class RegistrationViewModel(
     private val registrationInteractor: RegistrationInteractor,
 ): ViewModel() {
     val usernameState = mutableStateOf("")
+    val surnameState = mutableStateOf("")
     val passwordState = mutableStateOf("")
 
     private val _finishRegistrationFlow = MutableSharedFlow<Unit>()
@@ -32,6 +33,7 @@ class RegistrationViewModel(
                 registrationInteractor.register(
                     sessionId = sessionId,
                     name = usernameState.value,
+                    surname = surnameState.value,
                     password = passwordState.value,
                 )
                 _registrationStateFlow.update { it.copy(isLoading = false) }

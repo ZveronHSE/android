@@ -19,6 +19,7 @@
     <string name="last_step_label">Последний шаг</string>
     <string name="name_label">Как вас зовут?</string>
     <string name="name_placeholder">Иван</string>
+    <string name="surname_placeholder">Иванов</string>
     <string name="password_label">Придумайте пароль</string>
     <string name="password_explanation">Нужен, чтобы войти без телефона</string>
     <string name="register">Зарегистрироваться</string>

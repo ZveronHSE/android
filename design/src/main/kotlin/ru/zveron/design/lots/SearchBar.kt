@@ -14,9 +14,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,7 +31,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.zveron.design.R
-import ru.zveron.design.fonts.Rubik
 import ru.zveron.design.theme.ZveronTheme
 import ru.zveron.design.theme.enabledButtonGradient
 import ru.zveron.design.theme.gray1
@@ -39,66 +38,20 @@ import ru.zveron.design.theme.gray3
 
 @Composable
 fun SearchBar(
-    searchTitle: String,
-    modifier: Modifier = Modifier,
-    filterContentDescription: String? = null,
-    onSearchClick: () -> Unit = {},
-    onOptions: () -> Unit = {},
-) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(8.dp))
-            .background(MaterialTheme.colors.surface)
-            .height(44.dp)
-            .padding(10.dp)
-            .clickable(
-                onClickLabel = searchTitle,
-                role = Role.Button,
-                onClick = onSearchClick,
-            ),
-    ) {
-        Icon(
-            painter = painterResource(R.drawable.ic_search),
-            contentDescription = null,
-            tint = Color.Unspecified,
-        )
-
-        Spacer(Modifier.width(8.dp))
-
-        Text(
-            searchTitle,
-            style = TextStyle(
-                color = Color(0xFFACAEB4),
-                fontFamily = Rubik,
-                fontWeight = FontWeight.Normal,
-                fontSize = 14.sp,
-                lineHeight = 16.59.sp,
-            )
-        )
-
-        Spacer(Modifier.weight(1f))
-
-        Icon(
-            painter = painterResource(R.drawable.ic_filter),
-            contentDescription = filterContentDescription,
-            tint = Color.Unspecified,
-            modifier = Modifier.clickable(
-                onClickLabel = filterContentDescription,
-                role = Role.Button,
-                onClick = onOptions,
-            ),
-        )
-    }
-}
-
-@Composable
-fun EditableSearchBar(
     value: String,
     onValueChange: (String) -> Unit,
     inputHint: String,
+    modifier: Modifier = Modifier,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    leadFrame: @Composable () -> Unit = {
+        Icon(
+            painterResource(R.drawable.ic_search),
+            null,
+            tint = gray3,
+        )
+    },
+    trailFrame: (@Composable () -> Unit)? = null,
+    alwaysKeepTrail: Boolean = false,
 ) {
     BasicTextField(
         value = value,
@@ -110,25 +63,22 @@ fun EditableSearchBar(
             color = gray3,
         ),
         cursorBrush = enabledButtonGradient,
+        modifier = modifier,
     ) { innerTextField ->
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(44.dp)
-                .padding(horizontal = 16.dp)
                 .clip(RoundedCornerShape(8.dp))
-                .background(gray1),
+                .background(gray1)
+                .padding(10.dp),
         ) {
             val isFocused = interactionSource.collectIsFocusedAsState()
 
             Spacer(Modifier.width(8.dp))
 
-            Icon(
-                painterResource(R.drawable.ic_search),
-                null,
-                tint = gray3,
-            )
+            leadFrame.invoke()
 
             Spacer(Modifier.width(8.dp))
 
@@ -147,14 +97,8 @@ fun EditableSearchBar(
 
             Spacer(modifier = Modifier.weight(1f))
 
-            if (value.isNotEmpty()) {
-                IconButton(onClick = { onValueChange.invoke("") }) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_close_gradient),
-                        contentDescription = stringResource(R.string.search_clear_hint),
-                        tint = Color.Unspecified,
-                    )
-                }
+            if (alwaysKeepTrail || value.isNotEmpty()) {
+                trailFrame?.invoke()
             }
         }
     }
@@ -162,8 +106,54 @@ fun EditableSearchBar(
 
 @Preview(showBackground = true, backgroundColor = 0xFF6650a4)
 @Composable
-fun PreviewSearch() {
+private fun PreviewClear() {
     ZveronTheme {
-        SearchBar(searchTitle = "Поиск")
+        val (input, setInput) = remember {
+            mutableStateOf("")
+        }
+
+        SearchBar(
+            value = input,
+            onValueChange = setInput,
+            inputHint = "Поиск",
+            trailFrame = {
+                IconButton(onClick = { setInput("") }) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_close_gradient),
+                        contentDescription = stringResource(R.string.search_clear_hint),
+                        tint = Color.Unspecified,
+                    )
+                }
+            }
+        )
+    }
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFF6650a4)
+@Composable
+private fun PreviewButton() {
+    ZveronTheme {
+        val (input, setInput) = remember {
+            mutableStateOf("")
+        }
+
+        SearchBar(
+            value = input,
+            onValueChange = setInput,
+            inputHint = "Поиск",
+            alwaysKeepTrail = true,
+            trailFrame = {
+                Icon(
+                    painter = painterResource(R.drawable.ic_filter),
+                    contentDescription = null,
+                    tint = Color.Unspecified,
+                    modifier = Modifier.clickable(
+                        onClickLabel = null,
+                        role = Role.Button,
+                        onClick = {  },
+                    ),
+                )
+            }
+        )
     }
 }

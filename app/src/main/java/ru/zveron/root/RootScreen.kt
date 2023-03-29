@@ -2,11 +2,12 @@ package ru.zveron.root
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -96,7 +97,7 @@ class RootScreen(
                 children<RootScreenNavTarget> { child ->
                     child(
                         modifier = Modifier
-                            .windowInsetsPadding(WindowInsets.safeDrawing)
+                            .windowInsetsPadding(WindowInsets.systemBars.union(WindowInsets.displayCutout))
                             .fillMaxSize()
                     )
                 }

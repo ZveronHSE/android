@@ -11,14 +11,14 @@ class RegistrationInteractor(
         sessionId: String,
         password: String,
         name: String,
+        surname: String,
     ) {
         val fingerprint = authorizationStorage.deviceFingerPrint!!
         val result = registrationRepository.register(
             sessionId,
             password,
             name,
-            // TODO: replace with an actual surname
-            "qq",
+            surname,
             fingerprint
         )
 

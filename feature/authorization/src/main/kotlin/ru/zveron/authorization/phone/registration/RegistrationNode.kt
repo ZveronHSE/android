@@ -3,10 +3,13 @@ package ru.zveron.authorization.phone.registration
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -65,6 +68,7 @@ internal class RegistrationNode(
         )
 
         val (username, changeUsername) = remember { viewModel.usernameState }
+        val (surname, changeSurname) = remember { viewModel.surnameState }
         val (password, changePassword) = remember { viewModel.passwordState }
 
         val state by viewModel.registrationUiState.collectAsState()
@@ -77,13 +81,15 @@ internal class RegistrationNode(
 
         Registration(
             isLoading = state.isLoading,
-            phone = username,
-            onPhoneChanged = changeUsername,
+            name = username,
+            onNameChanged = changeUsername,
+            surname = surname,
+            onSurnameChanged = changeSurname,
             password = password,
             onPasswordChanged = changePassword,
             onBackClicked = ::navigateUp,
             onRegisterClicked = viewModel::register,
-            modifier = modifier,
+            modifier = modifier.windowInsetsPadding(WindowInsets.safeDrawing),
         )
     }
 }
@@ -91,8 +97,10 @@ internal class RegistrationNode(
 @Composable
 private fun Registration(
     isLoading: Boolean,
-    phone: String,
-    onPhoneChanged: (String) -> Unit,
+    name: String,
+    onNameChanged: (String) -> Unit,
+    surname: String,
+    onSurnameChanged: (String) -> Unit,
     password: String,
     onPasswordChanged: (String) -> Unit,
     modifier: Modifier = Modifier,
@@ -138,11 +146,32 @@ private fun Registration(
             ),
             modifier = Modifier.padding(start = 16.dp),
         )
+
         Spacer(Modifier.height(6.dp))
+
         TextField(
-            value = phone,
-            onValueChange = onPhoneChanged,
+            value = name,
+            onValueChange = onNameChanged,
             placeholder = { Text(stringResource(R.string.name_placeholder)) },
+            colors = TextFieldDefaults.textFieldColors(
+                backgroundColor = MaterialTheme.colors.surface,
+                focusedIndicatorColor = Color.Transparent,
+                disabledIndicatorColor = Color.Transparent,
+                errorIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+            ),
+            shape = RoundedCornerShape(10.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 16.dp, end = 34.dp),
+        )
+
+        Spacer(Modifier.height(6.dp))
+
+        TextField(
+            value = surname,
+            onValueChange = onSurnameChanged,
+            placeholder = { Text(stringResource(R.string.surname_placeholder)) },
             colors = TextFieldDefaults.textFieldColors(
                 backgroundColor = MaterialTheme.colors.surface,
                 focusedIndicatorColor = Color.Transparent,
@@ -234,6 +263,10 @@ private fun RegistrationPreview() {
         mutableStateOf("")
     }
 
+    val (surname, changeSurname) = remember {
+        mutableStateOf("")
+    }
+
     val (password, changePassword) = remember {
         mutableStateOf("")
     }
@@ -241,8 +274,10 @@ private fun RegistrationPreview() {
     ZveronTheme {
         Registration(
             isLoading = false,
-            phone = phone,
-            onPhoneChanged = changePhone,
+            name = phone,
+            onNameChanged = changePhone,
+            surname = surname,
+            onSurnameChanged = changeSurname,
             password = password,
             onPasswordChanged = changePassword,
         )
@@ -256,6 +291,10 @@ private fun RegistrationPreviewLoading() {
         mutableStateOf("")
     }
 
+    val (surname, changeSurname) = remember {
+        mutableStateOf("")
+    }
+
     val (password, changePassword) = remember {
         mutableStateOf("")
     }
@@ -263,8 +302,10 @@ private fun RegistrationPreviewLoading() {
     ZveronTheme {
         Registration(
             isLoading = true,
-            phone = phone,
-            onPhoneChanged = changePhone,
+            name = phone,
+            onNameChanged = changePhone,
+            surname = surname,
+            onSurnameChanged = changeSurname,
             password = password,
             onPasswordChanged = changePassword,
         )
