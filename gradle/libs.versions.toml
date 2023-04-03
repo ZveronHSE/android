@@ -33,6 +33,12 @@ coil = "2.2.2"
 
 zveron_contracts = "1.9.4"
 
+firebase_bom = "31.3.0"
+
+google_play_auth = "20.4.1"
+
+open_auth = "0.11.1"
+
 [libraries]
 #androidx
 androidx_coreKtx = { module = "androidx.core:core-ktx", version.ref = "androidx"}
@@ -78,9 +84,19 @@ coil_compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 
 zveronContracts = { module = "com.github.zveronHSe:contract", version.ref = "zveron_contracts" }
 
+# firebase
+firebase_bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase_bom" }
+firebase_authorization = { module = "com.google.firebase:firebase-auth-ktx" }
+
+# google play services
+googleplay_auth = { module = "com.google.android.gms:play-services-auth", version.ref = "google_play_auth" }
+
 android_gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "android_gradle_plugin" }
 kotlin_gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 protobuf_gradle_plugin = { module = "com.google.protobuf:protobuf-gradle-plugin", version.ref = "protobuf_gradle_plugin" }
+#googleplay_services_plugin = { id = "com.google.gms", name = "google-services", version = "" }
+
+openauth = { module = "net.openid:appauth", version.ref = "open_auth" }
 
 [plugins]
 android_application = { id = "com.android.application", version.ref = "android_gradle_plugin" }

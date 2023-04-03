@@ -4,6 +4,7 @@ import org.koin.dsl.module
 import ru.zveron.authorization.authorizationModule
 import ru.zveron.authorization.interceptorsModule
 import ru.zveron.authorization.phone.rootPhoneModule
+import ru.zveron.authorization.socials_sheet.socialsModule
 import ru.zveron.favorites.di.favoritesDataModule
 import ru.zveron.favorites.ui.favoritesModule
 import ru.zveron.lots_feed.feed.lotsFeedModule
@@ -11,6 +12,7 @@ import ru.zveron.lots_feed.filters_screen.filtersModule
 import ru.zveron.main_screen.bottom_navigation.lots_feed_backstack.lotsFeedBackStackModule
 import ru.zveron.main_screen.mainScreenModule
 import ru.zveron.network.apigatewayModule
+import ru.zveron.platform.platformModule
 
 internal val appModule = module {
     includes(
@@ -18,9 +20,11 @@ internal val appModule = module {
         authorizationModule,
         interceptorsModule,
         apigatewayModule,
+        platformModule,
 
         favoritesDataModule,
 
+        socialsModule,
         rootPhoneModule,
 
         mainScreenModule,

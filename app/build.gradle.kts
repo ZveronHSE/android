@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.konan.properties.loadProperties
 import ru.zveron.ZveronBuildType
 
 plugins {
@@ -16,6 +17,15 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        addManifestPlaceholders(
+            mapOf(
+                "appAuthRedirectScheme" to "ru.zveron",
+            )
+        )
+
+        val localProperties = loadProperties("${project.rootDir}/local_zveron.properties")
+        buildConfigField("String", "GOOGLE_CLIENT_ID", "\"${localProperties.getProperty("google_auth_key")}\"")
     }
 
     buildTypes {
@@ -55,6 +65,8 @@ dependencies {
     implementation(libs.zveronContracts)
     implementation(libs.grpc.protobuf.javaUtil)
 
+    implementation(libs.openauth)
+
     testImplementation(libs.junit.junit)
     testImplementation(libs.koin.test.junit4)
     androidTestImplementation(libs.test.ext.junit)
@@ -70,9 +82,12 @@ dependencies {
 
     implementation(libs.zveronContracts)
 
+    implementation(libs.coil.compose)
+
     implementation(project(":core:appyx"))
     implementation(project(":core:authorization"))
     implementation(project(":core:network"))
+    implementation(project(":core:platform:api"))
     implementation(project(":design"))
 
     implementation(project(":data:categories"))
