@@ -5,10 +5,13 @@ import android.util.Base64
 import net.openid.appauth.AuthorizationRequest
 import net.openid.appauth.AuthorizationServiceConfiguration
 import net.openid.appauth.ResponseTypeValues
+import ru.zveron.platform.SecretsHolder
 import java.security.MessageDigest
 import java.security.SecureRandom
 
-class GoogleAuthInteractor {
+class GoogleAuthInteractor(
+    private val secretsHolder: SecretsHolder,
+) {
     private val authServiceConfig by lazy {
         AuthorizationServiceConfiguration(
             Uri.parse(GOOGLE_AUTH_URL),
@@ -33,7 +36,7 @@ class GoogleAuthInteractor {
 
         return AuthorizationRequest.Builder(
             authServiceConfig,
-            "", // TODO: add client id,
+            secretsHolder.googleClientId,
             ResponseTypeValues.CODE,
             Uri.parse(GOOGLE_AUTH_REDIRECT),
         )

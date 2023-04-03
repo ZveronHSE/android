@@ -12,6 +12,7 @@ import ru.zveron.lots_feed.filters_screen.filtersModule
 import ru.zveron.main_screen.bottom_navigation.lots_feed_backstack.lotsFeedBackStackModule
 import ru.zveron.main_screen.mainScreenModule
 import ru.zveron.network.apigatewayModule
+import ru.zveron.platform.platformModule
 
 internal val appModule = module {
     includes(
@@ -19,6 +20,7 @@ internal val appModule = module {
         authorizationModule,
         interceptorsModule,
         apigatewayModule,
+        platformModule,
 
         favoritesDataModule,
 
