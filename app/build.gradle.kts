@@ -16,6 +16,12 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        addManifestPlaceholders(
+            mapOf(
+                "appAuthRedirectScheme" to "ru.zveron",
+            )
+        )
     }
 
     buildTypes {
@@ -55,6 +61,8 @@ dependencies {
     implementation(libs.zveronContracts)
     implementation(libs.grpc.protobuf.javaUtil)
 
+    implementation(libs.openauth)
+
     testImplementation(libs.junit.junit)
     testImplementation(libs.koin.test.junit4)
     androidTestImplementation(libs.test.ext.junit)
@@ -69,6 +77,8 @@ dependencies {
     implementation(libs.koin.android.compose)
 
     implementation(libs.zveronContracts)
+
+    implementation(libs.coil.compose)
 
     implementation(project(":core:appyx"))
     implementation(project(":core:authorization"))

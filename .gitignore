@@ -26,3 +26,6 @@ hs_err_pid*
 .gradle
 local.properties
 build
+
+zveron_debug.keystore
+local_zveron.properties

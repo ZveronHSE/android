@@ -4,6 +4,7 @@ import org.koin.dsl.module
 import ru.zveron.authorization.authorizationModule
 import ru.zveron.authorization.interceptorsModule
 import ru.zveron.authorization.phone.rootPhoneModule
+import ru.zveron.authorization.socials_sheet.socialsModule
 import ru.zveron.favorites.di.favoritesDataModule
 import ru.zveron.favorites.ui.favoritesModule
 import ru.zveron.lots_feed.feed.lotsFeedModule
@@ -21,6 +22,7 @@ internal val appModule = module {
 
         favoritesDataModule,
 
+        socialsModule,
         rootPhoneModule,
 
         mainScreenModule,

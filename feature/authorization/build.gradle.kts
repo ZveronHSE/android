@@ -16,6 +16,10 @@ dependencies {
     implementation(libs.koin.android)
     implementation(libs.koin.android.compose)
 
+    implementation(libs.googleplay.auth)
+
+    implementation(libs.openauth)
+
     implementation(libs.compose.ui.ui)
     implementation(libs.compose.material)
     implementation(libs.compose.ui.uiToolingPreview)

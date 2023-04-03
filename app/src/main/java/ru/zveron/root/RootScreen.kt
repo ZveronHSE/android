@@ -26,6 +26,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.bumble.appyx.core.children.nodeOrNull
 import com.bumble.appyx.core.composable.Children
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.navigation.model.combined.plus
@@ -37,7 +38,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import ru.zveron.appyx.modal.BottomSheetStateHolder
 import ru.zveron.appyx.modal.Modal
 import ru.zveron.appyx.modal.activeElement
 import ru.zveron.appyx.modal.operation.dismiss
@@ -60,7 +64,7 @@ class RootScreen(
 ) : ParentNode<RootScreenNavTarget>(
     buildContext = buildContext,
     navModel = backStack + modal,
-), MainScreenNavigator {
+), MainScreenNavigator, BottomSheetStateHolder {
     private val activeModalElementFlow: Flow<RootScreenNavTarget?> =
         modal.elements.map { it.activeElement }
 
@@ -79,10 +83,16 @@ class RootScreen(
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
     override fun View(modifier: Modifier) {
+        val shouldBlockSheetStateHolder = shouldBlockBottomSheet.collectAsState(initial = false)
+
         val sheetState = rememberModalBottomSheetState(
             initialValue = ModalBottomSheetValue.Hidden
         ) {
-            it != ModalBottomSheetValue.HalfExpanded
+            if (shouldBlockSheetStateHolder.value && it == ModalBottomSheetValue.Hidden) {
+                false
+            } else {
+                it != ModalBottomSheetValue.HalfExpanded
+            }
         }
 
         ModalBottomSheetLayout(
@@ -150,5 +160,15 @@ class RootScreen(
 
     override fun openAuthorization() {
         modal.show(RootScreenNavTarget.AuthorizationBottomSheet)
+    }
+
+    override val shouldBlockBottomSheet: Flow<Boolean> = modal.screenState.flatMapLatest { screenState ->
+        val bottomNavigationModeHolder = screenState.onScreen
+            .map { childOrCreate(it.key).nodeOrNull }
+            .filterIsInstance<BottomSheetStateHolder>()
+            .takeIf { it.isNotEmpty() }
+            ?.lastOrNull()
+
+        bottomNavigationModeHolder?.shouldBlockBottomSheet ?: flowOf(false)
     }
 }
