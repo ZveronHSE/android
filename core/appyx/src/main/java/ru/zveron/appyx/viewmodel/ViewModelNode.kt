@@ -42,9 +42,8 @@ open class ViewModelNode(
         })
     }
 
-    override fun getViewModelStore(): ViewModelStore {
-        return nodeViewModelStoreOwner
-    }
+    override val viewModelStore: ViewModelStore
+        get() = nodeViewModelStoreOwner
 
     @Composable
     fun ProvideViewModelStore(content: @Composable () -> Unit) {

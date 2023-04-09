@@ -94,7 +94,7 @@ internal fun LotsFeed(
             ) {
                 if (hasBackButton) {
                     Icon(
-                        painterResource(R.drawable.ic_back_triangle),
+                        painterResource(DesignR.drawable.ic_back_triangle),
                         contentDescription = stringResource(R.string.back_hint),
                         modifier = Modifier.clickable(
                             role = Role.Button,
