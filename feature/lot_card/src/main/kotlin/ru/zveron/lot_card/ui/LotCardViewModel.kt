@@ -60,6 +60,7 @@ class LotCardViewModel(
             communicationButtons = mapToCommunicationButtons(lotInfo),
             views = lotInfo.statistics.views,
             favorites = lotInfo.statistics.favorites,
+            gender = lotInfo.gender,
         )
     }
 

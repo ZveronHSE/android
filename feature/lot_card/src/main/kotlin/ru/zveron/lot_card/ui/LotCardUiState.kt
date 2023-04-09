@@ -3,6 +3,7 @@ package ru.zveron.lot_card.ui
 import androidx.compose.ui.graphics.Brush
 import ru.zveron.design.resources.ZveronImage
 import ru.zveron.design.resources.ZveronText
+import ru.zveron.lot_card.domain.Gender
 
 sealed class LotCardUiState {
     object Loading: LotCardUiState()
@@ -21,6 +22,7 @@ sealed class LotCardUiState {
         val communicationButtons: List<CommunicationButton>,
         val views: Int,
         val favorites: Int,
+        val gender: Gender,
     ): LotCardUiState()
 }
 

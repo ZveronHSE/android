@@ -61,6 +61,7 @@ import ru.zveron.design.theme.callButtonGradient
 import ru.zveron.design.theme.enabledButtonGradient
 import ru.zveron.design.theme.gray1
 import ru.zveron.design.theme.gray5
+import ru.zveron.lot_card.domain.Gender
 import ru.zveron.lots_card.R
 import ru.zveron.design.R as DesignR
 
@@ -81,7 +82,10 @@ private fun LotCardLoading(
     modifier: Modifier = Modifier,
     onBackClicked: () -> Unit = {},
 ) {
-    Column(modifier = modifier) {
+    Column(
+        modifier = modifier.padding(top = 16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
         LotCardTopBar(onBackClicked = onBackClicked)
 
         Spacer(Modifier.weight(1f))
@@ -129,7 +133,7 @@ internal fun LotCardContent(
         item {
             LotCardTopBar(onBackClicked = onBackClicked)
 
-            Spacer(Modifier.height(32.dp))
+            Spacer(Modifier.height(26.dp))
         }
 
         item {
@@ -138,11 +142,27 @@ internal fun LotCardContent(
             Spacer(Modifier.height(24.dp))
         }
 
+        val isMale = when (state.gender) {
+            Gender.MALE -> true
+            Gender.FEMALE -> false
+            Gender.METIS, Gender.UNKNOWN -> null
+        }
+
         item {
             LotCardTitle(
                 title = state.title,
-                isMale = true,
+                isMale = isMale,
                 address = state.address,
+            )
+
+            Spacer(Modifier.height(16.dp))
+        }
+
+        item {
+            LotCardStatistics(
+                likes = state.favorites,
+                views = state.views,
+                modifier = Modifier.padding(horizontal = 16.dp),
             )
 
             Spacer(Modifier.height(16.dp))
@@ -195,16 +215,19 @@ private fun LotPhotoPager(
                     .padding(horizontal = 16.dp)
                     .aspectRatio(1f)
                     .clip(RoundedCornerShape(32.dp)),
+                loadingImageModifier = Modifier.background(Color.LightGray),
             )
         }
 
-        LotCardPagerIndicator(
-            count = photos.size,
-            pagerState = pagerState,
-            modifier = Modifier
-                .padding(bottom = 8.dp)
-                .align(Alignment.BottomCenter),
-        )
+        if (photos.size > 1) {
+            LotCardPagerIndicator(
+                count = photos.size,
+                pagerState = pagerState,
+                modifier = Modifier
+                    .padding(bottom = 8.dp)
+                    .align(Alignment.BottomCenter),
+            )
+        }
     }
 
 }
@@ -229,14 +252,8 @@ private fun LotCardPagerIndicator(
                     mutableStateOf(pagerState.currentPage == iteration)
                 }
 
-//                val color by animateColorAsState(
-//                    targetValue = if (isSelected) MaterialTheme.colors.primary else Color.White,
-//                )
                 val color = if (isSelected) MaterialTheme.colors.primary else Color.White
 
-//                val size by animateDpAsState(
-//                    targetValue = if (isSelected) 20.dp else 10.dp,
-//                )
                 val size = if (isSelected) 20.dp else 10.dp
 
                 Box(
@@ -358,22 +375,68 @@ private fun LotCardTitle(
 }
 
 @Composable
+private fun LotCardStatistics(
+    likes: Int,
+    views: Int,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier,
+    ) {
+        Icon(
+            painterResource(DesignR.drawable.heart_unliked),
+            contentDescription = null,
+            modifier = Modifier.size(16.dp),
+            tint = Color.Unspecified,
+        )
+
+        Text(
+            text = likes.toString(),
+            style = TextStyle(
+                fontWeight = FontWeight.Light,
+                fontSize = 12.sp,
+            ),
+        )
+
+        Spacer(Modifier.width(8.dp))
+
+        Icon(
+            painterResource(DesignR.drawable.ic_eye),
+            contentDescription = null,
+            modifier = Modifier.size(16.dp),
+            tint = Color.Unspecified,
+        )
+
+        Text(
+            text = views.toString(),
+            style = TextStyle(
+                fontWeight = FontWeight.Light,
+                fontSize = 12.sp,
+            ),
+        )
+    }
+}
+
+@Composable
 private fun LotCardTags(
     tags: List<LotCardTag>,
     modifier: Modifier = Modifier,
 ) {
     LazyRow(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(start = 16.dp),
+        modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
+        item { Spacer(Modifier.width(8.dp)) }
+
         items(tags) {
             Tag(
                 it.title,
                 it.subtitle,
             )
         }
+
+        item { Spacer(Modifier.width(8.dp)) }
     }
 }
 
@@ -529,6 +592,7 @@ private fun LotCardPreview() {
         communicationButtons = emptyList(),
         views = 0,
         favorites = 0,
+        gender = Gender.MALE,
     )
 
     ZveronTheme {

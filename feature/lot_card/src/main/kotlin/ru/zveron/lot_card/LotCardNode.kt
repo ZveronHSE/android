@@ -5,8 +5,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
+import kotlinx.coroutines.flow.flowOf
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
+import ru.zveron.appyx.bottom_navigation.BottomNavigationMode
 import ru.zveron.appyx.viewmodel.ViewModelNode
 import ru.zveron.lot_card.ui.LotCard
 import ru.zveron.lot_card.ui.LotCardViewModel
@@ -35,4 +37,6 @@ class LotCardNode(
             onBackClicked = ::navigateUp,
         )
     }
+
+    override val bottomNavigationMode = flowOf(BottomNavigationMode.HIDE_BOTTOM_BAR)
 }
