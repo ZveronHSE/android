@@ -120,6 +120,10 @@ internal class LotsFeedViewModel(
         }
     }
 
+    fun lotClicked(id: Long) {
+        lotsFeedNavigator.goToLot(id)
+    }
+
     private fun likeLot(id: Long) {
         val lot = findLot(id) ?: return
         val desiredFavoriteStatus = !lot.isLiked.value

@@ -24,6 +24,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -64,7 +65,35 @@ import ru.zveron.lots_card.R
 import ru.zveron.design.R as DesignR
 
 @Composable
-internal fun LotCardSuccess(
+internal fun LotCard(
+    state: LotCardUiState,
+    modifier: Modifier = Modifier,
+    onBackClicked: () -> Unit = {},
+) {
+    when(state) {
+        LotCardUiState.Loading -> LotCardLoading(modifier, onBackClicked)
+        is LotCardUiState.Success -> LotCardSuccess(state, modifier, onBackClicked)
+    }
+}
+
+@Composable
+private fun LotCardLoading(
+    modifier: Modifier = Modifier,
+    onBackClicked: () -> Unit = {},
+) {
+    Column(modifier = modifier) {
+        LotCardTopBar(onBackClicked = onBackClicked)
+
+        Spacer(Modifier.weight(1f))
+
+        CircularProgressIndicator()
+
+        Spacer(Modifier.weight(1f))
+    }
+}
+
+@Composable
+private fun LotCardSuccess(
     state: LotCardUiState.Success,
     modifier: Modifier = Modifier,
     onBackClicked: () -> Unit = {},
@@ -497,6 +526,9 @@ private fun LotCardPreview() {
         rating = 4,
         maxRating = 5,
         price = "20 000 ₽",
+        communicationButtons = emptyList(),
+        views = 0,
+        favorites = 0,
     )
 
     ZveronTheme {
