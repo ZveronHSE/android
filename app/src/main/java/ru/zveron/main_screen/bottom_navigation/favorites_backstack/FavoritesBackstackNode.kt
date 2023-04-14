@@ -10,9 +10,11 @@ import com.bumble.appyx.navmodel.backstack.BackStack
 import kotlinx.parcelize.Parcelize
 import ru.zveron.appyx.viewmodel.ViewModelParentNode
 import ru.zveron.favorites.FavoritesNode
+import ru.zveron.favorites.FavoritesNodeNavigator
 
 class FavoritesBackstackNode(
     buildContext: BuildContext,
+    private val favoritesBackstackNavigator: FavoritesBackstackNavigator,
     favoritesBackstackComponent: FavoritesBackstackComponent = FavoritesBackstackComponent(),
     private val backstack: BackStack<NavTarget> = BackStack(
         initialElement = NavTarget.Favorites,
@@ -22,7 +24,7 @@ class FavoritesBackstackNode(
     buildContext = buildContext,
     navModel = backstack,
     plugins = listOf(favoritesBackstackComponent),
-) {
+), FavoritesNodeNavigator {
     sealed class NavTarget: Parcelable {
         @Parcelize
         object Favorites: NavTarget()
@@ -32,6 +34,7 @@ class FavoritesBackstackNode(
         return when (navTarget) {
             NavTarget.Favorites -> FavoritesNode(
                 buildContext,
+                this,
             )
         }
     }
@@ -42,5 +45,9 @@ class FavoritesBackstackNode(
             navModel = backstack,
             modifier = modifier,
         )
+    }
+
+    override fun openLot(id: Long) {
+        favoritesBackstackNavigator.goToLot(id)
     }
 }
