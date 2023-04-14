@@ -97,6 +97,7 @@ class LotsFeedNode(
             onSortTypeSelected = feedViewModel::sortTypeSelected,
             onParameterClick = parametersViewModel::parameterClicked,
             onLotLikeClick = feedViewModel::lotLikedClicked,
+            onLotClick = feedViewModel::lotClicked,
         )
     }
 }

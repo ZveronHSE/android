@@ -17,6 +17,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -31,6 +32,7 @@ fun ActionButton(
     onClick: () -> Unit = {},
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     contentAlignment: Alignment = Alignment.Center,
+    brush: Brush = enabledButtonGradient,
     content: @Composable BoxWithConstraintsScope.() -> Unit = {},
 ) {
     val alpha = if (enabled) 1f else 0.5f
@@ -41,7 +43,7 @@ fun ActionButton(
         BoxWithConstraints(
             modifier = modifier
                 .height(52.dp)
-                .background(enabledButtonGradient, RoundedCornerShape(10.dp), alpha)
+                .background(brush, RoundedCornerShape(10.dp), alpha)
                 .clickable(
                     interactionSource = interactionSource,
                     indication = LocalIndication.current,

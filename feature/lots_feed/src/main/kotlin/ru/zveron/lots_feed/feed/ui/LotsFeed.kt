@@ -79,6 +79,7 @@ internal fun LotsFeed(
     onCategoryClick: (CategoryUiState) -> Unit = {},
     onParameterClick: (Int) -> Unit = {},
     onLotLikeClick: (Long) -> Unit = {},
+    onLotClick: (Long) -> Unit = {},
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -94,7 +95,7 @@ internal fun LotsFeed(
             ) {
                 if (hasBackButton) {
                     Icon(
-                        painterResource(R.drawable.ic_back_triangle),
+                        painterResource(DesignR.drawable.ic_back_triangle),
                         contentDescription = stringResource(R.string.back_hint),
                         modifier = Modifier.clickable(
                             role = Role.Button,
@@ -184,6 +185,7 @@ internal fun LotsFeed(
             is LotsFeedUiState.Success -> LotsGrid(
                 feedUiState.lots,
                 onLotLikeClick,
+                onLotClick,
             )
         }
     }
@@ -198,10 +200,15 @@ private fun LazyGridScope.LoadingLots() {
 private fun LazyGridScope.LotsGrid(
     items: List<LotUiState>,
     onLotLikeClick: (Long) -> Unit,
+    onLotClick: (Long) -> Unit,
 ) {
     items(items, key = { it.id }) { lotUiState ->
-        val clicker = remember {
+        val likedClicker = remember {
             { onLotLikeClick.invoke(lotUiState.id) }
+        }
+
+        val cardClicker = remember {
+            { onLotClick.invoke(lotUiState.id) }
         }
 
         LotCard(
@@ -210,7 +217,8 @@ private fun LazyGridScope.LotsGrid(
             price = lotUiState.price,
             date = lotUiState.date,
             isLiked = lotUiState.isLiked.value,
-            onLikeClick = clicker,
+            onLikeClick = likedClicker,
+            onCardClick = cardClicker,
         )
     }
 

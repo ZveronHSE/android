@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="back_content_description">Назад</string>
+    <string name="male_content_description">Мужской пол</string>
+    <string name="female_content_description">Женский пол</string>
+    
+    <string name="lot_card_description_title">Описание</string>
+
+    <string name="lot_card_call_title">Позвонить</string>
+    <string name="lot_card_chat_title">Написать</string>
+</resources>

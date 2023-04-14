@@ -137,7 +137,7 @@ fun LotCard(
 
 @Preview
 @Composable
-internal fun LotCardPreview() {
+internal fun LotFeedPreview() {
     ZveronTheme {
         Row(
             modifier = Modifier

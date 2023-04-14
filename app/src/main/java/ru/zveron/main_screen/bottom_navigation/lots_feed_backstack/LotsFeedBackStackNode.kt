@@ -11,6 +11,8 @@ import com.bumble.appyx.navmodel.backstack.operation.push
 import kotlinx.parcelize.Parcelize
 import ru.zveron.appyx.viewmodel.ViewModelParentNode
 import ru.zveron.design.resources.ZveronText
+import ru.zveron.lot_card.LotCardNode
+import ru.zveron.lot_card.LotCardParams
 import ru.zveron.lots_feed.choose_item.ChooseItemNode
 import ru.zveron.lots_feed.feed.LotsFeedNavigator
 import ru.zveron.lots_feed.feed.LotsFeedNode
@@ -41,6 +43,9 @@ class LotsFeedBackStackNode(
 
         @Parcelize
         data class PickItem(val title: ZveronText): NavTarget()
+
+        @Parcelize
+        data class LotCard(val params: LotCardParams): NavTarget()
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -62,6 +67,11 @@ class LotsFeedBackStackNode(
                 navTarget.title,
                 lotsFeedBackStackComponent.getChoseeItemItemProvider(),
             )
+
+            is NavTarget.LotCard -> LotCardNode(
+                buildContext,
+                navTarget.params,
+            )
         }
     }
 
@@ -82,7 +92,7 @@ class LotsFeedBackStackNode(
     }
 
     override fun goToLot(lotId: Long) {
-        TODO("Not yet implemented")
+        backstack.push(NavTarget.LotCard(LotCardParams(lotId)))
     }
 
     override fun chooseItem(title: ZveronText) {
