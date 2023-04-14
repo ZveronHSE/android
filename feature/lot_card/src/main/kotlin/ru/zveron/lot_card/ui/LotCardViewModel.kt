@@ -11,7 +11,6 @@ import kotlinx.coroutines.launch
 import ru.zveron.design.resources.ZveronImage
 import ru.zveron.design.resources.ZveronText
 import ru.zveron.design.theme.callButtonGradient
-import ru.zveron.design.theme.enabledButtonGradient
 import ru.zveron.lot_card.LotCardParams
 import ru.zveron.lot_card.domain.CommunicationChannel
 import ru.zveron.lot_card.domain.LoadLotInfoInteractor
@@ -23,12 +22,21 @@ import kotlin.math.roundToInt
 class LotCardViewModel(
     private val lotCardParams: LotCardParams,
     private val loadLotInfoInteractor: LoadLotInfoInteractor,
-): ViewModel() {
+) : ViewModel() {
     private val _uiState = MutableStateFlow<LotCardUiState>(LotCardUiState.Loading)
     val uiState = _uiState.asStateFlow()
 
     init {
         loadLot()
+    }
+
+    fun onActionClicked(action: CommunicationAction) {
+        when (action) {
+            CommunicationAction.Chat -> TODO()
+            is CommunicationAction.PhoneCall -> TODO()
+            is CommunicationAction.Vk -> TODO()
+            is CommunicationAction.WriteEmail -> TODO()
+        }
     }
 
     private fun loadLot() {
@@ -69,22 +77,23 @@ class LotCardViewModel(
     }
 
     private fun mapToCommunicationButtons(lotInfo: LotInfo): List<CommunicationButton> {
-        return lotInfo.contact.channels.mapNotNull {
-            when (it) {
-                CommunicationChannel.PHONE -> CommunicationButton(
-                    text = ZveronText.RawResource(R.string.lot_card_call_title),
-                    brush = callButtonGradient,
-                    action = CommunicationAction.PhoneCall(lotInfo.contact.channelLink.phone!!),
-                )
+        return lotInfo.contact.channels
+            .mapNotNull {
+                when (it) {
+                    CommunicationChannel.PHONE -> CommunicationButton(
+                        text = ZveronText.RawResource(R.string.lot_card_call_title),
+                        brush = callButtonGradient,
+                        action = CommunicationAction.PhoneCall(lotInfo.contact.channelLink.phone!!),
+                    )
 
-                CommunicationChannel.CHAT -> CommunicationButton(
-                    text = ZveronText.RawResource(R.string.lot_card_chat_title),
-                    brush = enabledButtonGradient,
-                    action = CommunicationAction.Chat,
-                )
+//                    CommunicationChannel.CHAT -> CommunicationButton(
+//                        text = ZveronText.RawResource(R.string.lot_card_chat_title),
+//                        brush = enabledButtonGradient,
+//                        action = CommunicationAction.Chat,
+//                    )
 
-                CommunicationChannel.EMAIL, CommunicationChannel.VK, CommunicationChannel.UNKNOWN -> null
+                    CommunicationChannel.CHAT, CommunicationChannel.EMAIL, CommunicationChannel.VK, CommunicationChannel.UNKNOWN -> null
+                }
             }
-        }
     }
 }

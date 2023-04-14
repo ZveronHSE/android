@@ -55,9 +55,9 @@ import androidx.compose.ui.unit.sp
 import ru.zveron.design.components.ActionButton
 import ru.zveron.design.components.Stars
 import ru.zveron.design.resources.ZveronImage
+import ru.zveron.design.resources.ZveronText
 import ru.zveron.design.theme.ZveronTheme
 import ru.zveron.design.theme.blackWithAlpha05
-import ru.zveron.design.theme.callButtonGradient
 import ru.zveron.design.theme.enabledButtonGradient
 import ru.zveron.design.theme.gray1
 import ru.zveron.design.theme.gray5
@@ -70,10 +70,11 @@ internal fun LotCard(
     state: LotCardUiState,
     modifier: Modifier = Modifier,
     onBackClicked: () -> Unit = {},
+    onActionClick: (CommunicationAction) -> Unit = {},
 ) {
     when(state) {
         LotCardUiState.Loading -> LotCardLoading(modifier, onBackClicked)
-        is LotCardUiState.Success -> LotCardSuccess(state, modifier, onBackClicked)
+        is LotCardUiState.Success -> LotCardSuccess(state, modifier, onBackClicked, onActionClick)
     }
 }
 
@@ -101,8 +102,7 @@ private fun LotCardSuccess(
     state: LotCardUiState.Success,
     modifier: Modifier = Modifier,
     onBackClicked: () -> Unit = {},
-    onCallClick: () -> Unit = {},
-    onChatClick: () -> Unit = {},
+    onActionClick: (CommunicationAction) -> Unit = {},
 ) {
     Column(modifier = modifier.background(MaterialTheme.colors.surface)) {
         LotCardContent(
@@ -113,8 +113,8 @@ private fun LotCardSuccess(
 
         LotCardBottomButtons(
             price = state.price,
-            onCallClick = onCallClick,
-            onChatClick = onChatClick,
+            onActionClick = onActionClick,
+            communicationButtons = state.communicationButtons,
         )
     }
 }
@@ -516,9 +516,9 @@ private fun LotCardSeller(
 @Composable
 private fun LotCardBottomButtons(
     price: String,
+    communicationButtons: List<CommunicationButton>,
     modifier: Modifier = Modifier,
-    onCallClick: () -> Unit = {},
-    onChatClick: () -> Unit = {},
+    onActionClick: (CommunicationAction) -> Unit = {},
 ) {
     Card(
         backgroundColor = MaterialTheme.colors.surface,
@@ -539,32 +539,29 @@ private fun LotCardBottomButtons(
                 ),
             )
 
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                ActionButton(
-                    modifier = Modifier.weight(1f),
-                    onClick = onCallClick,
-                    brush = callButtonGradient,
-                ) {
-                    Text(
-                        text = stringResource(R.string.lot_card_call_title),
-                        style = TextStyle(
-                            fontWeight = FontWeight.Normal,
-                            fontSize = 16.sp,
-                        ),
-                    )
-                }
+            if (communicationButtons.isNotEmpty()) {
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    communicationButtons.forEach {
+                        key(it.text) {
+                            val clicker = remember {
+                                { onActionClick.invoke(it.action) }
+                            }
 
-                ActionButton(
-                    modifier = Modifier.weight(1f),
-                    onClick = onChatClick,
-                ) {
-                    Text(
-                        text = stringResource(R.string.lot_card_chat_title),
-                        style = TextStyle(
-                            fontWeight = FontWeight.Normal,
-                            fontSize = 16.sp,
-                        ),
-                    )
+                            ActionButton(
+                                modifier = Modifier.weight(1f),
+                                onClick = clicker,
+                                brush = it.brush,
+                            ) {
+                                ZveronText(
+                                    text = it.text,
+                                    style = TextStyle(
+                                        fontWeight = FontWeight.Normal,
+                                        fontSize = 16.sp,
+                                    ),
+                                )
+                            }
+                        }
+                    }
                 }
             }
         }

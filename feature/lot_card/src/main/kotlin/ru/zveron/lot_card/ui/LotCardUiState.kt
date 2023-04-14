@@ -1,5 +1,6 @@
 package ru.zveron.lot_card.ui
 
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Brush
 import ru.zveron.design.resources.ZveronImage
 import ru.zveron.design.resources.ZveronText
@@ -32,6 +33,7 @@ data class CommunicationButton(
     val action: CommunicationAction,
 )
 
+@Immutable
 sealed class CommunicationAction {
     data class Vk(val link: String): CommunicationAction()
 

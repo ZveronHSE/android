@@ -35,6 +35,7 @@ class LotCardNode(
             state = uiState,
             modifier = modifier,
             onBackClicked = ::navigateUp,
+            onActionClick = viewmodel::onActionClicked,
         )
     }
 
