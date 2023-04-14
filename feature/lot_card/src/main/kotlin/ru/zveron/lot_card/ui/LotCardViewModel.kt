@@ -1,10 +1,19 @@
 package ru.zveron.lot_card.ui
 
+import android.Manifest
+import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.util.Log
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -19,23 +28,56 @@ import ru.zveron.lot_card.domain.Parameter
 import ru.zveron.lots_card.R
 import kotlin.math.roundToInt
 
+@SuppressLint("StaticFieldLeak")
 class LotCardViewModel(
+    private val context: Context,
     private val lotCardParams: LotCardParams,
     private val loadLotInfoInteractor: LoadLotInfoInteractor,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<LotCardUiState>(LotCardUiState.Loading)
     val uiState = _uiState.asStateFlow()
 
+    private var permissionDependentAction: CommunicationAction? = null
+
+    private val _permissionEffectFlow = MutableSharedFlow<String>()
+    val permissionEffectFlow = _permissionEffectFlow.asSharedFlow()
+
     init {
         loadLot()
     }
 
-    fun onActionClicked(action: CommunicationAction) {
+    fun onActionClicked(action: CommunicationAction, checkPermission: Boolean = true) {
         when (action) {
+            is CommunicationAction.PhoneCall -> call(action, checkPermission)
             CommunicationAction.Chat -> TODO()
-            is CommunicationAction.PhoneCall -> TODO()
             is CommunicationAction.Vk -> TODO()
             is CommunicationAction.WriteEmail -> TODO()
+        }
+    }
+
+    private fun call(action: CommunicationAction.PhoneCall, checkPermission: Boolean) {
+        if (
+            checkPermission
+            && ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED
+        ) {
+            permissionDependentAction = action
+            viewModelScope.launch {
+                _permissionEffectFlow.emit(Manifest.permission.CALL_PHONE)
+            }
+        } else {
+            val intent = Intent(Intent.ACTION_DIAL).apply {
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                data = Uri.parse("tel:${action.phone}")
+            }
+            context.startActivity(intent)
+        }
+    }
+
+    fun onPermissionResult(granted: Boolean) {
+        if (granted) {
+            permissionDependentAction?.let {
+                onActionClicked(it, false)
+            }
         }
     }
 

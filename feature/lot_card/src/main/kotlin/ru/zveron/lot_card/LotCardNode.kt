@@ -1,6 +1,9 @@
 package ru.zveron.lot_card
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -28,6 +31,18 @@ class LotCardNode(
             viewModelStoreOwner = this,
             parameters = { parametersOf(params) }
         )
+
+        val permissionLauncher = rememberLauncherForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) {
+            viewmodel.onPermissionResult(it)
+        }
+
+        LaunchedEffect(viewmodel) {
+            viewmodel.permissionEffectFlow.collect {
+                permissionLauncher.launch(it)
+            }
+        }
 
         val uiState by viewmodel.uiState.collectAsState()
 
