@@ -12,6 +12,7 @@ import ru.zveron.favorites.ui.FavoritesViewModel
 
 class FavoritesNode(
     buildContext: BuildContext,
+    private val favoritesNodeNavigator: FavoritesNodeNavigator,
     private val component: FavoritesComponent = FavoritesComponent(),
 ): ViewModelNode(
     buildContext,
@@ -33,8 +34,7 @@ class FavoritesNode(
             modifier = modifier,
             onCategoryTabClicked = viewModel::categorySelected,
             onRetryClicked = viewModel::retryClicked,
-            // TODO: replace with real navigation
-            onLotClick = {},
+            onLotClick = favoritesNodeNavigator::openLot,
             onLotLikeClick = viewModel::onLotLikeClick,
             onDeleteAllClicked = viewModel::onRemoveAllClicked,
             onDeleteUnactiveClicked = viewModel::onRemoveUnactiveClicked,

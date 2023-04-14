@@ -21,6 +21,7 @@ import ru.zveron.lots_feed.filters_screen.FiltersNode
 
 class LotsFeedBackStackNode(
     buildContext: BuildContext,
+    private val lotsFeedBackStackNavigator: LotsFeedBackStackNavigator,
     private val lotsFeedBackStackComponent: LotsFeedBackStackComponent = LotsFeedBackStackComponent(),
     lotsFeedBackPlugin: LotsFeedBackPlugin = lotsFeedBackStackComponent.getBackPlugin(),
     private val backstack: BackStack<NavTarget> = BackStack(
@@ -28,7 +29,6 @@ class LotsFeedBackStackNode(
         savedStateMap = buildContext.savedStateMap,
         backPressHandler = lotsFeedBackPlugin,
     ),
-    private val lotsFeedBackStackNavigator: LotsFeedBackStackNavigator,
 ): ViewModelParentNode<LotsFeedBackStackNode.NavTarget>(
     buildContext = buildContext,
     navModel = backstack,
@@ -92,7 +92,8 @@ class LotsFeedBackStackNode(
     }
 
     override fun goToLot(lotId: Long) {
-        backstack.push(NavTarget.LotCard(LotCardParams(lotId)))
+        lotsFeedBackStackNavigator.goToLot(lotId)
+//        backstack.push(NavTarget.LotCard(LotCardParams(lotId)))
     }
 
     override fun chooseItem(title: ZveronText) {

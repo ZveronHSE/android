@@ -49,6 +49,8 @@ import ru.zveron.appyx.modal.operation.show
 import ru.zveron.authorization.phone.RootPhoneNode
 import ru.zveron.authorization.socials_sheet.SocialsSheetScreen
 import ru.zveron.design.components.BottomSheet
+import ru.zveron.lot_card.LotCardNode
+import ru.zveron.lot_card.LotCardParams
 import ru.zveron.main_screen.MainScreen
 import ru.zveron.main_screen.MainScreenNavigator
 
@@ -76,6 +78,7 @@ class RootScreen(
                 backStack.push(RootScreenNavTarget.PhoneAuthorization)
             }
 
+            is RootScreenNavTarget.LotCard -> LotCardNode(buildContext, LotCardParams(navTarget.id))
             RootScreenNavTarget.PhoneAuthorization -> RootPhoneNode(buildContext)
         }
     }
@@ -86,14 +89,15 @@ class RootScreen(
         val shouldBlockSheetStateHolder = shouldBlockBottomSheet.collectAsState(initial = false)
 
         val sheetState = rememberModalBottomSheetState(
-            initialValue = ModalBottomSheetValue.Hidden
-        ) {
-            if (shouldBlockSheetStateHolder.value && it == ModalBottomSheetValue.Hidden) {
-                false
-            } else {
-                it != ModalBottomSheetValue.HalfExpanded
+            initialValue = ModalBottomSheetValue.Hidden,
+            confirmValueChange = {
+                if (shouldBlockSheetStateHolder.value && it == ModalBottomSheetValue.Hidden) {
+                    false
+                } else {
+                    it != ModalBottomSheetValue.HalfExpanded
+                }
             }
-        }
+        )
 
         ModalBottomSheetLayout(
             sheetState = sheetState,
@@ -162,13 +166,18 @@ class RootScreen(
         modal.show(RootScreenNavTarget.AuthorizationBottomSheet)
     }
 
-    override val shouldBlockBottomSheet: Flow<Boolean> = modal.screenState.flatMapLatest { screenState ->
-        val bottomNavigationModeHolder = screenState.onScreen
-            .map { childOrCreate(it.key).nodeOrNull }
-            .filterIsInstance<BottomSheetStateHolder>()
-            .takeIf { it.isNotEmpty() }
-            ?.lastOrNull()
-
-        bottomNavigationModeHolder?.shouldBlockBottomSheet ?: flowOf(false)
+    override fun openLot(id: Long) {
+        backStack.push(RootScreenNavTarget.LotCard(id))
     }
+
+    override val shouldBlockBottomSheet: Flow<Boolean> =
+        modal.screenState.flatMapLatest { screenState ->
+            val bottomNavigationModeHolder = screenState.onScreen
+                .map { childOrCreate(it.key).nodeOrNull }
+                .filterIsInstance<BottomSheetStateHolder>()
+                .takeIf { it.isNotEmpty() }
+                ?.lastOrNull()
+
+            bottomNavigationModeHolder?.shouldBlockBottomSheet ?: flowOf(false)
+        }
 }

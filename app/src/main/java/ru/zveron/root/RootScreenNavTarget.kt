@@ -12,4 +12,7 @@ sealed class RootScreenNavTarget: Parcelable {
 
     @Parcelize
     object PhoneAuthorization: RootScreenNavTarget()
+
+    @Parcelize
+    data class LotCard(val id: Long): RootScreenNavTarget()
 }

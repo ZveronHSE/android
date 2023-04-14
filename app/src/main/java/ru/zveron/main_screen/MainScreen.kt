@@ -24,7 +24,9 @@ import ru.zveron.design.components.BottomNavigation
 import ru.zveron.design.components.BottomNavigationItem
 import ru.zveron.main_screen.bottom_navigation.BottomNavigationNavTarget
 import ru.zveron.main_screen.bottom_navigation.BottomTabsNavigator
+import ru.zveron.main_screen.bottom_navigation.favorites_backstack.FavoritesBackstackNavigator
 import ru.zveron.main_screen.bottom_navigation.favorites_backstack.FavoritesBackstackNode
+import ru.zveron.main_screen.bottom_navigation.lots_feed_backstack.LotsFeedBackStackNavigator
 import ru.zveron.main_screen.bottom_navigation.lots_feed_backstack.LotsFeedBackStackNode
 
 internal class MainScreen(
@@ -39,7 +41,7 @@ internal class MainScreen(
     buildContext = buildContext,
     navModel = spotlight,
     plugins = listOf(mainScreenComponent),
-), BottomTabsNavigator {
+), BottomTabsNavigator, LotsFeedBackStackNavigator, FavoritesBackstackNavigator {
 
     @Composable
     override fun View(modifier: Modifier) {
@@ -56,11 +58,9 @@ internal class MainScreen(
 
     override fun resolve(navTarget: BottomNavigationNavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
-            BottomNavigationNavTarget.LotsFeed -> LotsFeedBackStackNode(buildContext) {
-                mainScreenNavigator.openAuthorization()
-            }
+            BottomNavigationNavTarget.LotsFeed -> LotsFeedBackStackNode(buildContext, this)
 
-            BottomNavigationNavTarget.Favorites -> FavoritesBackstackNode(buildContext)
+            BottomNavigationNavTarget.Favorites -> FavoritesBackstackNode(buildContext, this)
         }
     }
 
@@ -101,6 +101,14 @@ internal class MainScreen(
 
     override fun openFavoritesBackstack() {
         spotlight.activate(BottomNavigationNavTarget.Favorites)
+    }
+
+    override fun goToAuthorization() {
+        mainScreenNavigator.openAuthorization()
+    }
+
+    override fun goToLot(id: Long) {
+        mainScreenNavigator.openLot(id)
     }
 
 }
