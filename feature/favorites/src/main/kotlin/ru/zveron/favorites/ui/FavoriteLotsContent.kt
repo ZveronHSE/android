@@ -96,7 +96,7 @@ private fun ColumnScope.ErrorFavoriteLots(
     Spacer(Modifier.weight(1f))
 
     Icon(
-        painterResource(R.drawable.ic_warning),
+        painterResource(DesignR.drawable.ic_warning),
         contentDescription = null,
         modifier = Modifier.align(Alignment.CenterHorizontally),
     )
