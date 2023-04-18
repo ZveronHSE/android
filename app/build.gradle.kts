@@ -98,4 +98,5 @@ dependencies {
     implementation(project(":feature:favorites"))
     implementation(project(":feature:lot_card"))
     implementation(project(":feature:user_lots"))
+    implementation(project(":feature:create_lot"))
 }

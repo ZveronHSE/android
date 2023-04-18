@@ -4,4 +4,6 @@ interface MainScreenNavigator {
     fun openAuthorization()
 
     fun openLot(id: Long)
+
+    fun createLot()
 }

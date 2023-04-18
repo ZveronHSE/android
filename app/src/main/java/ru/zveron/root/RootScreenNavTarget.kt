@@ -15,4 +15,7 @@ sealed class RootScreenNavTarget: Parcelable {
 
     @Parcelize
     data class LotCard(val id: Long): RootScreenNavTarget()
+
+    @Parcelize
+    object CreateLot: RootScreenNavTarget()
 }

@@ -48,6 +48,7 @@ import ru.zveron.appyx.modal.operation.dismiss
 import ru.zveron.appyx.modal.operation.show
 import ru.zveron.authorization.phone.RootPhoneNode
 import ru.zveron.authorization.socials_sheet.SocialsSheetScreen
+import ru.zveron.create_lot.RootCreateLotNode
 import ru.zveron.design.components.BottomSheet
 import ru.zveron.lot_card.LotCardNode
 import ru.zveron.lot_card.LotCardParams
@@ -80,6 +81,7 @@ class RootScreen(
 
             is RootScreenNavTarget.LotCard -> LotCardNode(buildContext, LotCardParams(navTarget.id))
             RootScreenNavTarget.PhoneAuthorization -> RootPhoneNode(buildContext)
+            RootScreenNavTarget.CreateLot -> RootCreateLotNode(buildContext)
         }
     }
 
@@ -168,6 +170,10 @@ class RootScreen(
 
     override fun openLot(id: Long) {
         backStack.push(RootScreenNavTarget.LotCard(id))
+    }
+
+    override fun createLot() {
+        backStack.push(RootScreenNavTarget.CreateLot)
     }
 
     override val shouldBlockBottomSheet: Flow<Boolean> =

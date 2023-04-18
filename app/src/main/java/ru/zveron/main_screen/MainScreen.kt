@@ -124,7 +124,7 @@ internal class MainScreen(
     }
 
     override fun createUserLot() {
-        TODO("Not yet implemented")
+        mainScreenNavigator.createLot()
     }
 
 }
