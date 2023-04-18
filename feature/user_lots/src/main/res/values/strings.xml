@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="user_lots_title">Объявления</string>
+    
+    <string name="active_lots_title">Активные</string>
+    <string name="archive_lots_title">В архиве</string>
+
+    <string name="add_lot_button_title">Добавить объявление</string>
+
+    <string name="user_lots_error">Не удалось звгрузить объявления</string>
+    <string name="user_lots_error_button_title">Попробовать еще раз</string>
+</resources>
