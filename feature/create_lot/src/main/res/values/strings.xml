@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="first_step_header">Создание объявления</string>
+
+    <string name="root_categories_header">Тип объявления</string>
+    <string name="photos_header">Добавьте фотографии</string>
+    <string name="name_header">Укажите название</string>
+
+    <string name="lot_name_placeholder">Введите название</string>
+    <string name="name_example">Например: Кошка "Леля". 3 года</string>
+
+    <string name="continue_button_title">Далее</string>
+</resources>

@@ -9,6 +9,7 @@ import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.navmodel.backstack.BackStack
 import kotlinx.parcelize.Parcelize
 import ru.zveron.appyx.viewmodel.ViewModelParentNode
+import ru.zveron.create_lot.first_step.FirstStepNode
 
 class RootCreateLotNode(
     buildContext: BuildContext,
@@ -28,7 +29,9 @@ class RootCreateLotNode(
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
-        TODO("Not yet implemented")
+        return when (navTarget) {
+            NavTarget.FirstStep -> FirstStepNode(buildContext, component.scope)
+        }
     }
 
     @Composable

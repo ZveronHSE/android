@@ -63,6 +63,7 @@ fun Chip(
     isActive: Boolean = false,
     onClick: () -> Unit = {},
     textMaxWidth: Dp = Dp.Unspecified,
+    showArrow: Boolean = true,
 ) {
     val backgroundModifier = if (isActive) {
         Modifier.background(enabledButtonGradient)
@@ -106,11 +107,13 @@ fun Chip(
             modifier = Modifier.sizeIn(maxWidth = textMaxWidth),
         )
 
-        Icon(
-            painter = painterResource(R.drawable.ic_down_triangle),
-            contentDescription = null,
-            tint = textColor,
-        )
+        if (showArrow) {
+            Icon(
+                painter = painterResource(R.drawable.ic_down_triangle),
+                contentDescription = null,
+                tint = textColor,
+            )
+        }
     }
 }
 
@@ -120,6 +123,16 @@ fun ChipActivePreview() {
     Chip(
         ZveronText.RawString("Порода"),
         isActive = true,
+    )
+}
+
+@Preview
+@Composable
+fun ChipWithoutArrowPreview() {
+    Chip(
+        ZveronText.RawString("Порода"),
+        isActive = true,
+        showArrow = false,
     )
 }
 
