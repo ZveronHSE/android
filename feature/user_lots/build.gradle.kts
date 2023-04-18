@@ -27,4 +27,5 @@ dependencies {
     implementation(project(":core:appyx"))
     implementation(project(":core:network"))
     implementation(project(":core:models"))
+    implementation(project(":core:authorization"))
 }

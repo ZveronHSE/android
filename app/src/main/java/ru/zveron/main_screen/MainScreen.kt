@@ -28,20 +28,26 @@ import ru.zveron.main_screen.bottom_navigation.favorites_backstack.FavoritesBack
 import ru.zveron.main_screen.bottom_navigation.favorites_backstack.FavoritesBackstackNode
 import ru.zveron.main_screen.bottom_navigation.lots_feed_backstack.LotsFeedBackStackNavigator
 import ru.zveron.main_screen.bottom_navigation.lots_feed_backstack.LotsFeedBackStackNode
+import ru.zveron.main_screen.bottom_navigation.user_lots_backstack.UserLotsBackStackNode
+import ru.zveron.main_screen.bottom_navigation.user_lots_backstack.UserLotsBackstackNavigator
 
 internal class MainScreen(
     buildContext: BuildContext,
     private val mainScreenNavigator: MainScreenNavigator,
     private val mainScreenComponent: MainScreenComponent = MainScreenComponent(),
     private val spotlight: Spotlight<BottomNavigationNavTarget> = Spotlight(
-        items = listOf(BottomNavigationNavTarget.LotsFeed, BottomNavigationNavTarget.Favorites),
+        items = listOf(
+            BottomNavigationNavTarget.LotsFeed,
+            BottomNavigationNavTarget.Favorites,
+            BottomNavigationNavTarget.UserLots,
+        ),
         savedStateMap = buildContext.savedStateMap,
     ),
 ) : ViewModelParentNode<BottomNavigationNavTarget>(
     buildContext = buildContext,
     navModel = spotlight,
     plugins = listOf(mainScreenComponent),
-), BottomTabsNavigator, LotsFeedBackStackNavigator, FavoritesBackstackNavigator {
+), BottomTabsNavigator, LotsFeedBackStackNavigator, FavoritesBackstackNavigator, UserLotsBackstackNavigator {
 
     @Composable
     override fun View(modifier: Modifier) {
@@ -61,6 +67,8 @@ internal class MainScreen(
             BottomNavigationNavTarget.LotsFeed -> LotsFeedBackStackNode(buildContext, this)
 
             BottomNavigationNavTarget.Favorites -> FavoritesBackstackNode(buildContext, this)
+
+            BottomNavigationNavTarget.UserLots -> UserLotsBackStackNode(buildContext, this)
         }
     }
 
@@ -103,12 +111,20 @@ internal class MainScreen(
         spotlight.activate(BottomNavigationNavTarget.Favorites)
     }
 
+    override fun openUserLotsBackstack() {
+        spotlight.activate(BottomNavigationNavTarget.UserLots)
+    }
+
     override fun goToAuthorization() {
         mainScreenNavigator.openAuthorization()
     }
 
     override fun goToLot(id: Long) {
         mainScreenNavigator.openLot(id)
+    }
+
+    override fun createUserLot() {
+        TODO("Not yet implemented")
     }
 
 }

@@ -86,7 +86,22 @@ class MainScreenViewModel(
     }
 
     private fun createLotTapped() {
+        if (authorizationStorage.isAuthorized()) {
+            openUserLots()
+        } else {
+            mainScreenNavigator.openAuthorization()
+            viewModelScope.launch {
+                val success = authorizationEventsEmitter.waitForAuthorization()
+                if (success) {
+                    openUserLots()
+                }
+            }
+        }
+    }
+
+    private fun openUserLots() {
         currentSelectedTab.value = BottomNavigationItem.CREATE_LOT
+        bottomTabsNavigator.openUserLotsBackstack()
     }
 
     private fun messagesTapped() {

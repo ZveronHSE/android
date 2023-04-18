@@ -14,6 +14,7 @@ import ru.zveron.main_screen.bottom_navigation.lots_feed_backstack.lotsFeedBackS
 import ru.zveron.main_screen.mainScreenModule
 import ru.zveron.network.apigatewayModule
 import ru.zveron.platform.platformModule
+import ru.zveron.user_lots.userLotsModule
 
 internal val appModule = module {
     includes(
@@ -37,5 +38,7 @@ internal val appModule = module {
         favoritesModule,
 
         lotCardModule,
+
+        userLotsModule,
     )
 }

@@ -4,4 +4,6 @@ interface BottomTabsNavigator {
     fun openLotsFeedBackstack()
 
     fun openFavoritesBackstack()
+
+    fun openUserLotsBackstack()
 }

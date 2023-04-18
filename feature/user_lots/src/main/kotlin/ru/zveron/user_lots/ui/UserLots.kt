@@ -55,14 +55,14 @@ internal fun UserLots(
     onRetryClicked: () -> Unit = {},
 ) {
     when (state) {
-        UserLotsUiState.Loading -> LoadingUserLots(modifier)
+        UserLotsUiState.Loading -> LoadingUserLots(modifier.fillMaxWidth())
         is UserLotsUiState.Success -> SuccessUserLots(
             userLotsUiState = state,
             onTabClick = onTabClick,
             onLotClick = onLotClick,
             onAddLotClick = onAddLotClick,
         )
-        UserLotsUiState.Error -> ErrorUserLots(modifier, onRetryClicked)
+        UserLotsUiState.Error -> ErrorUserLots(modifier.fillMaxWidth(), onRetryClicked)
     }
 }
 
@@ -143,7 +143,7 @@ private fun LoadingUserLots(
                 fontSize = 28.sp,
             ),
             color = gray5,
-            modifier = Modifier.padding(start = 16.dp)
+            modifier = Modifier.padding(start = 16.dp),
         )
 
         Spacer(Modifier.weight(1f))
