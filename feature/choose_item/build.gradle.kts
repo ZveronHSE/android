@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "ru.zveron.lots_feed"
+    namespace = "ru.zveron.choose_item"
 }
 
 dependencies {
@@ -19,22 +19,10 @@ dependencies {
     implementation(libs.compose.material)
     implementation(libs.compose.ui.uiToolingPreview)
 
-    implementation(libs.zveronContracts)
-
-    implementation(libs.grpc.protobuf.javaUtil)
-    implementation(libs.grpc.okhttp)
-
     debugImplementation(libs.compose.ui.uiTooling)
 
     implementation(project(":design"))
     implementation(project(":core:appyx"))
-    implementation(project(":core:authorization"))
-    implementation(project(":core:network"))
     implementation(project(":core:models"))
 
-    implementation(project(":data:categories"))
-    implementation(project(":data:favorites"))
-
-    implementation(project(":feature:authorization"))
-    implementation(project(":feature:choose_item"))
 }

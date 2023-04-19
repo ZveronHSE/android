@@ -1,4 +1,4 @@
-package ru.zveron.lots_feed.choose_item
+package ru.zveron.choose_item
 
 import kotlinx.coroutines.flow.StateFlow
 

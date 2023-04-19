@@ -1,4 +1,4 @@
-package ru.zveron.lots_feed.choose_item
+package ru.zveron.choose_item
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -40,7 +40,6 @@ import ru.zveron.design.shimmering.shimmeringBackground
 import ru.zveron.design.theme.ZveronTheme
 import ru.zveron.design.theme.gray1
 import ru.zveron.design.theme.gray3
-import ru.zveron.lots_feed.R
 import ru.zveron.design.R as DesignR
 
 @Composable

@@ -1,4 +1,4 @@
-package ru.zveron.lots_feed.choose_item
+package ru.zveron.choose_item
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState

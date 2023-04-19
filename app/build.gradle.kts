@@ -100,4 +100,5 @@ dependencies {
     implementation(project(":feature:lot_card"))
     implementation(project(":feature:user_lots"))
     implementation(project(":feature:create_lot"))
+    implementation(project(":feature:choose_item"))
 }

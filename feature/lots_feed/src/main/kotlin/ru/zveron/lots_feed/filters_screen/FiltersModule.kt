@@ -5,8 +5,8 @@ import org.koin.core.module.dsl.scopedOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
+import ru.zveron.choose_item.ChooseItemHolder
 import ru.zveron.lots_feed.BuildConfig
-import ru.zveron.lots_feed.choose_item.ChooseItemHolder
 import ru.zveron.lots_feed.filters_screen.data.categories.FiltersChildrenCategoryRepository
 import ru.zveron.lots_feed.filters_screen.data.categories.FiltersSelectedCategoryRepository
 import ru.zveron.lots_feed.filters_screen.data.lot_forms.FiltersChildrenLotFormRepository

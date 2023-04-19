@@ -23,6 +23,7 @@ internal class GeneralStepNode(
     private val component: GeneralStepComponent = GeneralStepComponent(),
 ) : ViewModelNode(
     buildContext = buildContext,
+    plugins = listOf(component),
 ) {
     init {
         component.scope.linkTo(scope)

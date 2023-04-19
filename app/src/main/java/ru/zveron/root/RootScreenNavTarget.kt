@@ -2,6 +2,7 @@ package ru.zveron.root
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import ru.zveron.design.resources.ZveronText
 
 sealed class RootScreenNavTarget: Parcelable {
     @Parcelize
@@ -18,4 +19,7 @@ sealed class RootScreenNavTarget: Parcelable {
 
     @Parcelize
     object CreateLot: RootScreenNavTarget()
+
+    @Parcelize
+    data class PickItem(val title: ZveronText): RootScreenNavTarget()
 }

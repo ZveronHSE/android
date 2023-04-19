@@ -6,9 +6,9 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import ru.zveron.lots_feed.choose_item.ChooseItem
-import ru.zveron.lots_feed.choose_item.ChooseItemItemProvider
-import ru.zveron.lots_feed.choose_item.ChooseItemUiState
+import ru.zveron.choose_item.ChooseItem
+import ru.zveron.choose_item.ChooseItemItemProvider
+import ru.zveron.choose_item.ChooseItemUiState
 import ru.zveron.lots_feed.filters_screen.data.lot_forms.ChildLotFormState
 import ru.zveron.lots_feed.filters_screen.data.lot_forms.FiltersChildrenLotFormRepository
 

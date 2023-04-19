@@ -48,8 +48,10 @@ import ru.zveron.appyx.modal.operation.dismiss
 import ru.zveron.appyx.modal.operation.show
 import ru.zveron.authorization.phone.RootPhoneNode
 import ru.zveron.authorization.socials_sheet.SocialsSheetScreen
+import ru.zveron.choose_item.ChooseItemNode
 import ru.zveron.create_lot.RootCreateLotNode
 import ru.zveron.design.components.BottomSheet
+import ru.zveron.design.resources.ZveronText
 import ru.zveron.lot_card.LotCardNode
 import ru.zveron.lot_card.LotCardParams
 import ru.zveron.main_screen.MainScreen
@@ -64,12 +66,17 @@ class RootScreen(
     private val modal: Modal<RootScreenNavTarget> = Modal(
         savedStateMap = buildContext.savedStateMap,
     ),
+    private val component: RootScreenComponent = RootScreenComponent(),
 ) : ParentNode<RootScreenNavTarget>(
     buildContext = buildContext,
     navModel = backStack + modal,
+    plugins = listOf(component),
 ), MainScreenNavigator, BottomSheetStateHolder {
     private val activeModalElementFlow: Flow<RootScreenNavTarget?> =
         modal.elements.map { it.activeElement }
+
+    private val currentItemProvider
+        get() = component.getChooseItemItemProvider().currentItemItemProvider
 
 
     override fun resolve(navTarget: RootScreenNavTarget, buildContext: BuildContext): Node {
@@ -82,6 +89,11 @@ class RootScreen(
             is RootScreenNavTarget.LotCard -> LotCardNode(buildContext, LotCardParams(navTarget.id))
             RootScreenNavTarget.PhoneAuthorization -> RootPhoneNode(buildContext)
             RootScreenNavTarget.CreateLot -> RootCreateLotNode(buildContext)
+            is RootScreenNavTarget.PickItem -> ChooseItemNode(
+                buildContext,
+                navTarget.title,
+                currentItemProvider,
+            )
         }
     }
 
@@ -174,6 +186,10 @@ class RootScreen(
 
     override fun createLot() {
         backStack.push(RootScreenNavTarget.CreateLot)
+    }
+
+    override fun pickItem(title: ZveronText) {
+        backStack.push(RootScreenNavTarget.PickItem(title))
     }
 
     override val shouldBlockBottomSheet: Flow<Boolean> =
