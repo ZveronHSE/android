@@ -22,6 +22,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
@@ -41,6 +42,7 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import ru.zveron.appyx.modal.BottomSheetStateHolder
 import ru.zveron.appyx.modal.Modal
 import ru.zveron.appyx.modal.activeElement
@@ -49,7 +51,7 @@ import ru.zveron.appyx.modal.operation.show
 import ru.zveron.authorization.phone.RootPhoneNode
 import ru.zveron.authorization.socials_sheet.SocialsSheetScreen
 import ru.zveron.choose_item.ChooseItemNode
-import ru.zveron.create_lot.RootCreateLotNode
+import ru.zveron.create_lot.root.RootCreateLotNode
 import ru.zveron.design.components.BottomSheet
 import ru.zveron.design.resources.ZveronText
 import ru.zveron.lot_card.LotCardNode
@@ -145,6 +147,8 @@ class RootScreen(
 
         Children(navModel = modal) {
             BottomSheet {
+                val scope = rememberCoroutineScope()
+
                 children<RootScreenNavTarget> { child ->
                     var hideCalled by remember(activeElement) { mutableStateOf(false) }
 
@@ -162,7 +166,7 @@ class RootScreen(
                             sheetState.show()
                         } else if (activeElement == null && sheetState.isVisible) {
                             hideCalled = true
-                            sheetState.hide()
+                            scope.launch { sheetState.hide() }
                         }
                     }
 
