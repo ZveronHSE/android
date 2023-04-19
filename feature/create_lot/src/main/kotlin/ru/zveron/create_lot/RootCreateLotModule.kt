@@ -2,8 +2,10 @@ package ru.zveron.create_lot
 
 import org.koin.core.module.dsl.scopedOf
 import org.koin.dsl.module
+import ru.zveron.create_lot.data.LotCreateInfoRepository
 import ru.zveron.create_lot.data.LotCreatePhotoStateRepository
 import ru.zveron.create_lot.data.LotCreateSelectedCategoriesRepository
+import ru.zveron.create_lot.data.PhotoConversionCacheRepository
 import ru.zveron.create_lot.domain.LotCreateUploadPhotoInteractor
 import ru.zveron.create_lot.first_step.firstStepModule
 
@@ -15,6 +17,8 @@ val rootCreateLotModule = module {
         scoped<CreateLotScopeDelegate> {
             get<RootCreateLotComponent>()
         }
+        scopedOf(::PhotoConversionCacheRepository)
+        scopedOf(::LotCreateInfoRepository)
     }
 
     includes(

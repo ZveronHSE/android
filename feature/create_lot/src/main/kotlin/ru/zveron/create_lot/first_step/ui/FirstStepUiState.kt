@@ -20,7 +20,7 @@ data class RootCategoryUiState(
 )
 
 data class PhotoUploadUiState(
-    val states: ListWrapper<Pair<Long, PhotoUploadState>>,
+    val states: ListWrapper<Pair<String, PhotoUploadState>>,
 )
 
 data class ContinueButtonState(

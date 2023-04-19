@@ -1,9 +1,13 @@
 package ru.zveron.create_lot.first_step
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
@@ -17,7 +21,7 @@ internal class FirstStepNode(
     buildContext: BuildContext,
     scope: Scope,
     private val component: FirstStepComponent = FirstStepComponent(),
-): ViewModelNode(
+) : ViewModelNode(
     buildContext = buildContext,
 ) {
     init {
@@ -30,6 +34,17 @@ internal class FirstStepNode(
             scope = component.scope,
             viewModelStoreOwner = this,
         )
+
+        val contract =
+            rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) {
+                it?.let { viewModel.loadPhoto(it) }
+            }
+
+        LaunchedEffect(viewModel) {
+            viewModel.requestPhotoFlow.collect {
+                contract.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+            }
+        }
 
         val rootCategoriesUiState = viewModel.rootCategoriesUiState.collectAsState()
         val photoUploadUiState = viewModel.photoUploadUiState.collectAsState()

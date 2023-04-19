@@ -30,6 +30,10 @@ class LotCreatePhotoStateRepository {
         }
         return newId
     }
+
+    fun getUri(id: String): String? {
+        return photoStates.value.find { it.id == id }?.url
+    }
 }
 
 enum class PhotoUploadStatus {

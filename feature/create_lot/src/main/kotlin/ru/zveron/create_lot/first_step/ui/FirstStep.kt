@@ -56,7 +56,7 @@ internal fun FirstStepLotCreate(
     onCloseClick: () -> Unit = {},
     onRootCategoryClick: (Int) -> Unit = {},
     onAddPhotoClick: () -> Unit = {},
-    onPhotoRetryClick: (Long) -> Unit = {},
+    onPhotoRetryClick: (String) -> Unit = {},
     onContinueClick: () -> Unit = {},
 ) {
     Column(modifier = modifier.padding(top = 16.dp)) {
@@ -202,7 +202,7 @@ private fun RootCategoriesSuccess(
 private fun RootCategoriesPhotos(
     photoUploadUiState: PhotoUploadUiState,
     onAddPhotoClick: () -> Unit = {},
-    onRetryClicked: (Long) -> Unit = {}
+    onRetryClicked: (String) -> Unit = {}
 ) {
     Text(
         text = stringResource(R.string.photos_header),
@@ -300,9 +300,9 @@ private fun FirstStepPreview() {
         val photoUploadUiState = PhotoUploadUiState(
             states = ListWrapper(
                 listOf(
-                    1L to PhotoUploadState.Error(ZveronImage.ResourceImage(DesignR.drawable.cool_dog)),
-                    2L to PhotoUploadState.Loading(ZveronImage.ResourceImage(DesignR.drawable.cool_dog)),
-                    3L to PhotoUploadState.Success(ZveronImage.ResourceImage(DesignR.drawable.cool_dog)),
+                    "1" to PhotoUploadState.Error(ZveronImage.ResourceImage(DesignR.drawable.cool_dog)),
+                    "2" to PhotoUploadState.Loading(ZveronImage.ResourceImage(DesignR.drawable.cool_dog)),
+                    "3" to PhotoUploadState.Success(ZveronImage.ResourceImage(DesignR.drawable.cool_dog)),
                 )
             ),
         )
@@ -331,9 +331,9 @@ private fun FirstStepLoadingPreview() {
         val photoUploadUiState = PhotoUploadUiState(
             states = ListWrapper(
                 listOf(
-                    1L to PhotoUploadState.Error(ZveronImage.ResourceImage(DesignR.drawable.cool_dog)),
-                    2L to PhotoUploadState.Loading(ZveronImage.ResourceImage(DesignR.drawable.cool_dog)),
-                    3L to PhotoUploadState.Success(ZveronImage.ResourceImage(DesignR.drawable.cool_dog)),
+                    "1" to PhotoUploadState.Error(ZveronImage.ResourceImage(DesignR.drawable.cool_dog)),
+                    "2" to PhotoUploadState.Loading(ZveronImage.ResourceImage(DesignR.drawable.cool_dog)),
+                    "3" to PhotoUploadState.Success(ZveronImage.ResourceImage(DesignR.drawable.cool_dog)),
                 )
             ),
         )
