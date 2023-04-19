@@ -1,4 +1,4 @@
-package ru.zveron.create_lot.first_step.ui
+package ru.zveron.create_lot.general_step.ui
 
 import androidx.compose.runtime.Immutable
 import ru.zveron.design.components.PhotoUploadState

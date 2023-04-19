@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import java.util.UUID
 
-class LotCreatePhotoStateRepository {
+internal class LotCreatePhotoStateRepository {
     private val _photoStates = MutableStateFlow<List<PhotoState>>(emptyList())
     val photoStates = _photoStates.asStateFlow()
 

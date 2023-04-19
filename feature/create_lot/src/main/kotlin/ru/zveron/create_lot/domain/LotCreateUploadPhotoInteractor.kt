@@ -14,7 +14,7 @@ import ru.zveron.image_storage.data.convert.ImageConvertResult
 import ru.zveron.image_storage.data.upload.ImageUploadRepository
 import ru.zveron.image_storage.data.upload.ImageUploadSource
 
-class LotCreateUploadPhotoInteractor(
+internal class LotCreateUploadPhotoInteractor(
     private val scopeDelegate: CreateLotScopeDelegate,
     private val lotCreatePhotoStateRepository: LotCreatePhotoStateRepository,
     private val imageConvertRepository: ImageConvertRepository,

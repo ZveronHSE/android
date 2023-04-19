@@ -9,13 +9,13 @@ import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.navmodel.backstack.BackStack
 import kotlinx.parcelize.Parcelize
 import ru.zveron.appyx.viewmodel.ViewModelParentNode
-import ru.zveron.create_lot.first_step.FirstStepNode
+import ru.zveron.create_lot.general_step.GeneralStepNode
 
 class RootCreateLotNode(
     buildContext: BuildContext,
     private val component: RootCreateLotComponent = RootCreateLotComponent(),
     private val backStack: BackStack<NavTarget> = BackStack(
-        initialElement = NavTarget.FirstStep,
+        initialElement = NavTarget.GeneralStep,
         savedStateMap = buildContext.savedStateMap,
     )
 ): ViewModelParentNode<RootCreateLotNode.NavTarget>(
@@ -25,12 +25,12 @@ class RootCreateLotNode(
 ) {
     sealed class NavTarget: Parcelable {
         @Parcelize
-        object FirstStep: NavTarget()
+        object GeneralStep: NavTarget()
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
-            NavTarget.FirstStep -> FirstStepNode(buildContext, component.scope)
+            NavTarget.GeneralStep -> GeneralStepNode(buildContext, component.scope)
         }
     }
 

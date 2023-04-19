@@ -1,4 +1,4 @@
-package ru.zveron.create_lot.first_step.ui
+package ru.zveron.create_lot.general_step.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -46,7 +46,7 @@ import ru.zveron.design.wrappers.ListWrapper
 import ru.zveron.design.R as DesignR
 
 @Composable
-internal fun FirstStepLotCreate(
+internal fun GeneralStepLotCreate(
     rootCategoriesUiState: RootCategoriesUiState,
     photoUploadUiState: PhotoUploadUiState,
     nameInput: String,
@@ -60,7 +60,7 @@ internal fun FirstStepLotCreate(
     onContinueClick: () -> Unit = {},
 ) {
     Column(modifier = modifier.padding(top = 16.dp)) {
-        FirstStepHeader(onCloseClick = onCloseClick)
+        GeneralStepHeader(onCloseClick = onCloseClick)
 
         Spacer(Modifier.height(32.dp))
 
@@ -79,7 +79,7 @@ internal fun FirstStepLotCreate(
         
         Spacer(Modifier.height(32.dp))
 
-        FirstStepNameInput(nameInput = nameInput, setName = setName)
+        GeneralStepNameInput(nameInput = nameInput, setName = setName)
 
         Spacer(Modifier.weight(1f))
 
@@ -99,7 +99,7 @@ internal fun FirstStepLotCreate(
 }
 
 @Composable
-private fun FirstStepHeader(
+private fun GeneralStepHeader(
     modifier: Modifier = Modifier,
     onCloseClick: () -> Unit = {},
 ) {
@@ -236,7 +236,7 @@ private fun RootCategoriesPhotos(
 }
 
 @Composable
-private fun FirstStepNameInput(
+private fun GeneralStepNameInput(
     nameInput: String,
     setName: (String) -> Unit,
 ) {
@@ -285,7 +285,7 @@ private fun FirstStepNameInput(
 
 @Preview(showBackground = true)
 @Composable
-private fun FirstStepPreview() {
+private fun GeneralStepPreview() {
     ZveronTheme {
         val rootCategoriesUiState = RootCategoriesUiState.Success(
             rootCategories = ListWrapper(
@@ -311,7 +311,7 @@ private fun FirstStepPreview() {
 
         val input = remember { mutableStateOf("") }
 
-        FirstStepLotCreate(
+        GeneralStepLotCreate(
             rootCategoriesUiState = rootCategoriesUiState,
             photoUploadUiState = photoUploadUiState,
             continueButtonState = continueButtonState,
@@ -324,7 +324,7 @@ private fun FirstStepPreview() {
 
 @Preview(showBackground = true)
 @Composable
-private fun FirstStepLoadingPreview() {
+private fun GeneralStepLoadingPreview() {
     ZveronTheme {
         val rootCategoriesUiState = RootCategoriesUiState.Loading
 
@@ -342,7 +342,7 @@ private fun FirstStepLoadingPreview() {
 
         val input = remember { mutableStateOf("") }
 
-        FirstStepLotCreate(
+        GeneralStepLotCreate(
             rootCategoriesUiState = rootCategoriesUiState,
             photoUploadUiState = photoUploadUiState,
             continueButtonState = continueButtonState,

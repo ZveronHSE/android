@@ -1,4 +1,4 @@
-package ru.zveron.create_lot.first_step
+package ru.zveron.create_lot.general_step
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -14,13 +14,13 @@ import com.bumble.appyx.core.modality.BuildContext
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.scope.Scope
 import ru.zveron.appyx.viewmodel.ViewModelNode
-import ru.zveron.create_lot.first_step.ui.FirstStepLotCreate
-import ru.zveron.create_lot.first_step.ui.FirstStepViewModel
+import ru.zveron.create_lot.general_step.ui.GeneralStepLotCreate
+import ru.zveron.create_lot.general_step.ui.GeneralStepViewModel
 
-internal class FirstStepNode(
+internal class GeneralStepNode(
     buildContext: BuildContext,
     scope: Scope,
-    private val component: FirstStepComponent = FirstStepComponent(),
+    private val component: GeneralStepComponent = GeneralStepComponent(),
 ) : ViewModelNode(
     buildContext = buildContext,
 ) {
@@ -30,7 +30,7 @@ internal class FirstStepNode(
 
     @Composable
     override fun View(modifier: Modifier) {
-        val viewModel = koinViewModel<FirstStepViewModel>(
+        val viewModel = koinViewModel<GeneralStepViewModel>(
             scope = component.scope,
             viewModelStoreOwner = this,
         )
@@ -50,7 +50,7 @@ internal class FirstStepNode(
         val photoUploadUiState = viewModel.photoUploadUiState.collectAsState()
         val continueButtonState = viewModel.continueButtonState.collectAsState()
 
-        FirstStepLotCreate(
+        GeneralStepLotCreate(
             rootCategoriesUiState = rootCategoriesUiState.value,
             photoUploadUiState = photoUploadUiState.value,
             nameInput = viewModel.nameInputState.value,

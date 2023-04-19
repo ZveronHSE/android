@@ -1,4 +1,4 @@
-package ru.zveron.create_lot.first_step.ui
+package ru.zveron.create_lot.general_step.ui
 
 import android.net.Uri
 import android.util.Log
@@ -28,7 +28,7 @@ import ru.zveron.design.components.PhotoUploadState
 import ru.zveron.design.resources.ZveronImage
 import ru.zveron.design.wrappers.ListWrapper
 
-class FirstStepViewModel(
+internal class GeneralStepViewModel(
     private val categoryRepository: CategoryRepository,
     private val lotCreateSelectedCategoriesRepository: LotCreateSelectedCategoriesRepository,
     private val lotCreateUploadPhotoInteractor: LotCreateUploadPhotoInteractor,

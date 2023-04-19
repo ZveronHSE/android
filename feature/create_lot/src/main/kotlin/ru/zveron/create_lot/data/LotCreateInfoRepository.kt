@@ -1,6 +1,6 @@
 package ru.zveron.create_lot.data
 
-class LotCreateInfoRepository {
+internal class LotCreateInfoRepository {
     private val photoUrls = mutableListOf<String>()
     private var lotName: String = ""
 

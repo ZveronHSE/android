@@ -7,7 +7,7 @@ import ru.zveron.create_lot.data.LotCreatePhotoStateRepository
 import ru.zveron.create_lot.data.LotCreateSelectedCategoriesRepository
 import ru.zveron.create_lot.data.PhotoConversionCacheRepository
 import ru.zveron.create_lot.domain.LotCreateUploadPhotoInteractor
-import ru.zveron.create_lot.first_step.firstStepModule
+import ru.zveron.create_lot.general_step.generalStepModule
 
 val rootCreateLotModule = module {
     scope<RootCreateLotComponent> {
@@ -22,6 +22,6 @@ val rootCreateLotModule = module {
     }
 
     includes(
-        firstStepModule,
+        generalStepModule,
     )
 }
