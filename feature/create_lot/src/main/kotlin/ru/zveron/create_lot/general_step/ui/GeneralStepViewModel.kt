@@ -24,6 +24,7 @@ import ru.zveron.create_lot.data.LotCreatePhotoStateRepository
 import ru.zveron.create_lot.data.LotCreateSelectedCategoriesRepository
 import ru.zveron.create_lot.data.PhotoUploadStatus
 import ru.zveron.create_lot.domain.LotCreateUploadPhotoInteractor
+import ru.zveron.create_lot.general_step.GeneralStepNavigator
 import ru.zveron.design.components.PhotoUploadState
 import ru.zveron.design.resources.ZveronImage
 import ru.zveron.design.wrappers.ListWrapper
@@ -34,6 +35,7 @@ internal class GeneralStepViewModel(
     private val lotCreateUploadPhotoInteractor: LotCreateUploadPhotoInteractor,
     lotCreatePhotoStateRepository: LotCreatePhotoStateRepository,
     private val lotCreateInfoRepository: LotCreateInfoRepository,
+    private val generalStepNavigator: GeneralStepNavigator,
 ) : ViewModel() {
     private val _rootCategoriesUiState =
         MutableStateFlow<RootCategoriesUiState>(RootCategoriesUiState.Loading)
@@ -95,7 +97,7 @@ internal class GeneralStepViewModel(
     }
 
     fun onContinueClick() {
-
+        generalStepNavigator.goToNextStep()
     }
 
     fun onNameInputted(value: String) {

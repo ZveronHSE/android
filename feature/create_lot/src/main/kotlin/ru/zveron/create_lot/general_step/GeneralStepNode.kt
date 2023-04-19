@@ -12,6 +12,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import org.koin.androidx.compose.koinViewModel
+import org.koin.core.parameter.parametersOf
 import org.koin.core.scope.Scope
 import ru.zveron.appyx.viewmodel.ViewModelNode
 import ru.zveron.create_lot.general_step.ui.GeneralStepLotCreate
@@ -20,6 +21,7 @@ import ru.zveron.create_lot.general_step.ui.GeneralStepViewModel
 internal class GeneralStepNode(
     buildContext: BuildContext,
     scope: Scope,
+    private val generalStepNavigator: GeneralStepNavigator,
     private val component: GeneralStepComponent = GeneralStepComponent(),
 ) : ViewModelNode(
     buildContext = buildContext,
@@ -34,6 +36,7 @@ internal class GeneralStepNode(
         val viewModel = koinViewModel<GeneralStepViewModel>(
             scope = component.scope,
             viewModelStoreOwner = this,
+            parameters = { parametersOf(generalStepNavigator) }
         )
 
         val contract =

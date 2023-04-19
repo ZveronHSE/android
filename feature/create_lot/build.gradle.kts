@@ -36,4 +36,5 @@ dependencies {
     implementation(project(":data:categories"))
     implementation(project(":data:image_storage"))
 
+    implementation(project(":feature:choose_item"))
 }

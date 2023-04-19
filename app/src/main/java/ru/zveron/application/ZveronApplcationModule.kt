@@ -5,7 +5,7 @@ import ru.zveron.authorization.authorizationModule
 import ru.zveron.authorization.interceptorsModule
 import ru.zveron.authorization.phone.rootPhoneModule
 import ru.zveron.authorization.socials_sheet.socialsModule
-import ru.zveron.create_lot.rootCreateLotModule
+import ru.zveron.create_lot.root.rootCreateLotModule
 import ru.zveron.favorites.di.favoritesDataModule
 import ru.zveron.favorites.ui.favoritesModule
 import ru.zveron.image_storage.imageStorageModule
