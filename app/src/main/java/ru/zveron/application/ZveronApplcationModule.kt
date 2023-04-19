@@ -8,6 +8,7 @@ import ru.zveron.authorization.socials_sheet.socialsModule
 import ru.zveron.create_lot.rootCreateLotModule
 import ru.zveron.favorites.di.favoritesDataModule
 import ru.zveron.favorites.ui.favoritesModule
+import ru.zveron.image_storage.imageStorageModule
 import ru.zveron.lot_card.lotCardModule
 import ru.zveron.lots_feed.feed.lotsFeedModule
 import ru.zveron.lots_feed.filters_screen.filtersModule
@@ -26,6 +27,7 @@ internal val appModule = module {
         platformModule,
 
         favoritesDataModule,
+        imageStorageModule,
 
         socialsModule,
         rootPhoneModule,

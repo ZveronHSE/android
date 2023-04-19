@@ -34,5 +34,6 @@ dependencies {
     implementation(project(":core:models"))
 
     implementation(project(":data:categories"))
+    implementation(project(":data:image_storage"))
 
 }
