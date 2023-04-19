@@ -70,12 +70,14 @@ class RootCreateLotNode private constructor(
                 buildContext,
                 ZveronText.RawResource(R.string.categories_title),
                 categoriesItemProvider,
+                removeOnItemPick = false,
             )
 
             NavTarget.LotFormStep -> ChooseItemNode(
                 buildContext,
                 ZveronText.RawResource(R.string.lot_form_title),
                 lotFormItemProvider,
+                removeOnItemPick = false,
             )
         }
     }

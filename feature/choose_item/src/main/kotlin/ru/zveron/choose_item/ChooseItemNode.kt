@@ -15,7 +15,8 @@ import ru.zveron.design.resources.ZveronText
 class ChooseItemNode(
     buildContext: BuildContext,
     val title: ZveronText,
-    val chooseItemItemProvider: ChooseItemItemProvider
+    val chooseItemItemProvider: ChooseItemItemProvider,
+    val removeOnItemPick: Boolean = true,
 ) : ViewModelNode(buildContext) {
     @Composable
     override fun View(modifier: Modifier) {
@@ -23,8 +24,10 @@ class ChooseItemNode(
 
         val itemClickHandler = remember {
             { id: Int ->
+                if (removeOnItemPick) {
+                    navigateUp()
+                }
                 chooseItemItemProvider.itemPicked(id)
-                navigateUp()
             }
         }
 
