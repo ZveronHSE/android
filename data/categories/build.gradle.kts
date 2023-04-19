@@ -13,4 +13,5 @@ dependencies {
     implementation(libs.grpc.okhttp)
 
     implementation(project(":core:network"))
+    implementation(project(":core:models"))
 }

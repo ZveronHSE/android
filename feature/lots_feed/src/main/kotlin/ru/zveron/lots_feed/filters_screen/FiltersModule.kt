@@ -33,11 +33,11 @@ import ru.zveron.lots_feed.filters_screen.ui.categories.FiltersRootCategoriesVie
 import ru.zveron.lots_feed.filters_screen.ui.lot_form.LotFormViewModel
 import ru.zveron.lots_feed.filters_screen.ui.parameters.FiltersViewModel
 import ru.zveron.lots_feed.filters_screen.ui.sort_types.FiltersSortTypesViewModel
-import ru.zveron.lots_feed.lot_forms.data.LotFormGrpcSource
-import ru.zveron.lots_feed.lot_forms.data.LotFormLocalSource
-import ru.zveron.lots_feed.lot_forms.data.LotFormMockSource
-import ru.zveron.lots_feed.lot_forms.data.LotFormRepository
-import ru.zveron.lots_feed.lot_forms.data.LotFormSource
+import ru.zveron.lot_forms.data.LotFormGrpcSource
+import ru.zveron.lot_forms.data.LotFormLocalSource
+import ru.zveron.lot_forms.data.LotFormMockSource
+import ru.zveron.lot_forms.data.LotFormRepository
+import ru.zveron.lot_forms.data.LotFormSource
 import ru.zveron.lots_feed.parameters.data.ParametersLocalCache
 
 val filtersModule = module {

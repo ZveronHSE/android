@@ -1,7 +1,7 @@
-package ru.zveron.lots_feed.lot_forms.data
+package ru.zveron.lot_forms.data
 
 import kotlinx.coroutines.delay
-import ru.zveron.lots_feed.models.lot_form.LotForm
+import ru.zveron.models.lot_form.LotForm
 
 class LotFormMockSource: LotFormSource {
     override suspend fun loadLotForms(categoryId: Int): List<LotForm> {

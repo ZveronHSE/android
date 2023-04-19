@@ -1,6 +1,7 @@
-package ru.zveron.lots_feed.lot_forms.data
+package ru.zveron.lot_forms.data
 
-import ru.zveron.lots_feed.models.lot_form.LotForm
+import ru.zveron.models.lot_form.LotForm
+
 
 class LotFormRepository(
     private val lotFormSource: LotFormSource,

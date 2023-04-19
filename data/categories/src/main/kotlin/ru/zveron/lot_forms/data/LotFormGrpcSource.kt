@@ -1,10 +1,10 @@
-package ru.zveron.lots_feed.lot_forms.data
+package ru.zveron.lot_forms.data
 
 import com.google.protobuf.Int32Value
 import com.google.protobuf.int32Value
 import ru.zveron.contract.parameter.external.LotFormResponse
-import ru.zveron.lots_feed.mappings.toLotFormDomainModel
-import ru.zveron.lots_feed.models.lot_form.LotForm
+import ru.zveron.models.lot_form.LotForm
+import ru.zveron.models.mappings.toLotFormDomainModel
 import ru.zveron.network.ApigatewayDelegate
 
 private const val GET_LOT_FORMS = "lotFormsGet"

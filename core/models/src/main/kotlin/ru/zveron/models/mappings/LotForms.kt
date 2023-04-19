@@ -1,7 +1,7 @@
-package ru.zveron.lots_feed.mappings
+package ru.zveron.models.mappings
 
 import ru.zveron.contract.parameter.external.LotForm
-import ru.zveron.lots_feed.models.lot_form.LotForm as DomainLotForm
+import ru.zveron.models.lot_form.LotForm as DomainLotForm
 
 fun LotForm.toLotFormDomainModel(): DomainLotForm {
     return DomainLotForm(this.id, this.name)
