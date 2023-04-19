@@ -9,10 +9,10 @@ import org.koin.core.component.createScope
 import org.koin.core.parameter.parametersOf
 import org.koin.core.scope.Scope
 import ru.zveron.create_lot.CreateLotScopeDelegate
-import ru.zveron.create_lot.categories.CategoriesItemProvider
-import ru.zveron.create_lot.categories.CategoriesStepNavigator
-import ru.zveron.create_lot.lot_form.LotFormItemProvider
-import ru.zveron.create_lot.lot_form.LotFormStepNavigator
+import ru.zveron.create_lot.categories_step.CategoriesItemProvider
+import ru.zveron.create_lot.categories_step.CategoriesStepNavigator
+import ru.zveron.create_lot.lot_form_step.LotFormItemProvider
+import ru.zveron.create_lot.lot_form_step.LotFormStepNavigator
 
 internal class RootCreateLotComponent: KoinScopeComponent, Destroyable, CreateLotScopeDelegate {
     override val scope: Scope by lazy { createScope(this) }

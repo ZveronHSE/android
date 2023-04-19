@@ -10,12 +10,12 @@ import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.push
 import kotlinx.parcelize.Parcelize
 import ru.zveron.appyx.viewmodel.ViewModelParentNode
-import ru.zveron.create_lot.categories.CategoriesStepNavigator
+import ru.zveron.create_lot.categories_step.CategoriesStepNavigator
 import ru.zveron.choose_item.ChooseItemNode
 import ru.zveron.create_lot.R
 import ru.zveron.create_lot.general_step.GeneralStepNavigator
 import ru.zveron.create_lot.general_step.GeneralStepNode
-import ru.zveron.create_lot.lot_form.LotFormStepNavigator
+import ru.zveron.create_lot.lot_form_step.LotFormStepNavigator
 import ru.zveron.design.resources.ZveronText
 
 class RootCreateLotNode private constructor(

@@ -1,4 +1,4 @@
-package ru.zveron.create_lot.categories
+package ru.zveron.create_lot.categories_step
 
 import android.util.Log
 import kotlinx.coroutines.CancellationException
