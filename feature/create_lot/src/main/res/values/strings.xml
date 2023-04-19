@@ -12,4 +12,5 @@
     <string name="continue_button_title">Далее</string>
 
     <string name="categories_title">Выберите категорию</string>
+    <string name="lot_form_title">Вид объявления</string>
 </resources>

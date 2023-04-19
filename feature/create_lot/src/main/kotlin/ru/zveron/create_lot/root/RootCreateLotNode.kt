@@ -10,11 +10,12 @@ import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.push
 import kotlinx.parcelize.Parcelize
 import ru.zveron.appyx.viewmodel.ViewModelParentNode
-import ru.zveron.categories.CategoriesStepNavigator
+import ru.zveron.create_lot.categories.CategoriesStepNavigator
 import ru.zveron.choose_item.ChooseItemNode
 import ru.zveron.create_lot.R
 import ru.zveron.create_lot.general_step.GeneralStepNavigator
 import ru.zveron.create_lot.general_step.GeneralStepNode
+import ru.zveron.create_lot.lot_form.LotFormStepNavigator
 import ru.zveron.design.resources.ZveronText
 
 class RootCreateLotNode private constructor(
@@ -28,9 +29,13 @@ class RootCreateLotNode private constructor(
     buildContext = buildContext,
     navModel = backStack,
     plugins = listOf(component),
-), GeneralStepNavigator, CategoriesStepNavigator {
+), GeneralStepNavigator, CategoriesStepNavigator, LotFormStepNavigator {
     private val categoriesItemProvider by lazy {
         component.getCategoriesItemProvider(this)
+    }
+
+    private val lotFormItemProvider by lazy {
+        component.getLotFormItemProvider(this)
     }
 
     constructor(buildContext: BuildContext) : this(
@@ -48,6 +53,9 @@ class RootCreateLotNode private constructor(
 
         @Parcelize
         object CategoriesStep : NavTarget()
+
+        @Parcelize
+        object LotFormStep : NavTarget()
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -62,6 +70,12 @@ class RootCreateLotNode private constructor(
                 buildContext,
                 ZveronText.RawResource(R.string.categories_title),
                 categoriesItemProvider,
+            )
+
+            NavTarget.LotFormStep -> ChooseItemNode(
+                buildContext,
+                ZveronText.RawResource(R.string.lot_form_title),
+                lotFormItemProvider,
             )
         }
     }
@@ -81,6 +95,11 @@ class RootCreateLotNode private constructor(
     }
 
     override fun completeCategoriesStep() {
+        lotFormItemProvider.launchLotFormLoad()
+        backStack.push(NavTarget.LotFormStep)
+    }
+
+    override fun completeLotFormStep() {
         TODO("Not yet implemented")
     }
 }
