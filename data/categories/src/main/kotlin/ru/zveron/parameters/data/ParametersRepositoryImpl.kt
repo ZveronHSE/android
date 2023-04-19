@@ -1,20 +1,20 @@
-package ru.zveron.lots_feed.parameters.data
+package ru.zveron.parameters.data
 
-import ru.zveron.lots_feed.models.parameters.Parameter
+import ru.zveron.models.parameters.Parameter
 
-internal class ParametersRepository(
+internal class ParametersRepositoryImpl(
     private val parametersSource: ParametersSource,
     private val parametersLocalCache: ParametersLocalCache,
-) {
+): ParametersRepository {
 
     /**
      * NOT SAFE TO CALL, USE WITH CAUTION
      */
-    fun getParameterById(parameterId: Int): Parameter {
+    override fun getParameterById(parameterId: Int): Parameter {
         return parametersLocalCache.getParameterById(parameterId)!!
     }
 
-    suspend fun loadParameters(categoryId: Int, lotFormId: Int): List<Parameter> {
+    override suspend fun loadParameters(categoryId: Int, lotFormId: Int): List<Parameter> {
         val parameters = parametersSource
             .loadParameters(categoryId, lotFormId)
             // TODO: remove this when adding support for multiple parameters types

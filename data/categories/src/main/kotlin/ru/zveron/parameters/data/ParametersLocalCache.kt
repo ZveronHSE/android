@@ -1,8 +1,8 @@
-package ru.zveron.lots_feed.parameters.data
+package ru.zveron.parameters.data
 
-import ru.zveron.lots_feed.models.parameters.Parameter
+import ru.zveron.models.parameters.Parameter
 
-internal class ParametersLocalCache {
+class ParametersLocalCache {
     private val cachedCategories = mutableSetOf<Parameter>()
 
     fun cacheParameters(parameters: List<Parameter>) {

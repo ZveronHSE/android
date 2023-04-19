@@ -16,10 +16,6 @@ import ru.zveron.lots_feed.filters_screen.data.parameters.FiltersSelectedParamet
 import ru.zveron.lots_feed.filters_screen.data.sort_types.FiltersSelectedSortTypeRepository
 import ru.zveron.lots_feed.filters_screen.domain.PassDataToFeedInteractor
 import ru.zveron.lots_feed.filters_screen.domain.PassDataToFeedInteractorImpl
-import ru.zveron.lots_feed.parameters.data.ParametersGrpcSource
-import ru.zveron.lots_feed.parameters.data.ParametersMockSource
-import ru.zveron.lots_feed.parameters.data.ParametersRepository
-import ru.zveron.lots_feed.parameters.data.ParametersSource
 import ru.zveron.lots_feed.filters_screen.domain.categories.ChildCategoryItemProvider
 import ru.zveron.lots_feed.filters_screen.domain.categories.FiltersSetSelectedCategoryInteractor
 import ru.zveron.lots_feed.filters_screen.domain.categories.FiltersUpdateCategoriesInteractor
@@ -38,7 +34,7 @@ import ru.zveron.lot_forms.data.LotFormLocalSource
 import ru.zveron.lot_forms.data.LotFormMockSource
 import ru.zveron.lot_forms.data.LotFormRepository
 import ru.zveron.lot_forms.data.LotFormSource
-import ru.zveron.lots_feed.parameters.data.ParametersLocalCache
+import ru.zveron.parameters.data.ParametersLocalCache
 
 val filtersModule = module {
     scope<FiltersComponent> {
@@ -95,17 +91,6 @@ val filtersModule = module {
     singleOf(::FiltersParameterItemProviderFactory)
 
     singleOf(::FiltersParametersLoadingRepository)
-
-    singleOf(::ParametersRepository)
-    singleOf(::ParametersGrpcSource)
-    singleOf(::ParametersMockSource)
-    single<ParametersSource> {
-        if (BuildConfig.useDebugMocks) {
-            get<ParametersMockSource>()
-        } else {
-            get<ParametersGrpcSource>()
-        }
-    }
     // endregion
 
     singleOf(::FiltersSelectedSortTypeRepository)

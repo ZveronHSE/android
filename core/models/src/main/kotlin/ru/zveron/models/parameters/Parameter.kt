@@ -1,4 +1,4 @@
-package ru.zveron.lots_feed.models.parameters
+package ru.zveron.models.parameters
 
 data class Parameter(
     val id: Int,

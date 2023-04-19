@@ -16,10 +16,10 @@ import ru.zveron.lots_feed.filters_screen.FiltersNavigator
 import ru.zveron.lots_feed.filters_screen.data.categories.FiltersSelectedCategoryRepository
 import ru.zveron.lots_feed.filters_screen.data.parameters.FiltersParametersLoadingRepository
 import ru.zveron.lots_feed.filters_screen.data.parameters.FiltersSelectedParametersRepository
-import ru.zveron.lots_feed.filters_screen.data.parameters.ParameterState
+import ru.zveron.parameters.ParameterState
 import ru.zveron.lots_feed.filters_screen.domain.parameters.FiltersParameterItemProviderFactory
 import ru.zveron.lots_feed.filters_screen.domain.parameters.FiltersUpdateParametersInteractor
-import ru.zveron.lots_feed.parameters.data.ParametersRepository
+import ru.zveron.parameters.data.ParametersRepository
 
 internal class FiltersViewModel(
     private val filtersUpdateParametersInteractor: FiltersUpdateParametersInteractor,

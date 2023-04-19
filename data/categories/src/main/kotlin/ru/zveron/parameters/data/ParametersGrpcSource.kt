@@ -1,10 +1,10 @@
-package ru.zveron.lots_feed.parameters.data
+package ru.zveron.parameters.data
 
 import ru.zveron.contract.parameter.external.ParameterRequest
 import ru.zveron.contract.parameter.external.parameterRequest
 import ru.zveron.contract.parameter.model.ParameterResponse
-import ru.zveron.lots_feed.mappings.toDomainModel
-import ru.zveron.lots_feed.models.parameters.Parameter
+import ru.zveron.models.mappings.toDomainModel
+import ru.zveron.models.parameters.Parameter
 import ru.zveron.network.ApigatewayDelegate
 
 private const val PARAMETER_METHOD_NAME = "parametersGet"

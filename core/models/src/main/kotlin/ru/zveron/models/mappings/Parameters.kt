@@ -1,9 +1,9 @@
-package ru.zveron.lots_feed.mappings
+package ru.zveron.models.mappings
 
 import ru.zveron.contract.parameter.model.Parameter
 import ru.zveron.contract.parameter.model.Type
-import ru.zveron.lots_feed.models.parameters.Parameter as DomainParameter
-import ru.zveron.lots_feed.models.parameters.ParameterType
+import ru.zveron.models.parameters.Parameter as DomainParameter
+import ru.zveron.models.parameters.ParameterType
 
 fun Parameter.toDomainModel(): DomainParameter {
     return DomainParameter(

@@ -15,6 +15,7 @@ import ru.zveron.lots_feed.filters_screen.filtersModule
 import ru.zveron.main_screen.bottom_navigation.lots_feed_backstack.lotsFeedBackStackModule
 import ru.zveron.main_screen.mainScreenModule
 import ru.zveron.network.apigatewayModule
+import ru.zveron.parameters.di.parametersModule
 import ru.zveron.platform.platformModule
 import ru.zveron.user_lots.userLotsModule
 
@@ -28,6 +29,7 @@ internal val appModule = module {
 
         favoritesDataModule,
         imageStorageModule,
+        parametersModule,
 
         socialsModule,
         rootPhoneModule,

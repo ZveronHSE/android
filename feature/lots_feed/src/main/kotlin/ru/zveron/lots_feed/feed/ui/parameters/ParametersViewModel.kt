@@ -18,8 +18,8 @@ import ru.zveron.lots_feed.feed.data.parameters.ParametersLoadingRepository
 import ru.zveron.lots_feed.feed.data.parameters.SelectedParametersRepository
 import ru.zveron.lots_feed.feed.domain.UpdateParametersInteractorImpl
 import ru.zveron.lots_feed.feed.domain.parameters.ParameterItemProviderFactory
-import ru.zveron.lots_feed.filters_screen.data.parameters.ParameterState
-import ru.zveron.lots_feed.parameters.data.ParametersRepository
+import ru.zveron.parameters.ParameterState
+import ru.zveron.parameters.data.ParametersRepository
 
 internal class ParametersViewModel(
     selectedCategoriesInteractor: SelectedCategoriesInteractor,

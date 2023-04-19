@@ -1,8 +1,8 @@
-package ru.zveron.lots_feed.parameters.data
+package ru.zveron.parameters.data
 
 import kotlinx.coroutines.delay
-import ru.zveron.lots_feed.models.parameters.Parameter
-import ru.zveron.lots_feed.models.parameters.ParameterType
+import ru.zveron.models.parameters.Parameter
+import ru.zveron.models.parameters.ParameterType
 
 internal class ParametersMockSource: ParametersSource {
     override suspend fun loadParameters(categoryId: Int, lotFormId: Int): List<Parameter> {
