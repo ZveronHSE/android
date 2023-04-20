@@ -192,7 +192,6 @@ private fun RootCategoriesSuccess(
                 title = ZveronText.RawString(rootCategory.name),
                 isActive = rootCategory.id == selectedRootCategoryId,
                 onClick = clicker,
-                showArrow = false,
             )
         }
     }

@@ -44,6 +44,7 @@ import ru.zveron.authorization.phone.registration.ui.RegistrationViewModel
 import ru.zveron.design.components.ActionButton
 import ru.zveron.design.shimmering.shimmeringBackground
 import ru.zveron.design.theme.ZveronTheme
+import ru.zveron.design.R as DesignR
 
 internal class RegistrationNode(
     private val sessionId: String,
@@ -115,7 +116,7 @@ private fun Registration(
                 .padding(top = 16.dp, start = 4.dp),
         ) {
             Icon(
-                painter = painterResource(R.drawable.ic_back),
+                painter = painterResource(DesignR.drawable.ic_back),
                 // TODO: fix accessibility
                 contentDescription = null,
             )

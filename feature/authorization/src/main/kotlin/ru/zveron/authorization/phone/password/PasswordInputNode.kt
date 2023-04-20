@@ -43,6 +43,7 @@ import org.koin.core.parameter.parametersOf
 import org.koin.core.scope.Scope
 import ru.zveron.appyx.viewmodel.ViewModelNode
 import ru.zveron.authorization.R
+import ru.zveron.design.R as DesignR
 import ru.zveron.authorization.phone.password.deps.PasswordNavigator
 import ru.zveron.authorization.phone.password.ui.PasswordUiState
 import ru.zveron.authorization.phone.password.ui.PasswordViewModel
@@ -128,7 +129,7 @@ private fun PasswordInput(
                 .padding(top = 16.dp, start = 4.dp),
         ) {
             Icon(
-                painter = painterResource(R.drawable.ic_back),
+                painter = painterResource(DesignR.drawable.ic_back),
                 // TODO: fix accessibility
                 contentDescription = null,
             )
@@ -233,9 +234,11 @@ private fun PasswordInput(
             )
 
             if (state.isLoading) {
-                Box(modifier = Modifier
-                    .fillMaxSize()
-                    .shimmeringBackground(this.maxWidth))
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .shimmeringBackground(this.maxWidth)
+                )
             }
         }
     }

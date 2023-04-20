@@ -13,4 +13,10 @@
 
     <string name="categories_title">Выберите категорию</string>
     <string name="lot_form_title">Вид объявления</string>
+
+    <string name="description_step_title">Опишите товар</string>
+    <string name="description_input_label">Описание</string>
+    <string name="description_input_placeholder">Опишите товар как можно подробнее…</string>
+    <string name="parameters_label">Дополнительная информация</string>
+
 </resources>

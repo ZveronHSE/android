@@ -5,16 +5,21 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import ru.zveron.design.components.LoadingChip
 import ru.zveron.favorites.ui.state.FavoritesCategoriesUiState
 import androidx.compose.runtime.remember
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import ru.zveron.design.R
 import ru.zveron.design.components.Chip
 import ru.zveron.design.resources.ZveronText
 import ru.zveron.design.theme.ZveronTheme
+import ru.zveron.design.theme.gray1
+import ru.zveron.design.theme.gray5
 import ru.zveron.favorites.ui.state.CategoryUiState
 
 @Composable
@@ -39,10 +44,21 @@ internal fun SelectorRow(
                         { onCategoryClick.invoke(category.id) }
                     }
 
+                    val isActive = category.id == categoriesUiState.selectedCategoryId
+
                     Chip(
                         title = ZveronText.RawString(category.title),
                         onClick = clicker,
                         isActive = category.id == categoriesUiState.selectedCategoryId,
+                        trailSlot = {
+                            val textColor = if (isActive) gray1 else gray5
+
+                            Icon(
+                                painter = painterResource(R.drawable.ic_down_triangle),
+                                contentDescription = null,
+                                tint = textColor,
+                            )
+                        },
                     )
                 }
             }
