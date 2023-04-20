@@ -11,7 +11,7 @@ sealed class ParametersUiState {
 }
 
 data class ParameterUiState(
-    val id: Long,
+    val id: Int,
     val title: String,
     val selected: Boolean,
 )

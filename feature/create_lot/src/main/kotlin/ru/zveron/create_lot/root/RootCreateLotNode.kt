@@ -61,6 +61,9 @@ class RootCreateLotNode private constructor(
 
         @Parcelize
         object DetailsStep: NavTarget()
+
+        @Parcelize
+        data class PickParameterValue(val id: Int, val parameterName: String): NavTarget()
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -90,6 +93,13 @@ class RootCreateLotNode private constructor(
                 component.scope,
                 this,
             )
+
+            is NavTarget.PickParameterValue -> ChooseItemNode(
+                buildContext,
+                ZveronText.RawString(navTarget.parameterName),
+                component.getParametersItemProvider(navTarget.id),
+                removeOnItemPick = true,
+            )
         }
     }
 
@@ -117,5 +127,9 @@ class RootCreateLotNode private constructor(
 
     override fun completeDetailsStep() {
         TODO("Not yet implemented")
+    }
+
+    override fun pickParameterValue(id: Int, parameterName: String) {
+        backStack.push(NavTarget.PickParameterValue(id, parameterName))
     }
 }

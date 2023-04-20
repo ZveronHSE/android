@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -49,7 +50,7 @@ internal fun DetailsStep(
     setDescription: (String) -> Unit,
     modifier: Modifier = Modifier,
     onBackClicked: () -> Unit = {},
-    onParameterClick: (Long) -> Unit = {},
+    onParameterClick: (Int) -> Unit = {},
     onContinueButtonClick: () -> Unit = {},
 ) {
     Column(modifier = modifier.padding(top = 16.dp)) {
@@ -155,7 +156,7 @@ private fun DetailsDescriptionInput(
 @Composable
 private fun DetailsParameters(
     parametersUiState: ParametersUiState,
-    onParameterClick: (Long) -> Unit = {},
+    onParameterClick: (Int) -> Unit = {},
 ) {
     Text(
         text = stringResource(R.string.parameters_label),
@@ -168,12 +169,10 @@ private fun DetailsParameters(
 
     Spacer(Modifier.height(16.dp))
 
-    val modifier = Modifier.padding(start = 16.dp)
     when (parametersUiState) {
-        ParametersUiState.Loading -> DetailsParametersLoading(modifier)
+        ParametersUiState.Loading -> DetailsParametersLoading()
         is ParametersUiState.Success -> DetailsParametersSuccess(
             parametersUiState = parametersUiState,
-            modifier = modifier,
             onParameterClick = onParameterClick,
         )
     }
@@ -187,9 +186,13 @@ private fun DetailsParametersLoading(
         horizontalArrangement = Arrangement.spacedBy(10.dp),
         modifier = modifier,
     ) {
+        item { Spacer(Modifier.width(6.dp)) }
+
         items(3) {
             LoadingChip(width = 100.dp)
         }
+
+        item { Spacer(Modifier.width(6.dp)) }
     }
 }
 
@@ -197,12 +200,14 @@ private fun DetailsParametersLoading(
 private fun DetailsParametersSuccess(
     parametersUiState: ParametersUiState.Success,
     modifier: Modifier = Modifier,
-    onParameterClick: (Long) -> Unit = {},
+    onParameterClick: (Int) -> Unit = {},
 ) {
     LazyRow(
         horizontalArrangement = Arrangement.spacedBy(10.dp),
         modifier = modifier,
     ) {
+        item { Spacer(Modifier.width(6.dp)) }
+
         items(parametersUiState.parameters.list, { it.id }) { parameter ->
             val clicker = remember {
                 { onParameterClick.invoke(parameter.id) }
@@ -223,6 +228,8 @@ private fun DetailsParametersSuccess(
                 },
             )
         }
+
+        item { Spacer(Modifier.width(6.dp)) }
     }
 }
 
