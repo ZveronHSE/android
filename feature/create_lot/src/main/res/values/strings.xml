@@ -19,4 +19,9 @@
     <string name="description_input_placeholder">Опишите товар как можно подробнее…</string>
     <string name="parameters_label">Дополнительная информация</string>
 
+    <string name="price_header">Укажите цену</string>
+    <string name="price_input_label">Цена</string>
+    <string name="price_input_placeholder">₽</string>
+    <string name="price_input_format">₽</string>
+    <string name="negotiate_price">Цена договорная</string>
 </resources>

@@ -18,6 +18,8 @@ import ru.zveron.create_lot.details_step.DetailsStepNode
 import ru.zveron.create_lot.general_step.GeneralStepNavigator
 import ru.zveron.create_lot.general_step.GeneralStepNode
 import ru.zveron.create_lot.lot_form_step.LotFormStepNavigator
+import ru.zveron.create_lot.price_step.PriceStepNavigator
+import ru.zveron.create_lot.price_step.PriceStepNode
 import ru.zveron.design.resources.ZveronText
 
 class RootCreateLotNode private constructor(
@@ -31,7 +33,8 @@ class RootCreateLotNode private constructor(
     buildContext = buildContext,
     navModel = backStack,
     plugins = listOf(component),
-), GeneralStepNavigator, CategoriesStepNavigator, LotFormStepNavigator, DetailsStepNavigator {
+), GeneralStepNavigator, CategoriesStepNavigator, LotFormStepNavigator, DetailsStepNavigator,
+    PriceStepNavigator {
     private val categoriesItemProvider by lazy {
         component.getCategoriesItemProvider(this)
     }
@@ -60,10 +63,13 @@ class RootCreateLotNode private constructor(
         object LotFormStep : NavTarget()
 
         @Parcelize
-        object DetailsStep: NavTarget()
+        object DetailsStep : NavTarget()
 
         @Parcelize
-        data class PickParameterValue(val id: Int, val parameterName: String): NavTarget()
+        data class PickParameterValue(val id: Int, val parameterName: String) : NavTarget()
+
+        @Parcelize
+        object PriceStep : NavTarget()
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -100,6 +106,12 @@ class RootCreateLotNode private constructor(
                 component.getParametersItemProvider(navTarget.id),
                 removeOnItemPick = true,
             )
+
+            NavTarget.PriceStep -> PriceStepNode(
+                buildContext,
+                component.scope,
+                this,
+            )
         }
     }
 
@@ -126,10 +138,14 @@ class RootCreateLotNode private constructor(
     }
 
     override fun completeDetailsStep() {
-        TODO("Not yet implemented")
+        backStack.push(NavTarget.PriceStep)
     }
 
     override fun pickParameterValue(id: Int, parameterName: String) {
         backStack.push(NavTarget.PickParameterValue(id, parameterName))
+    }
+
+    override fun completePriceStep() {
+        TODO("Not yet implemented")
     }
 }

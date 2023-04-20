@@ -21,7 +21,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import ru.zveron.design.selectors.Selector
+import ru.zveron.design.selectors.RadioSelector
 import ru.zveron.design.theme.blackWithAlpha02
 import ru.zveron.lots_feed.R
 import ru.zveron.lots_feed.feed.ui.SortType
@@ -62,7 +62,7 @@ fun SortTypes(
                     horizontalArrangement = Arrangement.spacedBy(4.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Selector(
+                    RadioSelector(
                         selected = isSelected,
                         onClick = clicker,
                     )

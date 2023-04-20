@@ -13,6 +13,7 @@ import ru.zveron.create_lot.details_step.domain.ParametersItemProviderFactory
 import ru.zveron.create_lot.domain.LotCreateUploadPhotoInteractor
 import ru.zveron.create_lot.general_step.generalStepModule
 import ru.zveron.create_lot.lot_form_step.LotFormItemProvider
+import ru.zveron.create_lot.price_step.priceStepModule
 
 val rootCreateLotModule = module {
     scope<RootCreateLotComponent> {
@@ -32,5 +33,6 @@ val rootCreateLotModule = module {
     includes(
         generalStepModule,
         detailsStepModule,
+        priceStepModule,
     )
 }
