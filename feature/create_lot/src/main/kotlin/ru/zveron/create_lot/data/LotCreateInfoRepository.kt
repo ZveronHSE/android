@@ -11,6 +11,8 @@ internal class LotCreateInfoRepository {
 
     private var lotForm: LotForm? = null
 
+    private var price: Int? = null
+
     private val _selectedParametersState = MutableStateFlow<Map<Int, String>>(emptyMap())
     val selectedParametersState = _selectedParametersState.asStateFlow()
 
@@ -39,7 +41,7 @@ internal class LotCreateInfoRepository {
         }
     }
 
-    fun getParameterValue(id: Int): String? {
-        return _selectedParametersState.value[id]
+    fun setPrice(price: Int) {
+        this.price = price
     }
 }
