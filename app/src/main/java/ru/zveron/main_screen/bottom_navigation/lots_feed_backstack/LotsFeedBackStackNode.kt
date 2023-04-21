@@ -12,6 +12,7 @@ import kotlinx.parcelize.Parcelize
 import ru.zveron.appyx.viewmodel.ViewModelParentNode
 import ru.zveron.choose_item.ChooseItemNode
 import ru.zveron.design.resources.ZveronText
+import ru.zveron.lot_card.LotCardNavigator
 import ru.zveron.lot_card.LotCardNode
 import ru.zveron.lot_card.LotCardParams
 import ru.zveron.lots_feed.feed.LotsFeedNavigator
@@ -33,7 +34,7 @@ class LotsFeedBackStackNode(
     buildContext = buildContext,
     navModel = backstack,
     plugins = listOf(lotsFeedBackStackComponent),
-), LotsFeedNavigator, FiltersNavigator {
+), LotsFeedNavigator, FiltersNavigator, LotCardNavigator {
     sealed class NavTarget: Parcelable {
         @Parcelize
         object RootCategory: NavTarget()
@@ -71,6 +72,7 @@ class LotsFeedBackStackNode(
             is NavTarget.LotCard -> LotCardNode(
                 buildContext,
                 navTarget.params,
+                this,
             )
         }
     }
@@ -101,5 +103,9 @@ class LotsFeedBackStackNode(
 
     override fun startAuthorization() {
         lotsFeedBackStackNavigator.goToAuthorization()
+    }
+
+    override fun goToSeller(id: Long) {
+        lotsFeedBackStackNavigator.goToLot(id)
     }
 }

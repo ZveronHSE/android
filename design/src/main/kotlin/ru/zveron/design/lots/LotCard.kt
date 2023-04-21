@@ -70,6 +70,7 @@ fun LotCard(
         elevation = 8.dp,
         modifier = modifier
             .fillMaxWidth()
+            .height(220.dp)
             .clickable(onClick = onCardClick),
     ) {
         Column(modifier.fillMaxWidth()) {
@@ -120,7 +121,7 @@ fun LotCard(
                 )
             )
 
-            Spacer(Modifier.height(12.dp))
+            Spacer(Modifier.weight(1f))
 
             Text(
                 date,
@@ -165,7 +166,7 @@ internal fun LotCardGridPreview() {
         ) {
             for(i in 0..3) {
                 item {
-                    SampleCard(isLiked = i % 2 == 0)
+                    SampleCard(isLiked = i % 2 == 0, isLong = i % 2 == 1,)
                 }
             }
         }
@@ -173,10 +174,12 @@ internal fun LotCardGridPreview() {
 }
 
 @Composable
-private fun SampleCard(modifier: Modifier = Modifier, isLiked: Boolean = true) {
+private fun SampleCard(modifier: Modifier = Modifier, isLiked: Boolean = true, isLong: Boolean = false) {
+    val text = if (isLong) "Победительница выставки в ..., отдам котят" else "Шапочка банан"
+    
     LotCard(
         zveronImage = ZveronImage.ResourceImage(R.drawable.cool_dog),
-        title = "Продам щенков Корги. 2 месяца",
+        title = text,
         price = "20 000 ₽",
         date = "сегодня",
         isLiked = isLiked,

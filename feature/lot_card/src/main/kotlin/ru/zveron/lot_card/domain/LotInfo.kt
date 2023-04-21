@@ -26,6 +26,7 @@ data class Parameter(
 )
 
 data class Seller(
+    val id: Long,
     val name: String,
     val avatarUrl: String,
     val rating: Double,

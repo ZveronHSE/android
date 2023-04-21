@@ -15,6 +15,7 @@ sealed class LotCardUiState {
         val address: String,
         val tags: List<LotCardTag>,
         val description: String,
+        val sellerId: Long,
         val sellerAvatar: ZveronImage,
         val sellerName: String,
         val rating: Int,

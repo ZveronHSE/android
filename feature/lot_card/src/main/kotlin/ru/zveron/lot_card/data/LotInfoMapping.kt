@@ -79,6 +79,7 @@ private fun GrpcCommunicationChannel.toDomainCommunicationChannel(): Communicati
 
 fun GrpcSeller.toDomainSeller(): Seller {
     return Seller(
+        id = this.id,
         name = "${this.name} ${this.surname}",
         avatarUrl = this.imageUrl,
         rating = this.rating,

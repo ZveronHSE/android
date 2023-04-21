@@ -128,6 +128,10 @@ internal class MainScreen(
         mainScreenNavigator.pickItem(title)
     }
 
+    override fun goToSeller(id: Long) {
+        mainScreenNavigator.goToSeller(id)
+    }
+
     override fun createUserLot() {
         mainScreenNavigator.createLot()
     }

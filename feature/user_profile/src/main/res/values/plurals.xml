@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="review_format">
+        <item quantity="one">%1$s отзыв</item>
+        <item quantity="few">%1$s отзыва</item>
+        <item quantity="many">%1$s отзывов</item>
+        <item quantity="other">%1$s отзывов</item>
+    </plurals>
+</resources>

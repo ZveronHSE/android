@@ -71,10 +71,17 @@ internal fun LotCard(
     modifier: Modifier = Modifier,
     onBackClicked: () -> Unit = {},
     onActionClick: (CommunicationAction) -> Unit = {},
+    onSellerClick: (Long) -> Unit = {},
 ) {
-    when(state) {
+    when (state) {
         LotCardUiState.Loading -> LotCardLoading(modifier, onBackClicked)
-        is LotCardUiState.Success -> LotCardSuccess(state, modifier, onBackClicked, onActionClick)
+        is LotCardUiState.Success -> LotCardSuccess(
+            state,
+            modifier,
+            onBackClicked,
+            onActionClick,
+            onSellerClick,
+        )
     }
 }
 
@@ -103,12 +110,14 @@ private fun LotCardSuccess(
     modifier: Modifier = Modifier,
     onBackClicked: () -> Unit = {},
     onActionClick: (CommunicationAction) -> Unit = {},
+    onSellerClick: (Long) -> Unit = {},
 ) {
     Column(modifier = modifier.background(MaterialTheme.colors.surface)) {
         LotCardContent(
             state = state,
             modifier = Modifier.weight(1f),
             onBackClicked = onBackClicked,
+            onSellerClick = onSellerClick,
         )
 
         LotCardBottomButtons(
@@ -124,6 +133,7 @@ internal fun LotCardContent(
     state: LotCardUiState.Success,
     modifier: Modifier = Modifier,
     onBackClicked: () -> Unit = {},
+    onSellerClick: (Long) -> Unit = {},
 ) {
     LazyColumn(
         modifier = modifier
@@ -186,7 +196,10 @@ internal fun LotCardContent(
                 sellerName = state.sellerName,
                 rating = state.rating,
                 maxRating = state.maxRating,
-                modifier = Modifier.padding(horizontal = 16.dp)
+                modifier = Modifier.padding(horizontal = 16.dp),
+                onAuthorClick = {
+                    onSellerClick.invoke(state.sellerId)
+                }
             )
 
             Spacer(Modifier.height(38.dp))
@@ -477,6 +490,7 @@ private fun LotCardSeller(
     rating: Int,
     maxRating: Int,
     modifier: Modifier = Modifier,
+    onAuthorClick: () -> Unit = {},
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -485,7 +499,8 @@ private fun LotCardSeller(
             .fillMaxWidth()
             .clip(RoundedCornerShape(24.dp))
             .background(gray1)
-            .padding(16.dp),
+            .padding(16.dp)
+            .clickable(onClick = onAuthorClick),
     ) {
         ZveronImage(
             zveronImage = avatarImage,
@@ -581,6 +596,7 @@ private fun LotCardPreview() {
             LotCardTag("Окрас", "Бежевый"),
         ),
         description = "С другой стороны, перспективное планирование предопределяет высокую востребованность своевременного выполнения сверхзадачи. Банальные, но неопровержимые выводы, а также стремящиеся вытеснить...",
+        sellerId = 1,
         sellerAvatar = ZveronImage.ResourceImage(DesignR.drawable.person_avatar),
         sellerName = "Гигачад",
         rating = 4,
