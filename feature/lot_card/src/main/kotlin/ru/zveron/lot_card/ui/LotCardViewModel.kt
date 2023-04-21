@@ -87,6 +87,10 @@ class LotCardViewModel(
         }
     }
 
+    fun retry() {
+        loadLot()
+    }
+
     private fun loadLot() {
         viewModelScope.launch {
             try {
@@ -97,6 +101,7 @@ class LotCardViewModel(
                 throw e
             } catch (e: Exception) {
                 Log.d("Lot card", "Error loading lot", e)
+                _uiState.update { LotCardUiState.Error }
             }
         }
     }

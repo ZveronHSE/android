@@ -7,4 +7,6 @@
     <string name="ended_tab" translatable="false">Завершённые</string>
     <string name="call_action" translatable="false">Позвонить</string>
     <string name="chat_action" translatable="false">Написать</string>
+    <string name="user_profile_error_title" translatable="false">Не удалось загрузить профиль</string>
+    <string name="user_profile_error_retry_title" translatable="false">Попробовать еще раз</string>
 </resources>

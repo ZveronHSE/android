@@ -36,6 +36,7 @@ internal class UserProfileViewModel(
     private fun launchLoadProfile() {
         viewModelScope.launch {
             try {
+                _uiState.update { UserProfileUiState.Loading }
                 val profile = userProfileRepository.getUserProfilePage(params.id)
                 val activeLots = ListWrapper(profile.activeLots.map { mapLot(it) })
                 val closedLots = ListWrapper(profile.closedLots.map { mapLot(it) })
@@ -61,6 +62,7 @@ internal class UserProfileViewModel(
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Exception) {
+                _uiState.update { UserProfileUiState.Error }
                 Log.e("User profile", "Error loading profile", e)
             }
         }
@@ -98,7 +100,7 @@ internal class UserProfileViewModel(
     fun onLotLikeClick(lotId: Long) {
         val lotUiState = when (val state = _uiState.value) {
             is UserProfileUiState.Success -> state.currentLots.list.find { it.id == lotId }
-            UserProfileUiState.Loading -> null
+            else -> null
         } ?: return
 
         val newLikeStatus = !lotUiState.isLiked.value
@@ -125,5 +127,9 @@ internal class UserProfileViewModel(
 
     fun onReviewsClick() {
 
+    }
+
+    fun retry() {
+        launchLoadProfile()
     }
 }

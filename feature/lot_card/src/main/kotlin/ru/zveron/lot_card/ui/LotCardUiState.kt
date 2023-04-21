@@ -6,7 +6,10 @@ import ru.zveron.design.resources.ZveronImage
 import ru.zveron.design.resources.ZveronText
 import ru.zveron.lot_card.domain.Gender
 
+@Immutable
 sealed class LotCardUiState {
+    object Error: LotCardUiState()
+
     object Loading: LotCardUiState()
 
     data class Success(

@@ -10,6 +10,8 @@ import ru.zveron.user_profile.R
 
 @Stable
 sealed class UserProfileUiState {
+    object Error: UserProfileUiState()
+
     object Loading: UserProfileUiState()
 
     @Stable

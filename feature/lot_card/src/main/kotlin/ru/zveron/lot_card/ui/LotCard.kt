@@ -47,8 +47,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
+import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -60,6 +62,7 @@ import ru.zveron.design.theme.ZveronTheme
 import ru.zveron.design.theme.blackWithAlpha05
 import ru.zveron.design.theme.enabledButtonGradient
 import ru.zveron.design.theme.gray1
+import ru.zveron.design.theme.gray3
 import ru.zveron.design.theme.gray5
 import ru.zveron.lot_card.domain.Gender
 import ru.zveron.lots_card.R
@@ -72,6 +75,7 @@ internal fun LotCard(
     onBackClicked: () -> Unit = {},
     onActionClick: (CommunicationAction) -> Unit = {},
     onSellerClick: (Long) -> Unit = {},
+    onRetryClicked: () -> Unit = {},
 ) {
     when (state) {
         LotCardUiState.Loading -> LotCardLoading(modifier, onBackClicked)
@@ -82,6 +86,61 @@ internal fun LotCard(
             onActionClick,
             onSellerClick,
         )
+        LotCardUiState.Error -> LotCardError(modifier, onBackClicked, onRetryClicked)
+    }
+}
+
+@OptIn(ExperimentalTextApi::class)
+@Composable
+private fun LotCardError(
+    modifier: Modifier = Modifier,
+    onBackClicked: () -> Unit = {},
+    onRetryClicked: () -> Unit = {},
+) {
+    Column(
+        modifier = modifier.padding(top = 16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        LotCardTopBar(onBackClicked = onBackClicked)
+
+        Spacer(Modifier.weight(1f))
+
+        Icon(
+            painterResource(ru.zveron.design.R.drawable.ic_warning),
+            contentDescription = null,
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+        )
+
+        Text(
+            text = stringResource(R.string.lot_card_error_title),
+            style = TextStyle(
+                fontWeight = FontWeight.Normal,
+                fontSize = 16.sp,
+                color = gray3,
+            ),
+            textAlign = TextAlign.Center,
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+        )
+
+        Spacer(Modifier.height(24.dp))
+
+        Text(
+            text = stringResource(R.string.lot_card_error_retry_title),
+            style = TextStyle(
+                brush = enabledButtonGradient,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Light,
+            ),
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .clickable(
+                    role = Role.Button,
+                    onClickLabel = stringResource(R.string.lot_card_error_retry_title),
+                    onClick = onRetryClicked,
+                ),
+        )
+
+        Spacer(Modifier.weight(2f))
     }
 }
 
@@ -609,6 +668,26 @@ private fun LotCardPreview() {
     )
 
     ZveronTheme {
-        LotCardSuccess(state, Modifier.fillMaxSize())
+        LotCard(state, Modifier.fillMaxSize())
+    }
+}
+
+@Composable
+@Preview(showBackground = true)
+private fun LotCardLoadingPreview() {
+    val state = LotCardUiState.Loading
+
+    ZveronTheme {
+        LotCard(state, Modifier.fillMaxSize())
+    }
+}
+
+@Composable
+@Preview(showBackground = true)
+private fun LotCardErrorPreview() {
+    val state = LotCardUiState.Error
+
+    ZveronTheme {
+        LotCard(state, Modifier.fillMaxSize())
     }
 }

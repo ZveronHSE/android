@@ -36,6 +36,7 @@ class UserProfileNode(
             onLotLikeClick = viewModel::onLotLikeClick,
             onTabClick = viewModel::onTabClick,
             onReviewsClick = viewModel::onReviewsClick,
+            onRetryClicked = viewModel::retry,
         )
     }
 }

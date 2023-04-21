@@ -53,6 +53,7 @@ class LotCardNode(
             onBackClicked = ::navigateUp,
             onActionClick = viewmodel::onActionClicked,
             onSellerClick = viewmodel::onSellerClicked,
+            onRetryClicked = viewmodel::retry,
         )
     }
 

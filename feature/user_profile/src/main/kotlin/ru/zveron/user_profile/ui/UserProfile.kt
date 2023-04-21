@@ -31,9 +31,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -44,6 +47,7 @@ import ru.zveron.design.resources.ZveronImage
 import ru.zveron.design.resources.ZveronText
 import ru.zveron.design.theme.ZveronTheme
 import ru.zveron.design.theme.enabledButtonGradient
+import ru.zveron.design.theme.gray3
 import ru.zveron.design.wrappers.ListWrapper
 import ru.zveron.user_profile.R
 import ru.zveron.design.R as DesignR
@@ -57,6 +61,7 @@ internal fun UserProfile(
     onLotLikeClick: (Long) -> Unit = {},
     onTabClick: (UserProfileTab) -> Unit = {},
     onReviewsClick: () -> Unit = {},
+    onRetryClicked: () -> Unit = {},
 ) {
     Column(
         modifier = modifier
@@ -85,8 +90,55 @@ internal fun UserProfile(
                 onLotLikeClick = onLotLikeClick,
                 onReviewsClick = onReviewsClick,
             )
+
+            UserProfileUiState.Error -> LotCardError(onRetryClicked)
         }
     }
+}
+
+@OptIn(ExperimentalTextApi::class)
+@Composable
+private fun ColumnScope.LotCardError(
+    onRetryClicked: () -> Unit = {},
+) {
+    Spacer(Modifier.weight(1f))
+
+    Icon(
+        painterResource(ru.zveron.design.R.drawable.ic_warning),
+        contentDescription = null,
+        modifier = Modifier.align(Alignment.CenterHorizontally),
+    )
+
+    Text(
+        text = stringResource(R.string.user_profile_error_title),
+        style = TextStyle(
+            fontWeight = FontWeight.Normal,
+            fontSize = 16.sp,
+            color = gray3,
+        ),
+        textAlign = TextAlign.Center,
+        modifier = Modifier.align(Alignment.CenterHorizontally),
+    )
+
+    Spacer(Modifier.height(24.dp))
+
+    Text(
+        text = stringResource(R.string.user_profile_error_retry_title),
+        style = TextStyle(
+            brush = enabledButtonGradient,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Light,
+        ),
+        modifier = Modifier
+            .align(Alignment.CenterHorizontally)
+            .clickable(
+                role = Role.Button,
+                onClickLabel = stringResource(R.string.user_profile_error_retry_title),
+                onClick = onRetryClicked,
+            ),
+    )
+
+    Spacer(Modifier.weight(2f))
 }
 
 @Composable
@@ -287,6 +339,26 @@ private fun UserProfileSuccessPreview() {
                 )
             ),
         )
+
+        UserProfile(uiState = state, modifier = Modifier.fillMaxSize())
+    }
+}
+
+@Composable
+@Preview(showBackground = true, locale = "RU")
+private fun UserProfileLoadngPreview() {
+    ZveronTheme {
+        val state = UserProfileUiState.Loading
+
+        UserProfile(uiState = state, modifier = Modifier.fillMaxSize())
+    }
+}
+
+@Composable
+@Preview(showBackground = true, locale = "RU")
+private fun UserProfileErrorPreview() {
+    ZveronTheme {
+        val state = UserProfileUiState.Error
 
         UserProfile(uiState = state, modifier = Modifier.fillMaxSize())
     }
