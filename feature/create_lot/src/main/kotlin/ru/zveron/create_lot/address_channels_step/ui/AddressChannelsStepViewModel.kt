@@ -1,5 +1,7 @@
 package ru.zveron.create_lot.address_channels_step.ui
 
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,15 +19,20 @@ internal class AddressChannelsStepViewModel(
 
     private val _continueButtonLoading = MutableStateFlow(false)
 
+    val addressInputState = mutableStateOf("")
+
     val uiState = combine(
-        addressRepository.addressState,
+//        addressRepository.addressState,
+        snapshotFlow { addressInputState.value },
         _selectedCommunicationChannels,
         _continueButtonLoading,
     ) { addressState, communicationChannelsState, loading ->
-        val continueButtonEnabled = addressState != null && communicationChannelsState.any { it.value }
+        val continueButtonEnabled = addressState.isNotBlank() && communicationChannelsState.any { it.value }
+//        val continueButtonEnabled = addressState != null && communicationChannelsState.any { it.value }
 
         AddressChannelsStepUiState(
-            addressState?.title,
+//            addressState?.title,
+            addressState,
             CommunicationChannelUiState.values().map {
                 val selected = communicationChannelsState[it] ?: false
                 selected to it
@@ -50,5 +57,9 @@ internal class AddressChannelsStepViewModel(
                 put(channel, !currentValue)
             }
         }
+    }
+
+    fun setAddress(input: String) {
+        addressInputState.value = input
     }
 }

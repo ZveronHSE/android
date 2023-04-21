@@ -35,6 +35,8 @@ internal class AddressChannelsStepNode(
         val uiState = viewModel.uiState.collectAsState()
 
         AddressChannelsStep(
+            address = viewModel.addressInputState.value,
+            setAddress = viewModel::setAddress,
             addressChannelUiState = uiState.value,
             modifier = modifier,
             onBackClick = ::navigateUp,
