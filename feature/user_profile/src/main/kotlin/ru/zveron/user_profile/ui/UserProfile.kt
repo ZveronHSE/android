@@ -1,5 +1,6 @@
 package ru.zveron.user_profile.ui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -58,7 +59,9 @@ internal fun UserProfile(
     onReviewsClick: () -> Unit = {},
 ) {
     Column(
-        modifier = modifier.padding(top = 16.dp),
+        modifier = modifier
+            .padding(top = 16.dp)
+            .fillMaxWidth(),
     ) {
         IconButton(onClick = onBackClick) {
             Icon(
@@ -90,7 +93,7 @@ internal fun UserProfile(
 private fun ColumnScope.UserProfileLoading() {
     Spacer(Modifier.weight(1f))
 
-    CircularProgressIndicator()
+    CircularProgressIndicator(Modifier.align(Alignment.CenterHorizontally))
 
     Spacer(Modifier.weight(1f))
 }
@@ -178,7 +181,9 @@ private fun ColumnScope.UserProfileSuccess(
             fontWeight = FontWeight.Normal,
             fontSize = 16.sp,
         ),
-        modifier = Modifier.align(Alignment.CenterHorizontally),
+        modifier = Modifier
+            .align(Alignment.CenterHorizontally)
+            .clickable(onClick = onReviewsClick),
     )
 
     Spacer(Modifier.height(32.dp))

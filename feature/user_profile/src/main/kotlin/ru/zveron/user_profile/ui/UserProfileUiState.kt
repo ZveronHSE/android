@@ -1,18 +1,18 @@
 package ru.zveron.user_profile.ui
 
 import androidx.annotation.StringRes
-import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.Stable
 import ru.zveron.design.resources.ZveronImage
 import ru.zveron.design.resources.ZveronText
 import ru.zveron.design.wrappers.ListWrapper
 import ru.zveron.user_profile.R
 
-@Immutable
+@Stable
 sealed class UserProfileUiState {
     object Loading: UserProfileUiState()
 
-    @Immutable
+    @Stable
     data class Success(
         val photo: ZveronImage,
         val displayedName: ZveronText,
@@ -24,6 +24,7 @@ sealed class UserProfileUiState {
     ): UserProfileUiState()
 }
 
+@Stable
 data class LotUiState(
     val id: Long,
     val title: String,
