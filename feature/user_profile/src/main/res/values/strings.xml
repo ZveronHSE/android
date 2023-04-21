@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="back_content_description" translatable="false">Назад</string>
+    <string name="name_display_format" translatable="false">%1$s %2$s</string>
+    <string name="rating_format" translatable="false">(%1$s)</string>
+    <string name="active_tab" translatable="false">Активные</string>
+    <string name="ended_tab" translatable="false">Завершённые</string>
+    <string name="call_action" translatable="false">Позвонить</string>
+    <string name="chat_action" translatable="false">Написать</string>
+    <string name="user_profile_error_title" translatable="false">Не удалось загрузить профиль</string>
+    <string name="user_profile_error_retry_title" translatable="false">Попробовать еще раз</string>
+</resources>

@@ -8,4 +8,6 @@ interface LotsFeedBackStackNavigator {
     fun goToLot(id: Long)
 
     fun pickItem(title: ZveronText)
+
+    fun goToSeller(id: Long)
 }

@@ -8,4 +8,7 @@
 
     <string name="lot_card_call_title">Позвонить</string>
     <string name="lot_card_chat_title">Написать</string>
+
+    <string name="lot_card_error_title">Не удалось загрузить объявление</string>
+    <string name="lot_card_error_retry_title">Попробовать еще раз</string>
 </resources>

@@ -47,8 +47,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
+import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -60,6 +62,7 @@ import ru.zveron.design.theme.ZveronTheme
 import ru.zveron.design.theme.blackWithAlpha05
 import ru.zveron.design.theme.enabledButtonGradient
 import ru.zveron.design.theme.gray1
+import ru.zveron.design.theme.gray3
 import ru.zveron.design.theme.gray5
 import ru.zveron.lot_card.domain.Gender
 import ru.zveron.lots_card.R
@@ -71,10 +74,73 @@ internal fun LotCard(
     modifier: Modifier = Modifier,
     onBackClicked: () -> Unit = {},
     onActionClick: (CommunicationAction) -> Unit = {},
+    onSellerClick: (Long) -> Unit = {},
+    onRetryClicked: () -> Unit = {},
 ) {
-    when(state) {
+    when (state) {
         LotCardUiState.Loading -> LotCardLoading(modifier, onBackClicked)
-        is LotCardUiState.Success -> LotCardSuccess(state, modifier, onBackClicked, onActionClick)
+        is LotCardUiState.Success -> LotCardSuccess(
+            state,
+            modifier,
+            onBackClicked,
+            onActionClick,
+            onSellerClick,
+        )
+        LotCardUiState.Error -> LotCardError(modifier, onBackClicked, onRetryClicked)
+    }
+}
+
+@OptIn(ExperimentalTextApi::class)
+@Composable
+private fun LotCardError(
+    modifier: Modifier = Modifier,
+    onBackClicked: () -> Unit = {},
+    onRetryClicked: () -> Unit = {},
+) {
+    Column(
+        modifier = modifier.padding(top = 16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        LotCardTopBar(onBackClicked = onBackClicked)
+
+        Spacer(Modifier.weight(1f))
+
+        Icon(
+            painterResource(ru.zveron.design.R.drawable.ic_warning),
+            contentDescription = null,
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+        )
+
+        Text(
+            text = stringResource(R.string.lot_card_error_title),
+            style = TextStyle(
+                fontWeight = FontWeight.Normal,
+                fontSize = 16.sp,
+                color = gray3,
+            ),
+            textAlign = TextAlign.Center,
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+        )
+
+        Spacer(Modifier.height(24.dp))
+
+        Text(
+            text = stringResource(R.string.lot_card_error_retry_title),
+            style = TextStyle(
+                brush = enabledButtonGradient,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Light,
+            ),
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .clickable(
+                    role = Role.Button,
+                    onClickLabel = stringResource(R.string.lot_card_error_retry_title),
+                    onClick = onRetryClicked,
+                ),
+        )
+
+        Spacer(Modifier.weight(2f))
     }
 }
 
@@ -103,12 +169,14 @@ private fun LotCardSuccess(
     modifier: Modifier = Modifier,
     onBackClicked: () -> Unit = {},
     onActionClick: (CommunicationAction) -> Unit = {},
+    onSellerClick: (Long) -> Unit = {},
 ) {
     Column(modifier = modifier.background(MaterialTheme.colors.surface)) {
         LotCardContent(
             state = state,
             modifier = Modifier.weight(1f),
             onBackClicked = onBackClicked,
+            onSellerClick = onSellerClick,
         )
 
         LotCardBottomButtons(
@@ -124,6 +192,7 @@ internal fun LotCardContent(
     state: LotCardUiState.Success,
     modifier: Modifier = Modifier,
     onBackClicked: () -> Unit = {},
+    onSellerClick: (Long) -> Unit = {},
 ) {
     LazyColumn(
         modifier = modifier
@@ -186,7 +255,10 @@ internal fun LotCardContent(
                 sellerName = state.sellerName,
                 rating = state.rating,
                 maxRating = state.maxRating,
-                modifier = Modifier.padding(horizontal = 16.dp)
+                modifier = Modifier.padding(horizontal = 16.dp),
+                onAuthorClick = {
+                    onSellerClick.invoke(state.sellerId)
+                }
             )
 
             Spacer(Modifier.height(38.dp))
@@ -477,6 +549,7 @@ private fun LotCardSeller(
     rating: Int,
     maxRating: Int,
     modifier: Modifier = Modifier,
+    onAuthorClick: () -> Unit = {},
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -485,7 +558,8 @@ private fun LotCardSeller(
             .fillMaxWidth()
             .clip(RoundedCornerShape(24.dp))
             .background(gray1)
-            .padding(16.dp),
+            .padding(16.dp)
+            .clickable(onClick = onAuthorClick),
     ) {
         ZveronImage(
             zveronImage = avatarImage,
@@ -581,6 +655,7 @@ private fun LotCardPreview() {
             LotCardTag("Окрас", "Бежевый"),
         ),
         description = "С другой стороны, перспективное планирование предопределяет высокую востребованность своевременного выполнения сверхзадачи. Банальные, но неопровержимые выводы, а также стремящиеся вытеснить...",
+        sellerId = 1,
         sellerAvatar = ZveronImage.ResourceImage(DesignR.drawable.person_avatar),
         sellerName = "Гигачад",
         rating = 4,
@@ -593,6 +668,26 @@ private fun LotCardPreview() {
     )
 
     ZveronTheme {
-        LotCardSuccess(state, Modifier.fillMaxSize())
+        LotCard(state, Modifier.fillMaxSize())
+    }
+}
+
+@Composable
+@Preview(showBackground = true)
+private fun LotCardLoadingPreview() {
+    val state = LotCardUiState.Loading
+
+    ZveronTheme {
+        LotCard(state, Modifier.fillMaxSize())
+    }
+}
+
+@Composable
+@Preview(showBackground = true)
+private fun LotCardErrorPreview() {
+    val state = LotCardUiState.Error
+
+    ZveronTheme {
+        LotCard(state, Modifier.fillMaxSize())
     }
 }

@@ -22,4 +22,7 @@ sealed class RootScreenNavTarget: Parcelable {
 
     @Parcelize
     data class PickItem(val title: ZveronText): RootScreenNavTarget()
+
+    @Parcelize
+    data class Profile(val profileId: Long): RootScreenNavTarget()
 }

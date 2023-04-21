@@ -20,6 +20,7 @@ import kotlinx.coroutines.launch
 import ru.zveron.design.resources.ZveronImage
 import ru.zveron.design.resources.ZveronText
 import ru.zveron.design.theme.callButtonGradient
+import ru.zveron.lot_card.LotCardNavigator
 import ru.zveron.lot_card.LotCardParams
 import ru.zveron.lot_card.domain.CommunicationChannel
 import ru.zveron.lot_card.domain.LoadLotInfoInteractor
@@ -33,6 +34,7 @@ class LotCardViewModel(
     private val context: Context,
     private val lotCardParams: LotCardParams,
     private val loadLotInfoInteractor: LoadLotInfoInteractor,
+    private val navigator: LotCardNavigator,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<LotCardUiState>(LotCardUiState.Loading)
     val uiState = _uiState.asStateFlow()
@@ -53,6 +55,10 @@ class LotCardViewModel(
             is CommunicationAction.Vk -> TODO()
             is CommunicationAction.WriteEmail -> TODO()
         }
+    }
+
+    fun onSellerClicked(id: Long) {
+        navigator.goToSeller(id)
     }
 
     private fun call(action: CommunicationAction.PhoneCall, checkPermission: Boolean) {
@@ -81,6 +87,10 @@ class LotCardViewModel(
         }
     }
 
+    fun retry() {
+        loadLot()
+    }
+
     private fun loadLot() {
         viewModelScope.launch {
             try {
@@ -91,6 +101,7 @@ class LotCardViewModel(
                 throw e
             } catch (e: Exception) {
                 Log.d("Lot card", "Error loading lot", e)
+                _uiState.update { LotCardUiState.Error }
             }
         }
     }
@@ -102,6 +113,7 @@ class LotCardViewModel(
             address = lotInfo.address,
             tags = lotInfo.parameters.map { mapToLotCardTag(it) },
             description = lotInfo.description,
+            sellerId = lotInfo.seller.id,
             sellerAvatar = ZveronImage.RemoteImage(lotInfo.seller.avatarUrl),
             sellerName = lotInfo.seller.name,
             rating = lotInfo.seller.rating.roundToInt(),

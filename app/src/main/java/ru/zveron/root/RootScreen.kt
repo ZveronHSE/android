@@ -55,10 +55,13 @@ import ru.zveron.create_lot.root.RootCreateLotNavigator
 import ru.zveron.create_lot.root.RootCreateLotNode
 import ru.zveron.design.components.BottomSheet
 import ru.zveron.design.resources.ZveronText
+import ru.zveron.lot_card.LotCardNavigator
 import ru.zveron.lot_card.LotCardNode
 import ru.zveron.lot_card.LotCardParams
 import ru.zveron.main_screen.MainScreen
 import ru.zveron.main_screen.MainScreenNavigator
+import ru.zveron.user_profile.UserProfileNode
+import ru.zveron.user_profile.UserProfileParams
 
 class RootScreen(
     buildContext: BuildContext,
@@ -74,7 +77,7 @@ class RootScreen(
     buildContext = buildContext,
     navModel = backStack + modal,
     plugins = listOf(component),
-), MainScreenNavigator, BottomSheetStateHolder, RootCreateLotNavigator {
+), MainScreenNavigator, BottomSheetStateHolder, RootCreateLotNavigator, LotCardNavigator {
     private val activeModalElementFlow: Flow<RootScreenNavTarget?> =
         modal.elements.map { it.activeElement }
 
@@ -89,13 +92,18 @@ class RootScreen(
                 backStack.push(RootScreenNavTarget.PhoneAuthorization)
             }
 
-            is RootScreenNavTarget.LotCard -> LotCardNode(buildContext, LotCardParams(navTarget.id))
+            is RootScreenNavTarget.LotCard -> LotCardNode(buildContext, LotCardParams(navTarget.id), this)
             RootScreenNavTarget.PhoneAuthorization -> RootPhoneNode(buildContext)
             RootScreenNavTarget.CreateLot -> RootCreateLotNode(buildContext, this)
             is RootScreenNavTarget.PickItem -> ChooseItemNode(
                 buildContext,
                 navTarget.title,
                 currentItemProvider,
+            )
+
+            is RootScreenNavTarget.Profile -> UserProfileNode(
+                buildContext,
+                UserProfileParams(navTarget.profileId),
             )
         }
     }
@@ -195,6 +203,10 @@ class RootScreen(
 
     override fun pickItem(title: ZveronText) {
         backStack.push(RootScreenNavTarget.PickItem(title))
+    }
+
+    override fun goToSeller(id: Long) {
+        backStack.push(RootScreenNavTarget.Profile(id))
     }
 
     override val shouldBlockBottomSheet: Flow<Boolean> =

@@ -19,6 +19,7 @@ import ru.zveron.lot_card.ui.LotCardViewModel
 class LotCardNode(
     buildContext: BuildContext,
     private val params: LotCardParams,
+    private val navigator: LotCardNavigator,
     private val lotCardComponent: LotCardComponent = LotCardComponent(),
 ): ViewModelNode(
     buildContext = buildContext,
@@ -29,7 +30,7 @@ class LotCardNode(
         val viewmodel = koinViewModel<LotCardViewModel>(
             scope = lotCardComponent.scope,
             viewModelStoreOwner = this,
-            parameters = { parametersOf(params) }
+            parameters = { parametersOf(params, navigator) }
         )
 
         val permissionLauncher = rememberLauncherForActivityResult(
@@ -51,6 +52,8 @@ class LotCardNode(
             modifier = modifier,
             onBackClicked = ::navigateUp,
             onActionClick = viewmodel::onActionClicked,
+            onSellerClick = viewmodel::onSellerClicked,
+            onRetryClicked = viewmodel::retry,
         )
     }
 

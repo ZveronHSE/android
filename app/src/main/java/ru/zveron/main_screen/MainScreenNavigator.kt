@@ -10,4 +10,6 @@ interface MainScreenNavigator {
     fun createLot()
 
     fun pickItem(title: ZveronText)
+
+    fun goToSeller(id: Long)
 }
