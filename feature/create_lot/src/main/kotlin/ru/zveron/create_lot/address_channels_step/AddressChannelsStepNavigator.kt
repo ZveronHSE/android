@@ -1,5 +1,5 @@
 package ru.zveron.create_lot.address_channels_step
 
 interface AddressChannelsStepNavigator {
-    fun completeAddressChannelsStep()
+    fun completeAddressChannelsStep(id: Long)
 }

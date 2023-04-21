@@ -42,6 +42,7 @@ internal class AddressChannelsStepNode(
             onBackClick = ::navigateUp,
             onAddressClick = viewModel::addressClicked,
             onCommunicationChannelsClick = viewModel::communicationChannelClicked,
+            onContinueButtonClick = viewModel::onContinueClicked,
         )
     }
 }

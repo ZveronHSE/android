@@ -1,6 +1,6 @@
 package ru.zveron.models.communication_channels
 
-enum class CommunicationChannels {
+enum class CommunicationChannel {
     CALL,
     CHAT,
 }

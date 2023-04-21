@@ -26,6 +26,7 @@ import ru.zveron.design.resources.ZveronText
 
 class RootCreateLotNode private constructor(
     buildContext: BuildContext,
+    private val navigator: RootCreateLotNavigator,
     private val component: RootCreateLotComponent = RootCreateLotComponent(),
     private val backStack: BackStack<NavTarget> = BackStack(
         initialElement = NavTarget.GeneralStep,
@@ -45,8 +46,9 @@ class RootCreateLotNode private constructor(
         component.getLotFormItemProvider(this)
     }
 
-    constructor(buildContext: BuildContext) : this(
+    constructor(buildContext: BuildContext, navigator: RootCreateLotNavigator) : this(
         buildContext,
+        navigator,
         RootCreateLotComponent(),
         BackStack(
             initialElement = NavTarget.GeneralStep,
@@ -160,7 +162,8 @@ class RootCreateLotNode private constructor(
         backStack.push(NavTarget.AddressChannelsStep)
     }
 
-    override fun completeAddressChannelsStep() {
-        TODO("Not yet implemented")
+    override fun completeAddressChannelsStep(id: Long) {
+        navigateUp()
+        navigator.openLot(id)
     }
 }

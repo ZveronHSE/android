@@ -51,6 +51,7 @@ import ru.zveron.appyx.modal.operation.show
 import ru.zveron.authorization.phone.RootPhoneNode
 import ru.zveron.authorization.socials_sheet.SocialsSheetScreen
 import ru.zveron.choose_item.ChooseItemNode
+import ru.zveron.create_lot.root.RootCreateLotNavigator
 import ru.zveron.create_lot.root.RootCreateLotNode
 import ru.zveron.design.components.BottomSheet
 import ru.zveron.design.resources.ZveronText
@@ -73,7 +74,7 @@ class RootScreen(
     buildContext = buildContext,
     navModel = backStack + modal,
     plugins = listOf(component),
-), MainScreenNavigator, BottomSheetStateHolder {
+), MainScreenNavigator, BottomSheetStateHolder, RootCreateLotNavigator {
     private val activeModalElementFlow: Flow<RootScreenNavTarget?> =
         modal.elements.map { it.activeElement }
 
@@ -90,7 +91,7 @@ class RootScreen(
 
             is RootScreenNavTarget.LotCard -> LotCardNode(buildContext, LotCardParams(navTarget.id))
             RootScreenNavTarget.PhoneAuthorization -> RootPhoneNode(buildContext)
-            RootScreenNavTarget.CreateLot -> RootCreateLotNode(buildContext)
+            RootScreenNavTarget.CreateLot -> RootCreateLotNode(buildContext, this)
             is RootScreenNavTarget.PickItem -> ChooseItemNode(
                 buildContext,
                 navTarget.title,

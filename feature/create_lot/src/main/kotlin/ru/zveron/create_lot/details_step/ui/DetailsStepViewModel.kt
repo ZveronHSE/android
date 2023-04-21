@@ -23,7 +23,7 @@ import ru.zveron.parameters.data.ParametersRepository
 internal class DetailsStepViewModel(
     private val navigator: DetailsStepNavigator,
     private val loadParametersInteractor: LoadParametersInteractor,
-    lotCreateInfoRepository: LotCreateInfoRepository,
+    private val lotCreateInfoRepository: LotCreateInfoRepository,
     private val parametersRepository: ParametersRepository,
 ) : ViewModel() {
     private val _parametersUiState = MutableStateFlow<ParametersState>(ParametersState.Loading)
@@ -68,6 +68,7 @@ internal class DetailsStepViewModel(
     }
 
     fun onContinueClick() {
+        lotCreateInfoRepository.setDescription(descriptionInputState.value)
         navigator.completeDetailsStep()
     }
 

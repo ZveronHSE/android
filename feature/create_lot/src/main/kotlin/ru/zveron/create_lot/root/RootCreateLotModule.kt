@@ -9,6 +9,7 @@ import ru.zveron.create_lot.data.LotCreatePhotoStateRepository
 import ru.zveron.create_lot.data.LotCreateSelectedCategoriesRepository
 import ru.zveron.create_lot.data.PhotoConversionCacheRepository
 import ru.zveron.create_lot.categories_step.CategoriesItemProvider
+import ru.zveron.create_lot.data.CreateLotRepository
 import ru.zveron.create_lot.data.LotCreateAddressRepository
 import ru.zveron.create_lot.details_step.detailsStepModule
 import ru.zveron.create_lot.details_step.domain.ParametersItemProviderFactory
@@ -31,6 +32,7 @@ val rootCreateLotModule = module {
         scopedOf(::LotFormItemProvider)
         scopedOf(::ParametersItemProviderFactory)
         scopedOf(::LotCreateAddressRepository)
+        scopedOf(::CreateLotRepository)
     }
 
     includes(
