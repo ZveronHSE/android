@@ -9,6 +9,7 @@ val MainBackground = Color(0xFFF8F8F8)
 val gray1 = Color(0xFFF4F4F5)
 val gray2 = Color(0xFFE2E2E5)
 val gray3 = Color(0xFFACAEB4)
+val gray4 = Color(0xFF666770)
 val gray5 = Color(0xFF18191B)
 
 val blackWithAlpha02 = Color.Black.copy(alpha = 0.2f)

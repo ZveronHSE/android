@@ -63,6 +63,8 @@ fun Chip(
     isActive: Boolean = false,
     onClick: () -> Unit = {},
     textMaxWidth: Dp = Dp.Unspecified,
+    leadSlot: (@Composable () -> Unit)? = null,
+    trailSlot: (@Composable () -> Unit)? = null,
 ) {
     val backgroundModifier = if (isActive) {
         Modifier.background(enabledButtonGradient)
@@ -93,6 +95,10 @@ fun Chip(
             .then(borderModifier)
             .padding(horizontal = 16.dp, vertical = 10.dp),
     ) {
+        leadSlot?.let { 
+            leadSlot.invoke()
+        }
+
         ZveronText(
             text = title,
             color = textColor,
@@ -106,17 +112,39 @@ fun Chip(
             modifier = Modifier.sizeIn(maxWidth = textMaxWidth),
         )
 
-        Icon(
-            painter = painterResource(R.drawable.ic_down_triangle),
-            contentDescription = null,
-            tint = textColor,
-        )
+        trailSlot?.let {
+            trailSlot.invoke()
+        }
     }
 }
 
 @Preview
 @Composable
 fun ChipActivePreview() {
+    val textColor = gray1
+    Chip(
+        ZveronText.RawString("Порода"),
+        isActive = true,
+        leadSlot = {
+            Icon(
+                painter = painterResource(R.drawable.ic_add),
+                contentDescription = null,
+                tint = textColor,
+            )
+        },
+        trailSlot = {
+            Icon(
+                painter = painterResource(R.drawable.ic_down_triangle),
+                contentDescription = null,
+                tint = textColor,
+            )
+        },
+    )
+}
+
+@Preview
+@Composable
+fun ChipWithoutSlotsPreview() {
     Chip(
         ZveronText.RawString("Порода"),
         isActive = true,

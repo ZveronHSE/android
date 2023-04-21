@@ -36,4 +36,5 @@ dependencies {
     implementation(project(":data:favorites"))
 
     implementation(project(":feature:authorization"))
+    implementation(project(":feature:choose_item"))
 }

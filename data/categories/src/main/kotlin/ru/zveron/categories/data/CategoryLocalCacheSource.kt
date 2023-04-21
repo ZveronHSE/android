@@ -1,5 +1,6 @@
 package ru.zveron.categories.data
 
+import android.util.Log
 import ru.zveron.categories.models.Category
 
 class CategoryLocalCacheSource: CategorySource {
@@ -15,8 +16,10 @@ class CategoryLocalCacheSource: CategorySource {
     }
 
     fun addRootCategories(categories: List<Category>) {
+        Log.d("Category", "adding root categories with size ${rootCategories.size}: ${categories.joinToString()}")
         if(rootCategories.isEmpty()) {
             rootCategories.addAll(categories)
+            Log.d("Category", "new root categories with size ${rootCategories.size}: ${rootCategories.joinToString()}")
         }
         categoriesCache.putAll(categories.associateBy { it.id })
     }

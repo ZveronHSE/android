@@ -22,6 +22,7 @@ import ru.zveron.appyx.spotlight.activate
 import ru.zveron.appyx.viewmodel.ViewModelParentNode
 import ru.zveron.design.components.BottomNavigation
 import ru.zveron.design.components.BottomNavigationItem
+import ru.zveron.design.resources.ZveronText
 import ru.zveron.main_screen.bottom_navigation.BottomNavigationNavTarget
 import ru.zveron.main_screen.bottom_navigation.BottomTabsNavigator
 import ru.zveron.main_screen.bottom_navigation.favorites_backstack.FavoritesBackstackNavigator
@@ -123,8 +124,12 @@ internal class MainScreen(
         mainScreenNavigator.openLot(id)
     }
 
+    override fun pickItem(title: ZveronText) {
+        mainScreenNavigator.pickItem(title)
+    }
+
     override fun createUserLot() {
-        TODO("Not yet implemented")
+        mainScreenNavigator.createLot()
     }
 
 }

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="first_step_header">Создание объявления</string>
+
+    <string name="root_categories_header">Тип объявления</string>
+    <string name="photos_header">Добавьте фотографии</string>
+    <string name="name_header">Укажите название</string>
+
+    <string name="lot_name_placeholder">Введите название</string>
+    <string name="name_example">Например: Кошка "Леля". 3 года</string>
+
+    <string name="gender_title">Выберите пол</string>
+    <string name="gender_male">Мужской</string>
+    <string name="gender_female">Женски</string>
+
+
+    <string name="continue_button_title">Далее</string>
+
+    <string name="categories_title">Выберите категорию</string>
+    <string name="lot_form_title">Вид объявления</string>
+
+    <string name="description_step_title">Опишите товар</string>
+    <string name="description_input_label">Описание</string>
+    <string name="description_input_placeholder">Опишите товар как можно подробнее…</string>
+    <string name="parameters_label">Дополнительная информация</string>
+
+    <string name="price_header">Укажите цену</string>
+    <string name="price_input_label">Цена</string>
+    <string name="price_input_placeholder">₽</string>
+    <string name="price_input_format">₽</string>
+    <string name="negotiate_price">Цена договорная</string>
+
+    <string name="address_title">Адрес</string>
+    <string name="address_input_label">Место сделки</string>
+    <string name="address_input_placeholder">Выберите адрес</string>
+    <string name="communication_channels_title">Способы связи</string>
+    <string name="call_communication_channel">По телефону</string>
+    <string name="chat_communication_channel">По сообщениям</string>
+</resources>

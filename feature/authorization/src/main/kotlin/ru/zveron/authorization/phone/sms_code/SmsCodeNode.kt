@@ -44,6 +44,7 @@ import ru.zveron.authorization.phone.sms_code.ui.SmsCodeViewModel
 import ru.zveron.design.inputs.OtpTextField
 import ru.zveron.design.theme.ZveronTheme
 import ru.zveron.design.theme.enabledButtonGradient
+import ru.zveron.design.R as DesignR
 
 internal class SmsCodeNode(
     buildContext: BuildContext,
@@ -118,7 +119,7 @@ private fun SmsCodeInput(
             modifier = Modifier.padding(top = 16.dp, start = 4.dp),
         ) {
             Icon(
-                painter = painterResource(R.drawable.ic_back),
+                painter = painterResource(DesignR.drawable.ic_back),
                 // TODO: fix accessibility
                 contentDescription = null,
             )
@@ -172,7 +173,7 @@ private fun SmsCodeInput(
 
             ErrorRow(modifier = Modifier.padding(start = 12.dp))
         }
-        
+
         Spacer(Modifier.height(20.dp))
 
         RequestCodeContainer(
@@ -225,6 +226,7 @@ private fun RequestCodeContainer(
                 modifier = modifier,
             )
         }
+
         is CodeRequestState.NeedToWait -> {
             Text(
                 stringResource(id = R.string.sms_request_code_timer, codeState.secondsLeft),

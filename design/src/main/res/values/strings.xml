@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="search_clear_hint">Очистить</string>
+    <string name="photo_retry_hint">Попробовать еще раз</string>
+    <string name="photo_upload_hint">Добавьте фотографию</string>
 </resources>

@@ -5,7 +5,7 @@ import ru.zveron.contract.lot.WaterfallRequest
 import ru.zveron.contract.lot.WaterfallResponse
 import ru.zveron.contract.lot.model.parameter
 import ru.zveron.contract.lot.waterfallRequest
-import ru.zveron.lots_feed.filters_screen.data.parameters.ParameterState
+import ru.zveron.parameters.ParameterState
 import ru.zveron.lots_feed.mappings.addSortType
 import ru.zveron.lots_feed.mappings.toGrpcFilter
 import ru.zveron.lots_feed.models.filters.Filter

@@ -10,10 +10,10 @@ import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.push
 import kotlinx.parcelize.Parcelize
 import ru.zveron.appyx.viewmodel.ViewModelParentNode
+import ru.zveron.choose_item.ChooseItemNode
 import ru.zveron.design.resources.ZveronText
 import ru.zveron.lot_card.LotCardNode
 import ru.zveron.lot_card.LotCardParams
-import ru.zveron.lots_feed.choose_item.ChooseItemNode
 import ru.zveron.lots_feed.feed.LotsFeedNavigator
 import ru.zveron.lots_feed.feed.LotsFeedNode
 import ru.zveron.lots_feed.filters_screen.FiltersNavigator
@@ -93,7 +93,6 @@ class LotsFeedBackStackNode(
 
     override fun goToLot(lotId: Long) {
         lotsFeedBackStackNavigator.goToLot(lotId)
-//        backstack.push(NavTarget.LotCard(LotCardParams(lotId)))
     }
 
     override fun chooseItem(title: ZveronText) {

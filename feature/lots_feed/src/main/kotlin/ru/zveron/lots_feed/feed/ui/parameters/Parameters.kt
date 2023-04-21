@@ -4,13 +4,18 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import ru.zveron.design.R
 import ru.zveron.design.components.Chip
 import ru.zveron.design.components.LoadingChip
 import ru.zveron.design.resources.ZveronText
+import ru.zveron.design.theme.gray1
+import ru.zveron.design.theme.gray5
 
 @Composable
 fun ParametersRow(
@@ -37,6 +42,15 @@ fun ParametersRow(
                     isActive = parameter.isActive,
                     onClick = { onParameterClick.invoke(parameter.id) },
                     textMaxWidth = 180.dp,
+                    trailSlot = {
+                        val textColor = if (parameter.isActive) gray1 else gray5
+
+                        Icon(
+                            painter = painterResource(R.drawable.ic_down_triangle),
+                            contentDescription = null,
+                            tint = textColor,
+                        )
+                    },
                 )
             }
         }

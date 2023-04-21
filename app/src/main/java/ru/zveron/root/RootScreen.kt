@@ -22,6 +22,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
@@ -41,6 +42,7 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import ru.zveron.appyx.modal.BottomSheetStateHolder
 import ru.zveron.appyx.modal.Modal
 import ru.zveron.appyx.modal.activeElement
@@ -48,7 +50,11 @@ import ru.zveron.appyx.modal.operation.dismiss
 import ru.zveron.appyx.modal.operation.show
 import ru.zveron.authorization.phone.RootPhoneNode
 import ru.zveron.authorization.socials_sheet.SocialsSheetScreen
+import ru.zveron.choose_item.ChooseItemNode
+import ru.zveron.create_lot.root.RootCreateLotNavigator
+import ru.zveron.create_lot.root.RootCreateLotNode
 import ru.zveron.design.components.BottomSheet
+import ru.zveron.design.resources.ZveronText
 import ru.zveron.lot_card.LotCardNode
 import ru.zveron.lot_card.LotCardParams
 import ru.zveron.main_screen.MainScreen
@@ -63,12 +69,17 @@ class RootScreen(
     private val modal: Modal<RootScreenNavTarget> = Modal(
         savedStateMap = buildContext.savedStateMap,
     ),
+    private val component: RootScreenComponent = RootScreenComponent(),
 ) : ParentNode<RootScreenNavTarget>(
     buildContext = buildContext,
     navModel = backStack + modal,
-), MainScreenNavigator, BottomSheetStateHolder {
+    plugins = listOf(component),
+), MainScreenNavigator, BottomSheetStateHolder, RootCreateLotNavigator {
     private val activeModalElementFlow: Flow<RootScreenNavTarget?> =
         modal.elements.map { it.activeElement }
+
+    private val currentItemProvider
+        get() = component.getChooseItemItemProvider().currentItemItemProvider
 
 
     override fun resolve(navTarget: RootScreenNavTarget, buildContext: BuildContext): Node {
@@ -80,6 +91,12 @@ class RootScreen(
 
             is RootScreenNavTarget.LotCard -> LotCardNode(buildContext, LotCardParams(navTarget.id))
             RootScreenNavTarget.PhoneAuthorization -> RootPhoneNode(buildContext)
+            RootScreenNavTarget.CreateLot -> RootCreateLotNode(buildContext, this)
+            is RootScreenNavTarget.PickItem -> ChooseItemNode(
+                buildContext,
+                navTarget.title,
+                currentItemProvider,
+            )
         }
     }
 
@@ -131,6 +148,8 @@ class RootScreen(
 
         Children(navModel = modal) {
             BottomSheet {
+                val scope = rememberCoroutineScope()
+
                 children<RootScreenNavTarget> { child ->
                     var hideCalled by remember(activeElement) { mutableStateOf(false) }
 
@@ -148,7 +167,7 @@ class RootScreen(
                             sheetState.show()
                         } else if (activeElement == null && sheetState.isVisible) {
                             hideCalled = true
-                            sheetState.hide()
+                            scope.launch { sheetState.hide() }
                         }
                     }
 
@@ -168,6 +187,14 @@ class RootScreen(
 
     override fun openLot(id: Long) {
         backStack.push(RootScreenNavTarget.LotCard(id))
+    }
+
+    override fun createLot() {
+        backStack.push(RootScreenNavTarget.CreateLot)
+    }
+
+    override fun pickItem(title: ZveronText) {
+        backStack.push(RootScreenNavTarget.PickItem(title))
     }
 
     override val shouldBlockBottomSheet: Flow<Boolean> =

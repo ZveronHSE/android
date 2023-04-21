@@ -9,9 +9,9 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import ru.zveron.choose_item.ChooseItemHolder
 import ru.zveron.design.resources.ZveronText
 import ru.zveron.lots_feed.R
-import ru.zveron.lots_feed.choose_item.ChooseItemHolder
 import ru.zveron.lots_feed.filters_screen.FiltersNavigator
 import ru.zveron.lots_feed.filters_screen.data.categories.FiltersSelectedCategoryRepository
 import ru.zveron.lots_feed.filters_screen.data.lot_forms.FiltersSelectedLotFormRepository

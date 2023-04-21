@@ -6,9 +6,10 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import ru.zveron.lots_feed.choose_item.ChooseItem
-import ru.zveron.lots_feed.choose_item.ChooseItemItemProvider
-import ru.zveron.lots_feed.choose_item.ChooseItemUiState
+import ru.zveron.choose_item.ChooseItem
+import ru.zveron.choose_item.ChooseItemItemProvider
+import ru.zveron.choose_item.ChooseItemUiState
+import ru.zveron.design.resources.ZveronText
 import ru.zveron.lots_feed.filters_screen.data.categories.ChildCategory
 import ru.zveron.lots_feed.filters_screen.data.categories.FiltersChildrenCategoryRepository
 
@@ -22,7 +23,7 @@ internal class ChildCategoryItemProvider(
         when (it) {
             ChildCategory.Loading -> ChooseItemUiState.Loading
             is ChildCategory.Success -> {
-                val items = it.categories.map { category -> ChooseItem(category.id, category.name) }
+                val items = it.categories.map { category -> ChooseItem(category.id, ZveronText.RawString(category.name)) }
                 ChooseItemUiState.Success(items)
             }
         }

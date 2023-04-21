@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import ru.zveron.lots_feed.filters_screen.data.categories.FiltersSelectedCategoryRepository
 import ru.zveron.lots_feed.filters_screen.data.lot_forms.FiltersSelectedLotFormRepository
 import ru.zveron.lots_feed.filters_screen.data.parameters.FiltersSelectedParametersRepository
-import ru.zveron.lots_feed.parameters.data.ParametersRepository
+import ru.zveron.parameters.data.ParametersRepository
 
 private const val DEFAULT_LOT_FORM_ID = 1
 

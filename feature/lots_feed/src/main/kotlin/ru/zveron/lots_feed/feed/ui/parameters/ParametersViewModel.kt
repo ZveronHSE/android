@@ -10,16 +10,16 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import ru.zveron.choose_item.ChooseItemHolder
 import ru.zveron.design.resources.ZveronText
 import ru.zveron.lots_feed.categories.domain.SelectedCategoriesInteractor
-import ru.zveron.lots_feed.choose_item.ChooseItemHolder
 import ru.zveron.lots_feed.feed.LotsFeedNavigator
 import ru.zveron.lots_feed.feed.data.parameters.ParametersLoadingRepository
 import ru.zveron.lots_feed.feed.data.parameters.SelectedParametersRepository
 import ru.zveron.lots_feed.feed.domain.UpdateParametersInteractorImpl
 import ru.zveron.lots_feed.feed.domain.parameters.ParameterItemProviderFactory
-import ru.zveron.lots_feed.filters_screen.data.parameters.ParameterState
-import ru.zveron.lots_feed.parameters.data.ParametersRepository
+import ru.zveron.parameters.ParameterState
+import ru.zveron.parameters.data.ParametersRepository
 
 internal class ParametersViewModel(
     selectedCategoriesInteractor: SelectedCategoriesInteractor,

@@ -27,7 +27,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import ru.zveron.design.selectors.Selector
+import ru.zveron.design.selectors.RadioSelector
 import ru.zveron.design.shimmering.shimmeringBackground
 import ru.zveron.design.theme.gray3
 import ru.zveron.design.theme.gray5
@@ -115,7 +115,7 @@ private fun RootCategory(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier,
     ) {
-        Selector(
+        RadioSelector(
             selected = rootCategoryUiState.id == selectedId,
             onClick = selectorClickHandler,
         )

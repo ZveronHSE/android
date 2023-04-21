@@ -92,10 +92,13 @@ dependencies {
 
     implementation(project(":data:categories"))
     implementation(project(":data:favorites"))
+    implementation(project(":data:image_storage"))
 
     implementation(project(":feature:authorization"))
     implementation(project(":feature:lots_feed"))
     implementation(project(":feature:favorites"))
     implementation(project(":feature:lot_card"))
     implementation(project(":feature:user_lots"))
+    implementation(project(":feature:create_lot"))
+    implementation(project(":feature:choose_item"))
 }

@@ -5,7 +5,8 @@ import kotlinx.coroutines.flow.asSharedFlow
 import ru.zveron.categories.data.SelectedCategoriesRepository
 import ru.zveron.lots_feed.feed.data.lot_forms.SelectedLotFormRepository
 import ru.zveron.lots_feed.feed.data.parameters.SelectedParametersRepository
-import ru.zveron.lots_feed.parameters.data.ParametersRepository
+import ru.zveron.parameters.data.ParametersRepository
+
 
 internal class UpdateParametersInteractorImpl(
     private val parametersRepository: ParametersRepository,

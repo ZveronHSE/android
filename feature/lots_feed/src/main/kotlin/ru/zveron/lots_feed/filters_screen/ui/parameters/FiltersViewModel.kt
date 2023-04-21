@@ -10,16 +10,16 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import ru.zveron.choose_item.ChooseItemHolder
 import ru.zveron.design.resources.ZveronText
-import ru.zveron.lots_feed.choose_item.ChooseItemHolder
 import ru.zveron.lots_feed.filters_screen.FiltersNavigator
 import ru.zveron.lots_feed.filters_screen.data.categories.FiltersSelectedCategoryRepository
 import ru.zveron.lots_feed.filters_screen.data.parameters.FiltersParametersLoadingRepository
 import ru.zveron.lots_feed.filters_screen.data.parameters.FiltersSelectedParametersRepository
-import ru.zveron.lots_feed.filters_screen.data.parameters.ParameterState
+import ru.zveron.parameters.ParameterState
 import ru.zveron.lots_feed.filters_screen.domain.parameters.FiltersParameterItemProviderFactory
 import ru.zveron.lots_feed.filters_screen.domain.parameters.FiltersUpdateParametersInteractor
-import ru.zveron.lots_feed.parameters.data.ParametersRepository
+import ru.zveron.parameters.data.ParametersRepository
 
 internal class FiltersViewModel(
     private val filtersUpdateParametersInteractor: FiltersUpdateParametersInteractor,
