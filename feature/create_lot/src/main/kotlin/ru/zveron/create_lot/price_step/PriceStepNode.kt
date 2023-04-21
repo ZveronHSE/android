@@ -42,6 +42,7 @@ internal class PriceStepNode(
             canContinue = canContinue.value,
             modifier = modifier,
             onContinueClick = viewModel::continueClicked,
+            onBackClick = ::navigateUp,
         )
     }
 }

@@ -13,6 +13,8 @@ import ru.zveron.appyx.viewmodel.ViewModelParentNode
 import ru.zveron.create_lot.categories_step.CategoriesStepNavigator
 import ru.zveron.choose_item.ChooseItemNode
 import ru.zveron.create_lot.R
+import ru.zveron.create_lot.address_channels_step.AddressChannelsStepNavigator
+import ru.zveron.create_lot.address_channels_step.AddressChannelsStepNode
 import ru.zveron.create_lot.details_step.DetailsStepNavigator
 import ru.zveron.create_lot.details_step.DetailsStepNode
 import ru.zveron.create_lot.general_step.GeneralStepNavigator
@@ -34,7 +36,7 @@ class RootCreateLotNode private constructor(
     navModel = backStack,
     plugins = listOf(component),
 ), GeneralStepNavigator, CategoriesStepNavigator, LotFormStepNavigator, DetailsStepNavigator,
-    PriceStepNavigator {
+    PriceStepNavigator, AddressChannelsStepNavigator {
     private val categoriesItemProvider by lazy {
         component.getCategoriesItemProvider(this)
     }
@@ -70,6 +72,9 @@ class RootCreateLotNode private constructor(
 
         @Parcelize
         object PriceStep : NavTarget()
+
+        @Parcelize
+        object AddressChannelsStep: NavTarget()
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -112,6 +117,12 @@ class RootCreateLotNode private constructor(
                 component.scope,
                 this,
             )
+
+            NavTarget.AddressChannelsStep -> AddressChannelsStepNode(
+                buildContext,
+                component.scope,
+                this,
+            )
         }
     }
 
@@ -146,6 +157,10 @@ class RootCreateLotNode private constructor(
     }
 
     override fun completePriceStep() {
+        backStack.push(NavTarget.AddressChannelsStep)
+    }
+
+    override fun completeAddressChannelsStep() {
         TODO("Not yet implemented")
     }
 }

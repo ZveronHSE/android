@@ -24,4 +24,11 @@
     <string name="price_input_placeholder">₽</string>
     <string name="price_input_format">₽</string>
     <string name="negotiate_price">Цена договорная</string>
+
+    <string name="address_title">Адрес</string>
+    <string name="address_input_label">Место сделки</string>
+    <string name="address_input_placeholder">Выберите адрес</string>
+    <string name="communication_channels_title">Способы связи</string>
+    <string name="call_communication_channel">По телефону</string>
+    <string name="chat_communication_channel">По сообщениям</string>
 </resources>
