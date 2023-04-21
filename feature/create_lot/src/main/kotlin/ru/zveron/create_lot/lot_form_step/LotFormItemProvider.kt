@@ -15,6 +15,7 @@ import ru.zveron.choose_item.ChooseItemUiState
 import ru.zveron.create_lot.CreateLotScopeDelegate
 import ru.zveron.create_lot.data.LotCreateInfoRepository
 import ru.zveron.create_lot.data.LotCreateSelectedCategoriesRepository
+import ru.zveron.design.resources.ZveronText
 import ru.zveron.lot_forms.data.LotFormRepository
 
 internal class LotFormItemProvider(
@@ -47,7 +48,7 @@ internal class LotFormItemProvider(
 
                 _uiState.update {
                     val items = lotForms.map {
-                        ChooseItem(it.id, it.title)
+                        ChooseItem(it.id, ZveronText.RawString(it.title))
                     }
                     ChooseItemUiState.Success(items)
                 }

@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.stateIn
 import ru.zveron.choose_item.ChooseItem
 import ru.zveron.choose_item.ChooseItemItemProvider
 import ru.zveron.choose_item.ChooseItemUiState
+import ru.zveron.design.resources.ZveronText
 import ru.zveron.lots_feed.filters_screen.data.lot_forms.ChildLotFormState
 import ru.zveron.lots_feed.filters_screen.data.lot_forms.FiltersChildrenLotFormRepository
 
@@ -22,7 +23,7 @@ internal class LotFormItemProvider(
         when (it) {
             ChildLotFormState.Loading -> ChooseItemUiState.Loading
             is ChildLotFormState.Success -> {
-                val items = it.lotForms.map { lotForm -> ChooseItem(lotForm.id, lotForm.title) }
+                val items = it.lotForms.map { lotForm -> ChooseItem(lotForm.id, ZveronText.RawString(lotForm.title)) }
                 ChooseItemUiState.Success(items)
             }
         }

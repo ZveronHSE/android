@@ -9,8 +9,10 @@ import ru.zveron.contract.lot.createLotRequest
 import ru.zveron.contract.lot.fullAddress
 import ru.zveron.contract.lot.model.photo
 import ru.zveron.models.communication_channels.CommunicationChannel
+import ru.zveron.models.gender.Gender
 import ru.zveron.models.lot_form.LotForm
 import ru.zveron.models.mappings.toGrpcCommunicationChannel
+import ru.zveron.models.mappings.toGrpcGender
 
 internal class LotCreateInfoRepository {
     private val photoUrls = mutableListOf<String>()
@@ -28,6 +30,8 @@ internal class LotCreateInfoRepository {
     private var communicationChannels: List<CommunicationChannel>? = null
 
     private var address: String? = null
+
+    private var gender: Gender? = null
 
     fun setName(name: String) {
         lotName = name
@@ -70,6 +74,10 @@ internal class LotCreateInfoRepository {
         this.address = address
     }
 
+    fun setGender(gender: Gender) {
+        this.gender = gender
+    }
+
     fun buildRequest(
         categorySelection: CategorySelection,
     ): CreateLotRequest {
@@ -83,6 +91,7 @@ internal class LotCreateInfoRepository {
             ?: throw IllegalStateException("communication channels not set")
         val address = this.address ?: throw IllegalStateException("address not set")
         val description = this.description ?: throw IllegalStateException("description")
+        val gender = this.gender
 
         return createLotRequest {
             this.title = name
@@ -106,9 +115,12 @@ internal class LotCreateInfoRepository {
             }
 
             this.lotFormId = lotForm.id
-            this.categoryId = categorySelection.rootCategory!!.id
+            this.categoryId = categorySelection.innerCategory!!.id
             this.communicationChannel.addAll(communicationChannels.map { it.toGrpcCommunicationChannel() })
 
+            gender?.let {
+                this.gender = gender.toGrpcGender()
+            }
         }
     }
 }

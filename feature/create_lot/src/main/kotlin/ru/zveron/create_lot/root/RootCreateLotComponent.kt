@@ -13,6 +13,9 @@ import ru.zveron.create_lot.CreateLotScopeDelegate
 import ru.zveron.create_lot.categories_step.CategoriesItemProvider
 import ru.zveron.create_lot.categories_step.CategoriesStepNavigator
 import ru.zveron.create_lot.details_step.domain.ParametersItemProviderFactory
+import ru.zveron.create_lot.domain.ShouldInputGenderInteractor
+import ru.zveron.create_lot.gender_step.GenderItemProvider
+import ru.zveron.create_lot.gender_step.GenderStepNavigator
 import ru.zveron.create_lot.lot_form_step.LotFormItemProvider
 import ru.zveron.create_lot.lot_form_step.LotFormStepNavigator
 
@@ -36,5 +39,13 @@ internal class RootCreateLotComponent: KoinScopeComponent, Destroyable, CreateLo
 
     fun getParametersItemProvider(parameterId: Int): ChooseItemItemProvider {
         return scope.get<ParametersItemProviderFactory>().createItemProvider(parameterId)
+    }
+
+    fun getShouldInputGenderInteractor(): ShouldInputGenderInteractor {
+        return scope.get()
+    }
+
+    fun getGenderItemProvider(genderStepNavigator: GenderStepNavigator): GenderItemProvider {
+        return scope.get(parameters = { parametersOf(genderStepNavigator) })
     }
 }

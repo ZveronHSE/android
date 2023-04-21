@@ -6,12 +6,14 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import ru.zveron.create_lot.address_channels_step.AddressChannelsStepNavigator
 import ru.zveron.create_lot.data.CreateLotRepository
 import ru.zveron.create_lot.data.LotCreateAddressRepository
@@ -92,7 +94,9 @@ internal class AddressChannelsStepViewModel(
         viewModelScope.launch {
             try {
                 _continueButtonLoading.update { true }
-                val id = createLotRepository.createLot()
+                val id = withContext(Dispatchers.IO) {
+                    createLotRepository.createLot()
+                }
                 _continueButtonLoading.update { false }
                 navigator.completeAddressChannelsStep(id)
             } catch (e: CancellationException) {

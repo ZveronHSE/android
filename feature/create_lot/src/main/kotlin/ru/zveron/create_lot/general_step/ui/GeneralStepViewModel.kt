@@ -22,6 +22,7 @@ import ru.zveron.categories.data.CategorySelection
 import ru.zveron.create_lot.data.LotCreateInfoRepository
 import ru.zveron.create_lot.data.LotCreatePhotoStateRepository
 import ru.zveron.create_lot.data.LotCreateSelectedCategoriesRepository
+import ru.zveron.create_lot.data.PhotoState
 import ru.zveron.create_lot.data.PhotoUploadStatus
 import ru.zveron.create_lot.domain.LotCreateUploadPhotoInteractor
 import ru.zveron.create_lot.general_step.GeneralStepNavigator
@@ -47,8 +48,9 @@ internal class GeneralStepViewModel(
     val continueButtonState = combine(
         lotCreateSelectedCategoriesRepository.currentCategorySelection,
         nameInputStateFlow,
-    ) { categorySelection, nameInput ->
-        val canContinue = validateContinueButton(categorySelection, nameInput)
+        lotCreatePhotoStateRepository.photoStates,
+    ) { categorySelection, nameInput, photoStates ->
+        val canContinue = validateContinueButton(categorySelection, nameInput, photoStates)
         ContinueButtonState(canContinue)
     }.stateIn(viewModelScope, SharingStarted.Lazily, ContinueButtonState(false))
 
@@ -129,8 +131,11 @@ internal class GeneralStepViewModel(
     private fun validateContinueButton(
         categorySelection: CategorySelection,
         nameInput: String,
+        photoStates: List<PhotoState>,
     ): Boolean {
-        return categorySelection.rootCategory != null && nameInput.isNotBlank()
+        return categorySelection.rootCategory != null
+                && nameInput.isNotBlank()
+                && photoStates.any { it.status == PhotoUploadStatus.SUCCESS }
     }
 
     fun loadPhoto(uri: Uri) {

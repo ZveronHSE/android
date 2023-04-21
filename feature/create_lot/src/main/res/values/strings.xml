@@ -9,6 +9,11 @@
     <string name="lot_name_placeholder">Введите название</string>
     <string name="name_example">Например: Кошка "Леля". 3 года</string>
 
+    <string name="gender_title">Выберите пол</string>
+    <string name="gender_male">Мужской</string>
+    <string name="gender_female">Женски</string>
+
+
     <string name="continue_button_title">Далее</string>
 
     <string name="categories_title">Выберите категорию</string>

@@ -17,6 +17,7 @@ import ru.zveron.create_lot.address_channels_step.AddressChannelsStepNavigator
 import ru.zveron.create_lot.address_channels_step.AddressChannelsStepNode
 import ru.zveron.create_lot.details_step.DetailsStepNavigator
 import ru.zveron.create_lot.details_step.DetailsStepNode
+import ru.zveron.create_lot.gender_step.GenderStepNavigator
 import ru.zveron.create_lot.general_step.GeneralStepNavigator
 import ru.zveron.create_lot.general_step.GeneralStepNode
 import ru.zveron.create_lot.lot_form_step.LotFormStepNavigator
@@ -37,13 +38,17 @@ class RootCreateLotNode private constructor(
     navModel = backStack,
     plugins = listOf(component),
 ), GeneralStepNavigator, CategoriesStepNavigator, LotFormStepNavigator, DetailsStepNavigator,
-    PriceStepNavigator, AddressChannelsStepNavigator {
+    PriceStepNavigator, AddressChannelsStepNavigator, GenderStepNavigator {
     private val categoriesItemProvider by lazy {
         component.getCategoriesItemProvider(this)
     }
 
     private val lotFormItemProvider by lazy {
         component.getLotFormItemProvider(this)
+    }
+
+    private val genderItemProvider by lazy {
+        component.getGenderItemProvider(this)
     }
 
     constructor(buildContext: BuildContext, navigator: RootCreateLotNavigator) : this(
@@ -77,6 +82,9 @@ class RootCreateLotNode private constructor(
 
         @Parcelize
         object AddressChannelsStep: NavTarget()
+
+        @Parcelize
+        object GenderStep: NavTarget()
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -125,6 +133,12 @@ class RootCreateLotNode private constructor(
                 component.scope,
                 this,
             )
+
+            NavTarget.GenderStep -> ChooseItemNode(
+                buildContext,
+                ZveronText.RawResource(R.string.gender_title),
+                genderItemProvider,
+            )
         }
     }
 
@@ -142,8 +156,12 @@ class RootCreateLotNode private constructor(
     }
 
     override fun completeCategoriesStep() {
-        lotFormItemProvider.launchLotFormLoad()
-        backStack.push(NavTarget.LotFormStep)
+        if (component.getShouldInputGenderInteractor().shouldSelectGender()) {
+            backStack.push(NavTarget.GenderStep)
+        } else {
+            lotFormItemProvider.launchLotFormLoad()
+            backStack.push(NavTarget.LotFormStep)
+        }
     }
 
     override fun completeLotFormStep() {
@@ -165,5 +183,10 @@ class RootCreateLotNode private constructor(
     override fun completeAddressChannelsStep(id: Long) {
         navigateUp()
         navigator.openLot(id)
+    }
+
+    override fun completeGenderStep() {
+        lotFormItemProvider.launchLotFormLoad()
+        backStack.push(NavTarget.LotFormStep)
     }
 }

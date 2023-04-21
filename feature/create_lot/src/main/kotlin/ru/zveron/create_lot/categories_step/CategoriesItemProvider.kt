@@ -15,6 +15,7 @@ import ru.zveron.choose_item.ChooseItemItemProvider
 import ru.zveron.choose_item.ChooseItemUiState
 import ru.zveron.create_lot.CreateLotScopeDelegate
 import ru.zveron.create_lot.data.LotCreateSelectedCategoriesRepository
+import ru.zveron.design.resources.ZveronText
 
 internal class CategoriesItemProvider(
     private val scopeDelegate: CreateLotScopeDelegate,
@@ -42,7 +43,7 @@ internal class CategoriesItemProvider(
 
                 _uiState.update {
                     val items = categories.map {
-                        ChooseItem(it.id, it.name)
+                        ChooseItem(it.id, ZveronText.RawString(it.name))
                     }
                     ChooseItemUiState.Success(items)
                 }

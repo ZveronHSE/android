@@ -18,7 +18,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -52,11 +51,22 @@ fun ChooseItemScreen(
 ) {
     val searchInput = remember { mutableStateOf("") }
 
+    val itemsForFilter = when (uiState) {
+        ChooseItemUiState.Loading -> emptyList()
+        is ChooseItemUiState.Success -> uiState.items.map {
+            it to it.title.getText()
+        }
+    }
+
     val visibleItems by remember(uiState) {
         derivedStateOf {
-            when(uiState) {
+            when (uiState) {
                 ChooseItemUiState.Loading -> emptyList()
-                is ChooseItemUiState.Success -> uiState.items.filter { it.title.contains(searchInput.value, true) }
+                is ChooseItemUiState.Success -> itemsForFilter
+                    .filter {
+                        it.second.contains(searchInput.value, true)
+                    }
+                    .map { it.first }
             }
         }
     }
@@ -125,12 +135,12 @@ private fun ColumnScope.Items(
             val clicker = remember {
                 { onItemClick.invoke(it.id) }
             }
-            Text(
+            ZveronText(
                 text = it.title,
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
                     .fillMaxWidth()
-                    .clickable(onClick = clicker, onClickLabel = it.title),
+                    .clickable(onClick = clicker, onClickLabel = it.title.getText()),
             )
         }
     }
@@ -172,9 +182,9 @@ private fun ChooseItemPreview() {
     ZveronTheme {
         val uiState = ChooseItemUiState.Success(
             listOf(
-                ChooseItem(1, "Собаки"),
-                ChooseItem(2, "Кошки"),
-                ChooseItem(3, "Грызуны"),
+                ChooseItem(1, ZveronText.RawString("Собаки")),
+                ChooseItem(2, ZveronText.RawString("Кошки")),
+                ChooseItem(3, ZveronText.RawString("Грызуны")),
             )
         )
         ChooseItemScreen(
