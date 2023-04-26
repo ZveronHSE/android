@@ -33,6 +33,8 @@ internal class ApigatewayDelegateImpl(
             this.requestBody = requestBody
         }
 
+        refreshTokenInteractor.checkTokenExpiration()
+
         return try {
             val apigatewayResponse =
                 apigatewayServiceCoroutineStub.callApiGateway(request, buildMetadata())
