@@ -107,6 +107,12 @@ class LotCardViewModel(
     }
 
     private fun mapToUiState(lotInfo: LotInfo): LotCardUiState.Success {
+        val avatar = if (lotInfo.seller.avatarUrl.isNotBlank()) {
+            ZveronImage.RemoteImage(lotInfo.seller.avatarUrl)
+        } else {
+            ZveronImage.ResourceImage(ru.zveron.design.R.drawable.ic_no_avatar)
+        }
+
         return LotCardUiState.Success(
             photos = lotInfo.photos.map { ZveronImage.RemoteImage(it) },
             title = lotInfo.title,
@@ -114,7 +120,7 @@ class LotCardViewModel(
             tags = lotInfo.parameters.map { mapToLotCardTag(it) },
             description = lotInfo.description,
             sellerId = lotInfo.seller.id,
-            sellerAvatar = ZveronImage.RemoteImage(lotInfo.seller.avatarUrl),
+            sellerAvatar = avatar,
             sellerName = lotInfo.seller.name,
             rating = lotInfo.seller.rating.roundToInt(),
             maxRating = 5,

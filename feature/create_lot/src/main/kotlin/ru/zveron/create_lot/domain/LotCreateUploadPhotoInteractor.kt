@@ -1,5 +1,6 @@
 package ru.zveron.create_lot.domain
 
+import android.util.Log
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -55,6 +56,7 @@ internal class LotCreateUploadPhotoInteractor(
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Exception) {
+                Log.d("Lot create", "Error uploading photo", e)
                 lotCreatePhotoStateRepository.updateStateForId(id, PhotoUploadStatus.ERROR)
             }
         }

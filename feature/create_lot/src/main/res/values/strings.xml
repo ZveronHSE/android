@@ -11,7 +11,7 @@
 
     <string name="gender_title">Выберите пол</string>
     <string name="gender_male">Мужской</string>
-    <string name="gender_female">Женски</string>
+    <string name="gender_female">Женский</string>
 
 
     <string name="continue_button_title">Далее</string>
