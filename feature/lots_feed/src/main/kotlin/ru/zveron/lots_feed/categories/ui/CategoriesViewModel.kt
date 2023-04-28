@@ -61,7 +61,14 @@ internal class CategoriesViewModel(
             try {
                 _uiState.update{ CategoriesUiState.Loading }
                 val categories = categoryInteractor.loadChildrenCategories(categoryId)
-                _uiState.update { CategoriesUiState.Success(categories.map { it.toUiState() }) }
+                _uiState.update {
+                    val states = categories.map { it.toUiState() }.toMutableList().apply {
+                        val birdCategory = findLast { category -> category.id == 12 } ?: return@apply
+                        this.remove(birdCategory)
+                        this.add(3, birdCategory)
+                    }
+                    CategoriesUiState.Success(states)
+                }
             } catch (e: Exception) {
                 Log.e("Categories", "Error loading child categories", e)
             }
