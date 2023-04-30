@@ -30,7 +30,7 @@ koin_android_compose = "3.4.1"
 
 coil = "2.2.2"
 
-zveron_contracts = "1.9.4"
+zveron_contracts = "2.0.0"
 
 firebase_bom = "31.3.0"
 

@@ -34,7 +34,6 @@ import ru.zveron.design.components.ActionButton
 import ru.zveron.design.components.BottomSheet
 import ru.zveron.design.components.LoginButton
 import ru.zveron.design.theme.GoogleColors
-import ru.zveron.design.theme.VkColors
 import ru.zveron.design.theme.ZveronTheme
 
 class SocialsSheetScreen(
@@ -99,7 +98,6 @@ private fun SocialsScreen(
     isLoading: Boolean,
     modifier: Modifier = Modifier,
     onGoogleButtonClick: () -> Unit = {},
-    onVkButtonClick: () -> Unit = {},
     onPhoneButtonClick: () -> Unit = {},
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
@@ -114,7 +112,7 @@ private fun SocialsScreen(
             ) {
                 LoginButton(loginButtonColors = GoogleColors, onClick = onGoogleButtonClick)
 
-                LoginButton(loginButtonColors = VkColors, onClick = onVkButtonClick)
+//                LoginButton(loginButtonColors = VkColors, onClick = onVkButtonClick)
             }
 
             Spacer(Modifier.height(24.dp))

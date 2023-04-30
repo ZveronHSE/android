@@ -9,6 +9,8 @@ internal class AuthorizationStorageImpl(
 
     override val accessToken: String?
         get() = authorizationPreferencesWrapper.accessToken
+    override val accessTokenExpiration: Long?
+        get() = authorizationPreferencesWrapper.accessTokenExpiration
     override val refreshToken: String?
         get() = authorizationPreferencesWrapper.refreshToken
     override val deviceFingerPrint: String?

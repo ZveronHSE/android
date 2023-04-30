@@ -72,6 +72,41 @@ fun CategoryStub(
 }
 
 @Composable
+fun RootCategory(
+    category: CategoryUiState,
+    modifier: Modifier = Modifier,
+    onCategoryClick: (CategoryUiState) -> Unit = {},
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
+            .clickable(
+                onClickLabel = category.title,
+                onClick = { onCategoryClick.invoke(category) },
+            )
+    ) {
+        ZveronImage(
+            zveronImage = category.image,
+            contentScale = ContentScale.FillHeight,
+            modifier = Modifier.height(135.dp)
+        )
+
+        Spacer(Modifier.height(8.dp))
+
+        Text(
+            category.title,
+            style = TextStyle(
+                fontFamily = Rubik,
+                fontWeight = FontWeight.Normal,
+                fontSize = 16.sp,
+                lineHeight = 18.96.sp,
+            ),
+            textAlign = TextAlign.Center,
+        )
+    }
+}
+
+@Composable
 fun Category(
     category: CategoryUiState,
     modifier: Modifier = Modifier,
@@ -89,7 +124,9 @@ fun Category(
         ZveronImage(
             zveronImage = category.image,
             contentScale = ContentScale.Crop,
-            modifier = Modifier.size(84.dp).clip(CircleShape)
+            modifier = Modifier
+                .size(84.dp)
+                .clip(CircleShape)
         )
 
         Spacer(Modifier.height(8.dp))
@@ -125,5 +162,18 @@ internal fun CategoryPreview() {
 internal fun CategoryStubPreview() {
     ZveronTheme {
         CategoryStub()
+    }
+}
+
+@Preview
+@Composable
+private fun RootCategoryPreview() {
+    ZveronTheme {
+        val category = CategoryUiState(
+            id = 0,
+            image = ZveronImage.ResourceImage(R.drawable.ic_goods_category),
+            title = "Товары для животных"
+        )
+        RootCategory(category)
     }
 }

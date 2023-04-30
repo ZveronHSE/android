@@ -64,13 +64,11 @@ fun LotRow(
         ) {
             ZveronImage(
                 zveronImage,
-                modifier = Modifier.fillMaxHeight(),
+                modifier = Modifier.fillMaxHeight().width(150.dp),
                 contentScale = ContentScale.FillHeight,
                 loadingImageModifier = Modifier
-                    .size(104.dp)
                     .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
                     .background(Color.LightGray),
-                readyImageModifier = Modifier.height(104.dp),
             )
 
             Column(

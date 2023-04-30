@@ -63,7 +63,7 @@ private fun ReadyCategories(
             ) {
                 for (category in categories) {
                     key(category.id) {
-                        Category(
+                        RootCategory(
                             category = category,
                             onCategoryClick = onCategoryClick,
                             modifier = Modifier.weight(1f),

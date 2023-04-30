@@ -17,6 +17,7 @@ import ru.zveron.models.lots.Lot
 import ru.zveron.user_profile.R
 import ru.zveron.user_profile.UserProfileParams
 import ru.zveron.user_profile.data.UserProfileRepository
+import ru.zveron.design.R as DesignR
 
 internal class UserProfileViewModel(
     private val params: UserProfileParams,
@@ -41,9 +42,15 @@ internal class UserProfileViewModel(
                 val activeLots = ListWrapper(profile.activeLots.map { mapLot(it) })
                 val closedLots = ListWrapper(profile.closedLots.map { mapLot(it) })
 
+                val avatar = if (profile.avatarUrl.isNotBlank()) {
+                    ZveronImage.RemoteImage(profile.avatarUrl)
+                } else {
+                    ZveronImage.ResourceImage(DesignR.drawable.ic_no_avatar)
+                }
+
                 _uiState.update {
                     UserProfileUiState.Success(
-                        photo = ZveronImage.RemoteImage(profile.avatarUrl),
+                        photo = avatar,
                         displayedName = ZveronText.ArgResource(
                             R.string.name_display_format,
                             profile.name,

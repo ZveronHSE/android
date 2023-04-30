@@ -5,6 +5,9 @@ interface AuthorizationStorage {
 
     val accessToken: String?
 
+    val accessTokenExpiration: Long?
+
+
     val refreshToken: String?
 
     val deviceFingerPrint: String?
