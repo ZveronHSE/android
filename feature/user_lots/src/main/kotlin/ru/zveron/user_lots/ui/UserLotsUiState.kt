@@ -11,6 +11,7 @@ sealed class UserLotsUiState {
     data class Success(
         val currentLots: ListWrapper<LotUiState>,
         val currentTab: UserLotTab,
+        val isRefreshing: Boolean = false,
     ): UserLotsUiState()
 
     object Loading: UserLotsUiState()

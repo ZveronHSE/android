@@ -51,6 +51,32 @@ class UserLotsViewModel(
         }
     }
 
+    fun refreshLots() {
+        viewModelScope.launch {
+            _uiState.update {
+                when (it) {
+                    is UserLotsUiState.Success -> it.copy(isRefreshing = true)
+                    else -> it
+                }
+            }
+            try {
+                val userLots = getUserLotsInteractor.getUserLots()
+                val uiUserLots = mapToUiUserLots(userLots)
+                _userLots.update { uiUserLots }
+
+                _uiState.update {
+                    UserLotsUiState.Success(
+                        currentLots = uiUserLots.activeLots,
+                        _currentTab.value,
+                    )
+                }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                _uiState.update { UserLotsUiState.Error }
+            }
+        }
+    }
     fun onTabClick(userLotTab: UserLotTab) {
         if (userLotTab == _currentTab.value) {
             return

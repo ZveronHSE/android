@@ -3,6 +3,7 @@ package ru.zveron.user_lots.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,9 +15,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
@@ -48,11 +53,14 @@ import ru.zveron.design.R as DesignR
 @Composable
 internal fun UserLots(
     state: UserLotsUiState,
+    isRefreshing: Boolean,
     modifier: Modifier = Modifier,
+    refreshEnabled: Boolean = true,
     onTabClick: (UserLotTab) -> Unit = {},
     onAddLotClick: () -> Unit = {},
     onLotClick: (Long) -> Unit = {},
     onRetryClicked: () -> Unit = {},
+    onRefresh: () -> Unit = {},
 ) {
     when (state) {
         UserLotsUiState.Loading -> LoadingUserLots(modifier.fillMaxWidth())
@@ -61,6 +69,9 @@ internal fun UserLots(
             onTabClick = onTabClick,
             onLotClick = onLotClick,
             onAddLotClick = onAddLotClick,
+            isRefreshing = isRefreshing,
+            refreshEnabled = refreshEnabled,
+            onRefresh = onRefresh,
         )
         UserLotsUiState.Error -> ErrorUserLots(modifier.fillMaxWidth(), onRetryClicked)
     }
@@ -154,43 +165,62 @@ private fun LoadingUserLots(
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun SuccessUserLots(
     userLotsUiState: UserLotsUiState.Success,
+    isRefreshing: Boolean,
     modifier: Modifier = Modifier,
+    refreshEnabled: Boolean = true,
     onTabClick: (UserLotTab) -> Unit = {},
     onAddLotClick: () -> Unit = {},
     onLotClick: (Long) -> Unit = {},
+    onRefresh: () -> Unit = {},
 ) {
-    LazyColumn(
-        modifier = modifier.padding(horizontal = 16.dp),
-    ) {
-        item {
-            Spacer(Modifier.height(40.dp))
+    Column(modifier = modifier.padding(horizontal = 16.dp)) {
+        Spacer(Modifier.height(40.dp))
 
-            Text(
-                text = stringResource(R.string.user_lots_title),
-                style = TextStyle(
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 28.sp,
-                ),
-                color = gray5,
-            )
-
-            Spacer(Modifier.height(32.dp))
-        }
-
-        item {
-            UserLotsTabs(userLotsUiState.currentTab, onTabClick = onTabClick)
-
-            Spacer(Modifier.height(24.dp))
-        }
-
-        UserLotsList(
-            userLotsUiState.currentLots,
-            onLotClick = onLotClick,
-            onAddLotClick = onAddLotClick,
+        Text(
+            text = stringResource(R.string.user_lots_title),
+            style = TextStyle(
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 28.sp,
+            ),
+            color = gray5,
         )
+
+        Spacer(Modifier.height(32.dp))
+
+        UserLotsTabs(userLotsUiState.currentTab, onTabClick = onTabClick)
+
+        Spacer(Modifier.height(24.dp))
+
+        val pullRefreshState = rememberPullRefreshState(
+            refreshing = isRefreshing,
+            onRefresh = onRefresh,
+        )
+
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
+                .pullRefresh(pullRefreshState, refreshEnabled)
+        ) {
+            LazyColumn {
+                UserLotsList(
+                    userLotsUiState.currentLots,
+                    onLotClick = onLotClick,
+                    onAddLotClick = onAddLotClick,
+                )
+            }
+
+            PullRefreshIndicator(
+                refreshing = isRefreshing,
+                state = pullRefreshState,
+                modifier = Modifier.align(Alignment.TopCenter),
+                contentColor = MaterialTheme.colors.primary,
+            )
+        }
     }
 }
 
@@ -303,6 +333,7 @@ private fun UserLotsSuccessPreview() {
 
         SuccessUserLots(
             userLotsUiState = state,
+            isRefreshing = true,
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colors.background)

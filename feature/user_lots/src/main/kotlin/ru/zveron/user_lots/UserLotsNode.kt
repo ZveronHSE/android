@@ -8,6 +8,7 @@ import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 import ru.zveron.appyx.viewmodel.ViewModelNode
 import ru.zveron.user_lots.ui.UserLots
+import ru.zveron.user_lots.ui.UserLotsUiState
 import ru.zveron.user_lots.ui.UserLotsViewModel
 
 class UserLotsNode(
@@ -28,6 +29,11 @@ class UserLotsNode(
 
         val uiState = viewmodel.uiState.collectAsState()
 
+        val isRefreshing = when (val state = uiState.value) {
+            is UserLotsUiState.Success -> state.isRefreshing
+            else -> false
+        }
+
         UserLots(
             state = uiState.value,
             modifier = modifier,
@@ -35,6 +41,9 @@ class UserLotsNode(
             onLotClick = viewmodel::onLotClick,
             onTabClick = viewmodel::onTabClick,
             onRetryClicked = viewmodel::onRetryClick,
+            isRefreshing = isRefreshing,
+            onRefresh = viewmodel::refreshLots,
+            refreshEnabled = uiState.value is UserLotsUiState.Success,
         )
     }
 }
