@@ -8,7 +8,7 @@ sealed class FavoritesContentState
 sealed class FavoritesLotsUiState: FavoritesContentState() {
     object Loading: FavoritesLotsUiState()
 
-    data class Success(val lots: List<LotUiState>): FavoritesLotsUiState()
+    data class Success(val lots: List<LotUiState>, val isRefreshing: Boolean = false): FavoritesLotsUiState()
 
     object Error: FavoritesLotsUiState()
 }

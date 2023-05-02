@@ -2,6 +2,7 @@ package ru.zveron.favorites.ui
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
@@ -14,8 +15,15 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
@@ -41,9 +49,9 @@ import ru.zveron.design.theme.ZveronTheme
 import ru.zveron.design.theme.enabledButtonGradient
 import ru.zveron.design.theme.gray3
 import ru.zveron.favorites.R
-import ru.zveron.design.R as DesignR
 import ru.zveron.favorites.ui.state.FavoritesLotsUiState
 import ru.zveron.favorites.ui.state.LotUiState
+import ru.zveron.design.R as DesignR
 
 private const val BOTTOM_BAR_HEIGHT = 98
 
@@ -51,20 +59,26 @@ private const val BOTTOM_BAR_HEIGHT = 98
 internal fun ColumnScope.FavoriteLotsContent(
     lotsState: FavoritesLotsUiState,
     searchFilter: State<String>,
+    isRefreshing: Boolean,
     modifier: Modifier = Modifier,
+    refreshEnabled: Boolean = true,
     onRetryClicked: () -> Unit = {},
     onLotClick: (Long) -> Unit = {},
     onLotLikeClick: (Long) -> Unit = {},
+    onRefresh: () -> Unit = {},
 ) {
     when (lotsState) {
         FavoritesLotsUiState.Error -> ErrorFavoriteLots(onRetryClicked)
         FavoritesLotsUiState.Loading -> LoadingFavoriteLots(modifier)
         is FavoritesLotsUiState.Success -> SuccessFavoriteLots(
-            lotsState.lots,
-            searchFilter,
-            modifier,
-            onLotLikeClick,
-            onLotClick,
+            lots = lotsState.lots,
+            searchFilter = searchFilter,
+            isRefreshing = isRefreshing,
+            modifier = modifier,
+            refreshEnabled = refreshEnabled,
+            onLotLikeClick = onLotLikeClick,
+            onLotClick = onLotClick,
+            onRefresh = onRefresh,
         )
     }
 }
@@ -137,9 +151,12 @@ private fun ColumnScope.ErrorFavoriteLots(
 private fun ColumnScope.SuccessFavoriteLots(
     lots: List<LotUiState>,
     searchFilter: State<String>,
+    isRefreshing: Boolean,
     modifier: Modifier = Modifier,
+    refreshEnabled: Boolean = true,
     onLotLikeClick: (Long) -> Unit = {},
-    onLotClick: (Long) -> Unit,
+    onLotClick: (Long) -> Unit = {},
+    onRefresh: () -> Unit = {},
 ) {
     val notEmpty by remember(lots) {
         // TODO: wrap this with [derivedStateOf]
@@ -161,72 +178,133 @@ private fun ColumnScope.SuccessFavoriteLots(
     when {
         visibleNotEmpty && notEmpty -> LotsNotEmpty(
             lots = visibleItems,
+            isRefreshing = isRefreshing,
             modifier = modifier,
+            refreshEnabled = refreshEnabled,
             onLotClick = onLotClick,
             onLotLikeClick = onLotLikeClick,
+            onRefresh = onRefresh,
         )
         !visibleNotEmpty && notEmpty -> LotsEmptyBySearch()
-        else -> LotsEmpty()
+        else -> LotsEmpty(
+            isRefreshing = isRefreshing,
+            modifier = modifier,
+            refreshEnabled = refreshEnabled,
+            onRefresh = onRefresh,
+        )
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun ColumnScope.LotsNotEmpty(
     lots: List<LotUiState>,
-    modifier: Modifier,
+    isRefreshing: Boolean,
+    modifier: Modifier = Modifier,
+    refreshEnabled: Boolean = true,
     onLotLikeClick: (Long) -> Unit = {},
     onLotClick: (Long) -> Unit = {},
+    onRefresh: () -> Unit = {},
 ) {
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = isRefreshing,
+        onRefresh = onRefresh,
+    )
+
+    Box(
         modifier = modifier
             .weight(1f)
-            .fillMaxWidth(),
-        contentPadding = PaddingValues(16.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
+            .fillMaxWidth()
+            .pullRefresh(state = pullRefreshState, enabled = refreshEnabled)
     ) {
-        items(lots, { it.id }) { lot ->
-            val likeClicker = remember {
-                { onLotLikeClick.invoke(lot.id) }
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            items(lots, { it.id }) { lot ->
+                val likeClicker = remember {
+                    { onLotLikeClick.invoke(lot.id) }
+                }
+
+                val lotClicker = remember {
+                    { onLotClick.invoke(lot.id) }
+                }
+
+                LotCard(
+                    zveronImage = lot.image,
+                    title = lot.title,
+                    price = lot.price,
+                    date = lot.date,
+                    isLiked = lot.isLiked.value,
+                    onLikeClick = likeClicker,
+                    onCardClick = lotClicker,
+                )
             }
 
-            val lotClicker = remember {
-                { onLotClick.invoke(lot.id) }
+            item(span = { GridItemSpan(3) }) {
+                Spacer(Modifier.height(BOTTOM_BAR_HEIGHT.dp))
             }
-
-            LotCard(
-                zveronImage = lot.image,
-                title = lot.title,
-                price = lot.price,
-                date = lot.date,
-                isLiked = lot.isLiked.value,
-                onLikeClick = likeClicker,
-                onCardClick = lotClicker,
-            )
         }
 
-        item(span = { GridItemSpan(3) }) {
-            Spacer(Modifier.height(BOTTOM_BAR_HEIGHT.dp))
-        }
+        PullRefreshIndicator(
+            refreshing = isRefreshing,
+            state = pullRefreshState,
+            modifier = Modifier.align(Alignment.TopCenter),
+            contentColor = MaterialTheme.colors.primary,
+        )
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-private fun ColumnScope.LotsEmpty() {
-    Spacer(modifier = Modifier.weight(1f))
-
-    Text(
-        text = stringResource(R.string.favorites_empty_title),
-        style = TextStyle(
-            fontWeight = FontWeight.Normal,
-            fontSize = 16.sp,
-            color = gray3,
-        ),
-        modifier = Modifier.align(Alignment.CenterHorizontally),
+private fun ColumnScope.LotsEmpty(
+    isRefreshing: Boolean,
+    modifier: Modifier = Modifier,
+    refreshEnabled: Boolean = true,
+    onRefresh: () -> Unit = {},
+) {
+    val scrollableState = rememberScrollState()
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = isRefreshing,
+        onRefresh = onRefresh,
     )
 
-    Spacer(modifier = Modifier.weight(2f))
+    Box(
+        modifier = modifier
+            .weight(1f)
+            .fillMaxWidth()
+            .pullRefresh(state = pullRefreshState, enabled = refreshEnabled)
+    ) {
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .verticalScroll(scrollableState)
+        ) {
+            Spacer(modifier = Modifier.weight(1f))
+
+            Text(
+                text = stringResource(R.string.favorites_empty_title),
+                style = TextStyle(
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 16.sp,
+                    color = gray3,
+                ),
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+            )
+
+            Spacer(modifier = Modifier.weight(2f))
+        }
+
+        PullRefreshIndicator(
+            refreshing = isRefreshing,
+            state = pullRefreshState,
+            modifier = Modifier.align(Alignment.TopCenter),
+            contentColor = MaterialTheme.colors.primary,
+        )
+    }
 }
 
 @Composable
@@ -249,7 +327,9 @@ private fun ColumnScope.LotsEmptyBySearch() {
             color = gray3,
             textAlign = TextAlign.Center,
         ),
-        modifier = Modifier.align(Alignment.CenterHorizontally).padding(horizontal = 32.dp),
+        modifier = Modifier
+            .align(Alignment.CenterHorizontally)
+            .padding(horizontal = 32.dp),
     )
 
     Spacer(modifier = Modifier.weight(2f))
@@ -265,7 +345,7 @@ private fun FavoriteLotsLoadingPreview() {
 
     ZveronTheme {
         Column(Modifier.fillMaxSize()) {
-            FavoriteLotsContent(lotsState = state, searchFilter = searchFilter)
+            FavoriteLotsContent(lotsState = state, searchFilter = searchFilter, isRefreshing = false)
         }
     }
 }
@@ -281,7 +361,7 @@ private fun FavoriteLotsErrorPreview(
 
     ZveronTheme {
         Column(Modifier.fillMaxSize()) {
-            FavoriteLotsContent(lotsState = state, searchFilter = searchFilter)
+            FavoriteLotsContent(lotsState = state, searchFilter = searchFilter, isRefreshing = false,)
         }
     }
 }
@@ -326,7 +406,7 @@ private fun FavoriteLotsSuccessPreview() {
 
     ZveronTheme {
         Column(Modifier.fillMaxSize()) {
-            FavoriteLotsContent(lotsState = state, searchFilter = searchFilter)
+            FavoriteLotsContent(lotsState = state, searchFilter = searchFilter, isRefreshing = false,)
         }
     }
 }
@@ -368,7 +448,7 @@ private fun FavoriteLotsSuccessEmptyPreview() {
 
     ZveronTheme {
         Column(Modifier.fillMaxSize()) {
-            FavoriteLotsContent(lotsState = state, searchFilter = searchFilter)
+            FavoriteLotsContent(lotsState = state, searchFilter = searchFilter, isRefreshing = false)
         }
     }
 }

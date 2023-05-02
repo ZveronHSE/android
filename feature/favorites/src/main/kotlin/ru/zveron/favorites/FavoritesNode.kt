@@ -9,6 +9,7 @@ import org.koin.androidx.compose.koinViewModel
 import ru.zveron.appyx.viewmodel.ViewModelNode
 import ru.zveron.favorites.ui.Favorites
 import ru.zveron.favorites.ui.FavoritesViewModel
+import ru.zveron.favorites.ui.state.FavoritesLotsUiState
 
 class FavoritesNode(
     buildContext: BuildContext,
@@ -28,6 +29,11 @@ class FavoritesNode(
         val categoriesState by viewModel.categoriesUiState.collectAsState()
         val contentState by viewModel.contentUiState.collectAsState()
 
+        val isRefreshing = when (val uiState = contentState) {
+            is FavoritesLotsUiState.Success -> uiState.isRefreshing
+            else -> false
+        }
+
         Favorites(
             categoryState = categoriesState,
             contentState = contentState,
@@ -38,6 +44,9 @@ class FavoritesNode(
             onLotLikeClick = viewModel::onLotLikeClick,
             onDeleteAllClicked = viewModel::onRemoveAllClicked,
             onDeleteUnactiveClicked = viewModel::onRemoveUnactiveClicked,
+            isRefreshing = isRefreshing,
+            onRefresh = viewModel::refresh,
+            refreshEnabled = contentState is FavoritesLotsUiState.Success,
         )
     }
 }
