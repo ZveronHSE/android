@@ -21,6 +21,7 @@ import ru.zveron.favorites.ui.state.CategoryUiState
 import ru.zveron.favorites.ui.state.FavoritesCategoriesUiState
 import ru.zveron.favorites.ui.state.FavoritesLotsUiState
 import ru.zveron.favorites.ui.state.LotUiState
+import ru.zveron.models.lots.Lot
 import ru.zveron.models.lots.Status
 
 internal class FavoritesViewModel(
@@ -81,17 +82,7 @@ internal class FavoritesViewModel(
             updateUiStateForCategory(categoryId, FavoritesLotsUiState.Loading)
             try {
                 val lots = loadCategoryFavoriteLotsInteractor.loadFavoriteLots(categoryId)
-                val uiLots = lots.map {
-                    LotUiState(
-                        id = it.id,
-                        title = it.title,
-                        price = it.price,
-                        date = it.publicationDate,
-                        image = ZveronImage.RemoteImage(it.photoUrl),
-                        isLiked = mutableStateOf(true),
-                        isActive = it.status == Status.ACTIVE || it.status == Status.UNKNOWN,
-                    )
-                }
+                val uiLots = lots.map { it.toUiState() }
                 val successState = FavoritesLotsUiState.Success(uiLots)
                 updateUiStateForCategory(categoryId, successState)
             } catch (e: CancellationException) {
@@ -205,5 +196,40 @@ internal class FavoritesViewModel(
     fun retryClicked() {
         val categoryId = _selectedCategoryId.value ?: return
         loadFavoriteLotsForCategory(categoryId)
+    }
+
+    fun refresh() {
+        val categoryId = _selectedCategoryId.value ?: return
+        val currentUiState = _contentStates.value[categoryId] ?: return
+        viewModelScope.launch {
+            val newState = when (currentUiState) {
+                is FavoritesLotsUiState.Success -> currentUiState.copy(isRefreshing = true)
+                else -> currentUiState
+            }
+            updateUiStateForCategory(categoryId, newState)
+            try {
+                val lots = loadCategoryFavoriteLotsInteractor.loadFavoriteLots(categoryId)
+                val uiLots = lots.map { it.toUiState() }
+                val successState = FavoritesLotsUiState.Success(uiLots, isRefreshing = false)
+                updateUiStateForCategory(categoryId, successState)
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                Log.e("Favorites", "Error loading favorite lots", e)
+                updateUiStateForCategory(categoryId, FavoritesLotsUiState.Error)
+            }
+        }
+    }
+
+    private fun Lot.toUiState(): LotUiState {
+        return LotUiState(
+            id = this.id,
+            title = this.title,
+            price = this.price,
+            date = this.publicationDate,
+            image = ZveronImage.RemoteImage(this.photoUrl),
+            isLiked = mutableStateOf(true),
+            isActive = this.status == Status.ACTIVE || this.status == Status.UNKNOWN,
+        )
     }
 }

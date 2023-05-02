@@ -44,13 +44,16 @@ import ru.zveron.favorites.ui.state.FavoritesLotsUiState
 fun Favorites(
     categoryState: FavoritesCategoriesUiState,
     contentState: FavoritesContentState,
+    isRefreshing: Boolean,
     modifier: Modifier = Modifier,
+    refreshEnabled: Boolean = true,
     onCategoryTabClicked: (Int) -> Unit = {},
     onRetryClicked: () -> Unit = {},
     onLotClick: (Long) -> Unit = {},
     onLotLikeClick: (Long) -> Unit = {},
     onDeleteAllClicked: () -> Unit = {},
     onDeleteUnactiveClicked: () -> Unit = {},
+    onRefresh: () -> Unit = {},
 ) {
     val searchFilter = remember {
         mutableStateOf("")
@@ -133,6 +136,9 @@ fun Favorites(
                 onRetryClicked = onRetryClicked,
                 onLotClick = onLotClick,
                 onLotLikeClick = onLotLikeClick,
+                isRefreshing = isRefreshing,
+                onRefresh = onRefresh,
+                refreshEnabled = refreshEnabled,
             )
         }
     }
@@ -200,6 +206,7 @@ fun FavoritesReadyPreview() {
             categoryState = categoryState,
             contentState = contentState,
             modifier = Modifier.fillMaxSize(),
+            isRefreshing = true,
         )
     }
 }
