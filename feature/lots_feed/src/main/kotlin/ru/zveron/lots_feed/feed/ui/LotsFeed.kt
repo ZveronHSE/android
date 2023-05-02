@@ -16,7 +16,12 @@ import androidx.compose.foundation.lazy.grid.LazyGridItemScope
 import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -62,6 +67,7 @@ private fun LazyGridScope.fullWidthItem(
     )
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun LotsFeed(
     categoryTitle: ZveronText,
@@ -71,123 +77,142 @@ internal fun LotsFeed(
     currentSortType: SortType,
     query: String,
     setQuery: (String) -> Unit,
+    isRefreshing: Boolean,
     modifier: Modifier = Modifier,
     onFiltersClicked: () -> Unit = {},
     hasBackButton: Boolean = false,
+    refreshEnabled: Boolean = false,
     onNavigateBack: () -> Unit = {},
     onSortTypeSelected: (SortType) -> Unit = {},
     onCategoryClick: (CategoryUiState) -> Unit = {},
     onParameterClick: (Int) -> Unit = {},
     onLotLikeClick: (Long) -> Unit = {},
     onLotClick: (Long) -> Unit = {},
+    onRefresh: () -> Unit = {},
 ) {
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
-        contentPadding = PaddingValues(16.dp),
-        modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
+    val pullRefreshState =
+        rememberPullRefreshState(refreshing = isRefreshing, onRefresh = onRefresh)
+    Box(
+        modifier = modifier.pullRefresh(
+            pullRefreshState,
+            enabled = refreshEnabled,
+        )
     ) {
-        fullWidthItem {
-            Row (
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                if (hasBackButton) {
-                    Icon(
-                        painterResource(DesignR.drawable.ic_back_triangle),
-                        contentDescription = stringResource(R.string.back_hint),
-                        modifier = Modifier.clickable(
-                            role = Role.Button,
-                            onClickLabel = stringResource(R.string.back_hint),
-                            onClick = onNavigateBack,
-                        )
-                    )
-
-                    Spacer(Modifier.width(8.dp))
-                }
-
-                SearchBar(
-                    value = query,
-                    onValueChange = setQuery,
-                    inputHint = stringResource(R.string.search_input_hint),
-                    alwaysKeepTrail = true,
-                    trailFrame = {
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            contentPadding = PaddingValues(16.dp),
+            modifier = Modifier.fillMaxSize(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            fullWidthItem {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    if (hasBackButton) {
                         Icon(
-                            painter = painterResource(DesignR.drawable.ic_filter),
-                            contentDescription = stringResource(R.string.filter_content_description),
-                            tint = Color.Unspecified,
+                            painterResource(DesignR.drawable.ic_back_triangle),
+                            contentDescription = stringResource(R.string.back_hint),
                             modifier = Modifier.clickable(
-                                onClickLabel = stringResource(R.string.filter_content_description),
                                 role = Role.Button,
-                                onClick = onFiltersClicked,
-                            ),
+                                onClickLabel = stringResource(R.string.back_hint),
+                                onClick = onNavigateBack,
+                            )
                         )
+
+                        Spacer(Modifier.width(8.dp))
                     }
-                )
+
+                    SearchBar(
+                        value = query,
+                        onValueChange = setQuery,
+                        inputHint = stringResource(R.string.search_input_hint),
+                        alwaysKeepTrail = true,
+                        trailFrame = {
+                            Icon(
+                                painter = painterResource(DesignR.drawable.ic_filter),
+                                contentDescription = stringResource(R.string.filter_content_description),
+                                tint = Color.Unspecified,
+                                modifier = Modifier.clickable(
+                                    onClickLabel = stringResource(R.string.filter_content_description),
+                                    role = Role.Button,
+                                    onClick = onFiltersClicked,
+                                ),
+                            )
+                        }
+                    )
+                }
             }
-        }
 
-        fullWidthItem { Spacer(Modifier.height(20.dp)) }
-
-        fullWidthItem {
-            ZveronText(
-                categoryTitle,
-                style = TextStyle(
-                    fontFamily = Rubik,
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 28.sp,
-                    lineHeight = 33.18.sp,
-                )
-            )
-        }
-
-        if (categoriesUiState !is CategoriesUiState.Hidden) {
-            fullWidthItem { Spacer(Modifier.height(24.dp)) }
+            fullWidthItem { Spacer(Modifier.height(20.dp)) }
 
             fullWidthItem {
-                Categories(
-                    categoriesUiState = categoriesUiState,
-                    onCategoryClick = onCategoryClick,
+                ZveronText(
+                    categoryTitle,
+                    style = TextStyle(
+                        fontFamily = Rubik,
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 28.sp,
+                        lineHeight = 33.18.sp,
+                    )
                 )
             }
-        }
 
-        if (parametersUiState !is ParametersUiState.Hidden) {
-            fullWidthItem { Spacer(Modifier.height(6.dp)) }
+            if (categoriesUiState !is CategoriesUiState.Hidden) {
+                fullWidthItem { Spacer(Modifier.height(24.dp)) }
+
+                fullWidthItem {
+                    Categories(
+                        categoriesUiState = categoriesUiState,
+                        onCategoryClick = onCategoryClick,
+                    )
+                }
+            }
+
+            if (parametersUiState !is ParametersUiState.Hidden) {
+                fullWidthItem { Spacer(Modifier.height(6.dp)) }
+
+                fullWidthItem {
+                    ParametersRow(
+                        uiState = parametersUiState,
+                        onParameterClick = onParameterClick,
+                    )
+                }
+            }
+
+            fullWidthItem { Spacer(Modifier.height(32.dp)) }
 
             fullWidthItem {
-                ParametersRow(
-                    uiState = parametersUiState,
-                    onParameterClick = onParameterClick,
+                Box(
+                    Modifier.fillMaxWidth()
+                ) {
+                    SortDropdown(
+                        selectedSortType = currentSortType,
+                        modifier = Modifier.align(Alignment.CenterEnd),
+                        onSortTypeSelected
+                    )
+                }
+            }
+
+            fullWidthItem { Spacer(Modifier.height(16.dp)) }
+
+            when (feedUiState) {
+                LotsFeedUiState.Loading -> LoadingLots()
+                is LotsFeedUiState.Success -> LotsGrid(
+                    feedUiState.lots,
+                    onLotLikeClick,
+                    onLotClick,
                 )
             }
         }
 
-        fullWidthItem { Spacer(Modifier.height(32.dp)) }
-
-        fullWidthItem {
-            Box(
-                Modifier.fillMaxWidth()
-            ) {
-                SortDropdown(
-                    selectedSortType = currentSortType,
-                    modifier = Modifier.align(Alignment.CenterEnd),
-                    onSortTypeSelected
-                )
-            }
-        }
-
-        fullWidthItem { Spacer(Modifier.height(16.dp)) }
-
-        when (feedUiState) {
-            LotsFeedUiState.Loading -> LoadingLots()
-            is LotsFeedUiState.Success -> LotsGrid(
-                feedUiState.lots,
-                onLotLikeClick,
-                onLotClick,
-            )
-        }
+        PullRefreshIndicator(
+            refreshing = isRefreshing,
+            state = pullRefreshState,
+            modifier = Modifier.align(Alignment.TopCenter),
+            contentColor = MaterialTheme.colors.primary,
+        )
     }
 }
 
@@ -242,6 +267,7 @@ private fun LotsFeedLoadingPreview() {
             modifier = Modifier.fillMaxSize(),
             query = query,
             setQuery = setQuery,
+            isRefreshing = true,
         )
     }
 }
@@ -267,7 +293,7 @@ private fun LotsFeedSuccessPreview() {
                 image = ZveronImage.ResourceImage(ru.zveron.design.R.drawable.cool_dog),
                 isLiked = remember { mutableStateOf(false) },
 
-            ),
+                ),
             LotUiState(
                 id = 3,
                 title = "Ошейник с брелком",
@@ -289,16 +315,16 @@ private fun LotsFeedSuccessPreview() {
 
     val categoriesState = CategoriesUiState.Success(
         categories = listOf(
-          CategoryUiState(
-              id = 1,
-              image = ZveronImage.ResourceImage(ru.zveron.design.R.drawable.cool_dog),
-              title = "Животные"
-          ),
-          CategoryUiState(
-              id = 2,
-              image = ZveronImage.ResourceImage(ru.zveron.design.R.drawable.cool_dog),
-              title = "Товары",
-          )
+            CategoryUiState(
+                id = 1,
+                image = ZveronImage.ResourceImage(ru.zveron.design.R.drawable.cool_dog),
+                title = "Животные"
+            ),
+            CategoryUiState(
+                id = 2,
+                image = ZveronImage.ResourceImage(ru.zveron.design.R.drawable.cool_dog),
+                title = "Товары",
+            )
         ),
     )
 
@@ -320,6 +346,7 @@ private fun LotsFeedSuccessPreview() {
             modifier = Modifier.fillMaxSize(),
             query = query,
             setQuery = setQuery,
+            isRefreshing = false,
         )
     }
 }
@@ -342,6 +369,7 @@ private fun LotsFeedLoadingWithBackPreview() {
             modifier = Modifier.fillMaxSize(),
             query = query,
             setQuery = setQuery,
+            isRefreshing = true,
         )
     }
 }

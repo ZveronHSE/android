@@ -15,6 +15,7 @@ import ru.zveron.appyx.viewmodel.ViewModelNode
 import ru.zveron.lots_feed.categories.ui.CategoriesViewModel
 import ru.zveron.lots_feed.categories.ui.CategoryUiState
 import ru.zveron.lots_feed.feed.ui.LotsFeed
+import ru.zveron.lots_feed.feed.ui.LotsFeedUiState
 import ru.zveron.lots_feed.feed.ui.LotsFeedViewModel
 import ru.zveron.lots_feed.feed.ui.parameters.ParametersViewModel
 
@@ -52,7 +53,7 @@ class LotsFeedNode(
             parameters = { parametersOf(lotsFeedNavigator) },
         )
 
-        val feedUiState by feedViewModel.feedUiState.collectAsState()
+        val feedUiState = feedViewModel.feedUiState.collectAsState()
 
         val categoriesUiState by categoriesViewModel.uiState.collectAsState()
 
@@ -81,9 +82,14 @@ class LotsFeedNode(
             }
         }
 
+        val isRefreshing = when (val uiState = feedUiState.value) {
+            is LotsFeedUiState.Success -> uiState.isRefreshing
+            LotsFeedUiState.Loading -> false
+        }
+
         LotsFeed(
             categoryTitle = categoryTitle,
-            feedUiState = feedUiState,
+            feedUiState = feedUiState.value,
             categoriesUiState = categoriesUiState,
             parametersUiState = parametersUiState,
             currentSortType = currentSortType,
@@ -98,6 +104,9 @@ class LotsFeedNode(
             onParameterClick = parametersViewModel::parameterClicked,
             onLotLikeClick = feedViewModel::lotLikedClicked,
             onLotClick = feedViewModel::lotClicked,
+            isRefreshing = isRefreshing,
+            onRefresh = feedViewModel::refreshLots,
+            refreshEnabled = feedUiState.value is LotsFeedUiState.Success,
         )
     }
 }

@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ru.zveron.authorization.domain.AuthorizationEventsEmitter
 import ru.zveron.authorization.storage.AuthorizationStorage
@@ -89,7 +90,28 @@ internal class LotsFeedViewModel(
                 val lotsResponse = loadFeedInteractor.loadLots(queryState.value)
                 val newLots = lotsResponse.map { it.toUiLot() }
 
-                _feedUiState.value = LotsFeedUiState.Success(newLots)
+                _feedUiState.value = LotsFeedUiState.Success(newLots, isRefreshing = false)
+            } catch (e: Exception) {
+                Log.e("Lots", "Error loading main page lots", e)
+            }
+        }
+    }
+
+    fun refreshLots() {
+        loadLotsJob?.cancel()
+
+        loadLotsJob = viewModelScope.launch {
+            try {
+                _feedUiState.update {
+                    when (it) {
+                        is LotsFeedUiState.Success -> it.copy(isRefreshing = true)
+                        LotsFeedUiState.Loading -> it
+                    }
+                }
+                val lotsResponse = loadFeedInteractor.loadLots(queryState.value)
+                val newLots = lotsResponse.map { it.toUiLot() }
+
+                _feedUiState.value = LotsFeedUiState.Success(newLots, isRefreshing = false)
             } catch (e: Exception) {
                 Log.e("Lots", "Error loading main page lots", e)
             }

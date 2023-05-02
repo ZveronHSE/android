@@ -6,7 +6,7 @@ import ru.zveron.design.resources.ZveronImage
 sealed class LotsFeedUiState {
     object Loading: LotsFeedUiState()
 
-    data class Success(val lots: List<LotUiState>): LotsFeedUiState()
+    data class Success(val lots: List<LotUiState>, val isRefreshing: Boolean = false): LotsFeedUiState()
 }
 
 
