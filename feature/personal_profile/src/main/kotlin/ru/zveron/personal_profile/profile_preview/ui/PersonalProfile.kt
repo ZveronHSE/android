@@ -43,6 +43,7 @@ import ru.zveron.design.components.ActionButton
 import ru.zveron.design.components.RegularButton
 import ru.zveron.design.components.Stars
 import ru.zveron.design.resources.ZveronImage
+import ru.zveron.design.shimmering.shimmeringBackground
 import ru.zveron.design.theme.ZveronTheme
 import ru.zveron.design.theme.enabledButtonGradient
 import ru.zveron.design.theme.gray3
@@ -162,7 +163,7 @@ private fun PersonalProfileSuccess(
 
     val scrollState = rememberScrollState()
 
-    Box(modifier = modifier.pullRefresh(pullRefreshState, true)) {
+    Box(modifier = modifier.pullRefresh(pullRefreshState, !uiState.isLogoutting)) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -224,6 +225,7 @@ private fun PersonalProfileSuccess(
 
             RegularButton(
                 onClick = onEditProfileClick,
+                enabled = !uiState.isLogoutting,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
@@ -238,6 +240,7 @@ private fun PersonalProfileSuccess(
 
             ActionButton(
                 onClick = onLogoutClick,
+                enabled = !uiState.isLogoutting,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
@@ -246,6 +249,10 @@ private fun PersonalProfileSuccess(
                     text = stringResource(R.string.personal_profile_logout),
                     style = MaterialTheme.typography.body1,
                 )
+
+                if (uiState.isLogoutting) {
+                    Box(modifier = Modifier.fillMaxSize().shimmeringBackground(maxWidth))
+                }
             }
 
             TextButton(
@@ -255,7 +262,8 @@ private fun PersonalProfileSuccess(
                     .padding(bottom = (BOTTOM_BAR_HEIGHT + 24).dp),
                 colors = ButtonDefaults.textButtonColors(
                     contentColor = gray3,
-                )
+                ),
+                enabled = !uiState.isLogoutting,
             ) {
                 Text(
                     stringResource(R.string.personal_profile_delete_account),

@@ -5,12 +5,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import org.koin.androidx.compose.koinViewModel
+import org.koin.core.parameter.parametersOf
 import ru.zveron.appyx.viewmodel.ViewModelNode
 import ru.zveron.personal_profile.profile_preview.ui.PersonalProfile
 import ru.zveron.personal_profile.profile_preview.ui.PersonalProfileViewModel
 
 class PersonalProfileNode(
     buildContext: BuildContext,
+    private val navigator: PersonalProfileNavigator,
     private val component: PersonalProfileComponent = PersonalProfileComponent(),
 ): ViewModelNode(
     buildContext = buildContext,
@@ -21,6 +23,7 @@ class PersonalProfileNode(
         val viewModel = koinViewModel<PersonalProfileViewModel>(
             scope = component.scope,
             viewModelStoreOwner = this,
+            parameters = { parametersOf(navigator) },
         )
 
         val uiState = viewModel.uiState.collectAsState()

@@ -15,7 +15,7 @@ import com.bumble.appyx.navmodel.backstack.operation.push
 import org.koin.core.component.KoinScopeComponent
 import org.koin.core.component.createScope
 import org.koin.core.scope.Scope
-import ru.zveron.appyx.combine.combineOperations
+import ru.zveron.appyx.operations.combineOperations
 import ru.zveron.authorization.domain.AuthorizationEventsEmitter
 import ru.zveron.authorization.phone.password.PasswordInputNode
 import ru.zveron.authorization.phone.phone_input.PhoneInputNode

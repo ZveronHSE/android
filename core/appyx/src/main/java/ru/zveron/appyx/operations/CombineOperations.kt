@@ -1,4 +1,4 @@
-package ru.zveron.appyx.combine
+package ru.zveron.appyx.operations
 
 import com.bumble.appyx.core.navigation.NavElements
 import com.bumble.appyx.core.navigation.NavModel

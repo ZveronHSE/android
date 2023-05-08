@@ -48,6 +48,7 @@ import ru.zveron.appyx.modal.Modal
 import ru.zveron.appyx.modal.activeElement
 import ru.zveron.appyx.modal.operation.dismiss
 import ru.zveron.appyx.modal.operation.show
+import ru.zveron.appyx.operations.clearWithNewRoot
 import ru.zveron.authorization.phone.RootPhoneNode
 import ru.zveron.authorization.socials_sheet.SocialsSheetScreen
 import ru.zveron.choose_item.ChooseItemNode
@@ -207,6 +208,11 @@ class RootScreen(
 
     override fun goToSeller(id: Long) {
         backStack.push(RootScreenNavTarget.Profile(id))
+    }
+
+    override fun reattachMainScreen() {
+        backStack.clearWithNewRoot(RootScreenNavTarget.MainPage)
+        modal.dismiss()
     }
 
     override val shouldBlockBottomSheet: Flow<Boolean> =

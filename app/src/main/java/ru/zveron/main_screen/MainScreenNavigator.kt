@@ -12,4 +12,6 @@ interface MainScreenNavigator {
     fun pickItem(title: ZveronText)
 
     fun goToSeller(id: Long)
+
+    fun reattachMainScreen()
 }

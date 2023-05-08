@@ -149,4 +149,8 @@ internal class MainScreen(
         mainScreenNavigator.createLot()
     }
 
+    override fun reattachMainScreen() {
+        mainScreenNavigator.reattachMainScreen()
+    }
+
 }

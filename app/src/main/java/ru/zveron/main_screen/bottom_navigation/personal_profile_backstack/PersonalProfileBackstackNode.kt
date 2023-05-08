@@ -9,12 +9,13 @@ import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.navmodel.backstack.BackStack
 import kotlinx.parcelize.Parcelize
 import ru.zveron.appyx.viewmodel.ViewModelParentNode
+import ru.zveron.personal_profile.profile_preview.PersonalProfileNavigator
 import ru.zveron.personal_profile.profile_preview.PersonalProfileNode
 
 class PersonalProfileBackstackNode(
     buildContext: BuildContext,
     private val navigator: PersonalProfileBackstackNavigator,
-    private val component: PersonalProfileBackstackComponent = PersonalProfileBackstackComponent(),
+    component: PersonalProfileBackstackComponent = PersonalProfileBackstackComponent(),
     private val backStack: BackStack<NavTarget> = BackStack(
         initialElement = NavTarget.PersonalProfile,
         savedStateMap = buildContext.savedStateMap,
@@ -23,7 +24,7 @@ class PersonalProfileBackstackNode(
     buildContext = buildContext,
     plugins = listOf(component),
     navModel = backStack,
-) {
+), PersonalProfileNavigator {
     sealed class NavTarget: Parcelable {
         @Parcelize
         object PersonalProfile: NavTarget()
@@ -31,12 +32,16 @@ class PersonalProfileBackstackNode(
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
-            NavTarget.PersonalProfile -> PersonalProfileNode(buildContext)
+            NavTarget.PersonalProfile -> PersonalProfileNode(buildContext, this)
         }
     }
 
     @Composable
     override fun View(modifier: Modifier) {
         Children(navModel = backStack, modifier = modifier)
+    }
+
+    override fun reattachMainScreen() {
+        navigator.reattachMainScreen()
     }
 }

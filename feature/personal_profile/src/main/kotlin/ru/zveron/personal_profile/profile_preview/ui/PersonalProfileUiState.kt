@@ -14,5 +14,6 @@ sealed class PersonalProfileUiState {
         val rating: Double,
         val displayName: String,
         val isRefreshing: Boolean = false,
+        val isLogoutting: Boolean = false,
     ): PersonalProfileUiState()
 }

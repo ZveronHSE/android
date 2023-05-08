@@ -38,4 +38,11 @@ internal class AuthorizationStorageImpl(
     override fun refreshDeviceFingerprint(fingerprint: String) {
         authorizationPreferencesWrapper.fingerprint = fingerprint
     }
+
+    override fun clearAuthorization() {
+        authorizationPreferencesWrapper.accessToken = null
+        authorizationPreferencesWrapper.refreshToken = null
+        authorizationPreferencesWrapper.accessTokenExpiration = null
+        authorizationPreferencesWrapper.refreshTokenExpiration = null
+    }
 }
