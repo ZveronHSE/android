@@ -7,9 +7,12 @@ import ru.zveron.design.resources.ZveronImage
 sealed class PersonalProfileUiState {
     object Loading: PersonalProfileUiState()
 
+    object Error: PersonalProfileUiState()
+
     data class Success(
         val avatar: ZveronImage,
         val rating: Double,
         val displayName: String,
+        val isRefreshing: Boolean = false,
     ): PersonalProfileUiState()
 }

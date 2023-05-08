@@ -28,6 +28,11 @@ class PersonalProfileNode(
         PersonalProfile(
             uiState = uiState.value,
             modifier = modifier,
+            onEditProfileClick = viewModel::onEditPorfileClick,
+            onLogoutClick = viewModel::onLogoutTapped,
+            onDeleteProfileClick = viewModel::onDeleteAccountTapped,
+            onRetryClick = viewModel::onRetryClick,
+            onRefresh = viewModel::refresh,
         )
     }
 }

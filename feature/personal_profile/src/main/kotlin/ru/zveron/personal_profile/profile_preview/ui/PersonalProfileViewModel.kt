@@ -1,17 +1,19 @@
 package ru.zveron.personal_profile.profile_preview.ui
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import ru.zveron.design.R
+import ru.zveron.design.R as DesignR
 import ru.zveron.design.resources.ZveronImage
+import ru.zveron.personal_profile.profile_preview.data.PersonalProfileRepository
 
 internal class PersonalProfileViewModel(
-
+    private val personalProfileRepository: PersonalProfileRepository,
 ): ViewModel() {
     private val _uiState = MutableStateFlow<PersonalProfileUiState>(PersonalProfileUiState.Loading)
     val uiState = _uiState.asStateFlow()
@@ -21,19 +23,78 @@ internal class PersonalProfileViewModel(
     }
 
     private fun loadPersonalProfile() {
-        // TODO: add actual implementation
         viewModelScope.launch {
-            _uiState.update { PersonalProfileUiState.Loading }
+            try {
+                _uiState.update { PersonalProfileUiState.Loading }
 
-            delay(1000L)
+                val profileInfo = personalProfileRepository.getPersonalProfileInfo()
 
-            _uiState.update {
-                PersonalProfileUiState.Success(
-                    avatar = ZveronImage.ResourceImage(R.drawable.ic_no_avatar),
-                    displayName = "Егор Шпак",
-                    rating = 4.2,
-                )
+                _uiState.update {
+                    PersonalProfileUiState.Success(
+                        avatar = if (profileInfo.avatarUrl.isNotBlank()) {
+                            ZveronImage.RemoteImage(profileInfo.avatarUrl)
+                        } else {
+                            ZveronImage.ResourceImage(DesignR.drawable.ic_no_avatar)
+                        },
+                        rating = profileInfo.rating,
+                        displayName = "${profileInfo.name} ${profileInfo.surname}",
+                    )
+                }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                Log.d("Personal profile", "Error loading profile info", e)
+                _uiState.update { PersonalProfileUiState.Error }
             }
         }
+    }
+
+    fun refresh() {
+        viewModelScope.launch {
+            try {
+                _uiState.update {
+                    when (it) {
+                        is PersonalProfileUiState.Success -> it.copy(isRefreshing = true)
+                        else -> it
+                    }
+                }
+
+                val profileInfo = personalProfileRepository.getPersonalProfileInfo()
+
+                _uiState.update {
+                    PersonalProfileUiState.Success(
+                        avatar = if (profileInfo.avatarUrl.isNotBlank()) {
+                            ZveronImage.RemoteImage(profileInfo.avatarUrl)
+                        } else {
+                            ZveronImage.ResourceImage(DesignR.drawable.ic_no_avatar)
+                        },
+                        rating = profileInfo.rating,
+                        displayName = "${profileInfo.name} ${profileInfo.surname}",
+                        isRefreshing = false,
+                    )
+                }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                Log.d("Personal profile", "Error loading profile info", e)
+                _uiState.update { PersonalProfileUiState.Error }
+            }
+        }
+    }
+
+    fun onLogoutTapped() {
+
+    }
+
+    fun onDeleteAccountTapped() {
+
+    }
+
+    fun onEditPorfileClick() {
+
+    }
+
+    fun onRetryClick() {
+        loadPersonalProfile()
     }
 }
