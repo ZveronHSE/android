@@ -12,4 +12,7 @@ sealed class BottomNavigationNavTarget: Parcelable {
 
     @Parcelize
     object UserLots: BottomNavigationNavTarget()
+
+    @Parcelize
+    object PersonalProfile: BottomNavigationNavTarget()
 }

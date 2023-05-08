@@ -109,6 +109,21 @@ class MainScreenViewModel(
     }
 
     private fun profileTapped() {
+        if (authorizationStorage.isAuthorized()) {
+            openPersonalProfile()
+        } else {
+            mainScreenNavigator.openAuthorization()
+            viewModelScope.launch {
+                val success = authorizationEventsEmitter.waitForAuthorization()
+                if (success) {
+                    openPersonalProfile()
+                }
+            }
+        }
+    }
+
+    private fun openPersonalProfile() {
         currentSelectedTab.value = BottomNavigationItem.PROFILE
+        bottomTabsNavigator.openPersonalProfileBackstack()
     }
 }

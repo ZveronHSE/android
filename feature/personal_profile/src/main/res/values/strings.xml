@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="personal_profile_header">Профиль</string>
+    <string name="personal_profile_edit">Редактировать</string>
+    <string name="personal_profile_logout">Выйти</string>
+    <string name="personal_profile_delete_account">Удалить аккаунт</string>
+</resources>

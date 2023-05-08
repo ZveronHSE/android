@@ -13,9 +13,11 @@ import ru.zveron.lot_card.lotCardModule
 import ru.zveron.lots_feed.feed.lotsFeedModule
 import ru.zveron.lots_feed.filters_screen.filtersModule
 import ru.zveron.main_screen.bottom_navigation.lots_feed_backstack.lotsFeedBackStackModule
+import ru.zveron.main_screen.bottom_navigation.personal_profile_backstack.personalProfileBackstackModule
 import ru.zveron.main_screen.mainScreenModule
 import ru.zveron.network.apigatewayModule
 import ru.zveron.parameters.di.parametersModule
+import ru.zveron.personal_profile.profile_preview.personalProfileModule
 import ru.zveron.platform.platformModule
 import ru.zveron.user_lots.userLotsModule
 import ru.zveron.user_profile.userProfileModule
@@ -50,5 +52,8 @@ internal val appModule = module {
         rootCreateLotModule,
 
         userProfileModule,
+
+        personalProfileBackstackModule,
+        personalProfileModule,
     )
 }
