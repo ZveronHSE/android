@@ -12,6 +12,7 @@ import ru.zveron.authorization.storage.AuthorizationStorage
 import ru.zveron.design.R as DesignR
 import ru.zveron.design.resources.ZveronImage
 import ru.zveron.personal_profile.profile_preview.PersonalProfileNavigator
+import ru.zveron.personal_profile.profile_preview.data.DeleteAccountRepository
 import ru.zveron.personal_profile.profile_preview.data.LogoutRepository
 import ru.zveron.personal_profile.profile_preview.data.PersonalProfileRepository
 
@@ -20,6 +21,7 @@ internal class PersonalProfileViewModel(
     private val logoutRepository: LogoutRepository,
     private val navigator: PersonalProfileNavigator,
     private val authorizationStorage: AuthorizationStorage,
+    private val deleteAccountRepository: DeleteAccountRepository,
 ): ViewModel() {
     private val _uiState = MutableStateFlow<PersonalProfileUiState>(PersonalProfileUiState.Loading)
     val uiState = _uiState.asStateFlow()
@@ -109,7 +111,23 @@ internal class PersonalProfileViewModel(
     }
 
     fun onDeleteAccountTapped() {
-
+        viewModelScope.launch {
+            try {
+                _uiState.update {
+                    when (it) {
+                        is PersonalProfileUiState.Success -> it.copy(isDeleting = true)
+                        else -> it
+                    }
+                }
+                deleteAccountRepository.deleteAccount()
+                authorizationStorage.clearAuthorization()
+                navigator.reattachMainScreen()
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                Log.d("Personal profile", "Error deleting profile", e)
+            }
+        }
     }
 
     fun onEditPorfileClick() {

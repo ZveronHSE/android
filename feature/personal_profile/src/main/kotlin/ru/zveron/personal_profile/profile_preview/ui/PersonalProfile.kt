@@ -3,6 +3,7 @@ package ru.zveron.personal_profile.profile_preview.ui
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
@@ -163,7 +165,9 @@ private fun PersonalProfileSuccess(
 
     val scrollState = rememberScrollState()
 
-    Box(modifier = modifier.pullRefresh(pullRefreshState, !uiState.isLogoutting)) {
+    val canPerformClicks = !uiState.isLogoutting && !uiState.isDeleting
+
+    Box(modifier = modifier.pullRefresh(pullRefreshState, canPerformClicks)) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -225,7 +229,7 @@ private fun PersonalProfileSuccess(
 
             RegularButton(
                 onClick = onEditProfileClick,
-                enabled = !uiState.isLogoutting,
+                enabled = canPerformClicks,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
@@ -240,7 +244,7 @@ private fun PersonalProfileSuccess(
 
             ActionButton(
                 onClick = onLogoutClick,
-                enabled = !uiState.isLogoutting,
+                enabled = canPerformClicks,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
@@ -251,27 +255,40 @@ private fun PersonalProfileSuccess(
                 )
 
                 if (uiState.isLogoutting) {
-                    Box(modifier = Modifier.fillMaxSize().shimmeringBackground(maxWidth))
+                    Box(modifier = Modifier
+                        .fillMaxSize()
+                        .shimmeringBackground(maxWidth))
                 }
             }
 
-            TextButton(
-                onClick = onDeleteProfileClick,
-                modifier = Modifier
+            BoxWithConstraints(
+                Modifier
                     .align(Alignment.CenterHorizontally)
                     .padding(bottom = (BOTTOM_BAR_HEIGHT + 24).dp),
-                colors = ButtonDefaults.textButtonColors(
-                    contentColor = gray3,
-                ),
-                enabled = !uiState.isLogoutting,
+                contentAlignment = Alignment.TopCenter,
             ) {
-                Text(
-                    stringResource(R.string.personal_profile_delete_account),
-                    style = TextStyle(
-                        fontWeight = FontWeight.Normal,
-                        fontSize = 16.sp,
+                TextButton(
+                    onClick = onDeleteProfileClick,
+                    colors = ButtonDefaults.textButtonColors(
+                        contentColor = gray3,
                     ),
-                )
+                    enabled = !uiState.isLogoutting,
+                ) {
+                    Text(
+                        stringResource(R.string.personal_profile_delete_account),
+                        style = TextStyle(
+                            fontWeight = FontWeight.Normal,
+                            fontSize = 16.sp,
+                        ),
+                    )
+                }
+
+                if (uiState.isDeleting) {
+                    Box(modifier = Modifier
+                        .width(maxWidth)
+                        .height(maxHeight)
+                        .shimmeringBackground(maxWidth))
+                }
             }
         }
 
@@ -317,6 +334,23 @@ private fun PersonalProfilePreviewLoading() {
 private fun PersonalProfilePreviewError() {
     ZveronTheme {
         val state = PersonalProfileUiState.Error
+        PersonalProfile(
+            uiState = state,
+            modifier = Modifier.fillMaxSize(),
+        )
+    }
+}
+
+@Composable
+@Preview(showBackground = true, backgroundColor = 0xFFF9F9F9)
+private fun PersonalProfileDeletePreview() {
+    ZveronTheme {
+        val state = PersonalProfileUiState.Success(
+            avatar = ZveronImage.ResourceImage(DesignR.drawable.ic_no_avatar),
+            displayName = "Егор Шпак",
+            rating = 4.2,
+            isDeleting = true,
+        )
         PersonalProfile(
             uiState = state,
             modifier = Modifier.fillMaxSize(),

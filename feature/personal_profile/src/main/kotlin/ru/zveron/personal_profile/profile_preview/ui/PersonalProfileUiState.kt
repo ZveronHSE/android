@@ -15,5 +15,6 @@ sealed class PersonalProfileUiState {
         val displayName: String,
         val isRefreshing: Boolean = false,
         val isLogoutting: Boolean = false,
+        val isDeleting: Boolean = false,
     ): PersonalProfileUiState()
 }

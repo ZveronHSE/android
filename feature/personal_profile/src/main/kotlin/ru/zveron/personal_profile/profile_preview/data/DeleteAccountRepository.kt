@@ -4,14 +4,14 @@ import com.google.protobuf.Empty
 import com.google.protobuf.empty
 import ru.zveron.network.ApigatewayDelegate
 
-private const val LOGOUT_METHOD_NAME = "authPerformLogout"
+private const val DELETE_PROFILE_METHOD_NAME = "profileDelete"
 
-internal class LogoutRepository(
+internal class DeleteAccountRepository(
     private val apigatewayDelegate: ApigatewayDelegate,
 ) {
-    suspend fun logout() {
+    suspend fun deleteAccount() {
         apigatewayDelegate.callApiGateway<Empty, Empty>(
-            LOGOUT_METHOD_NAME,
+            DELETE_PROFILE_METHOD_NAME,
             empty {  },
             Empty.newBuilder(),
         )
