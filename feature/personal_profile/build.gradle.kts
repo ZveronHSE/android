@@ -28,6 +28,7 @@ dependencies {
     implementation(project(":core:network"))
     implementation(project(":core:models"))
     implementation(project(":core:authorization"))
+    implementation(project(":core:platform:api"))
 
     implementation(project(":data:favorites"))
 }

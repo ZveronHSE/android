@@ -11,10 +11,15 @@ import kotlinx.coroutines.launch
 import ru.zveron.authorization.storage.AuthorizationStorage
 import ru.zveron.design.R as DesignR
 import ru.zveron.design.resources.ZveronImage
+import ru.zveron.design.resources.ZveronText
+import ru.zveron.personal_profile.R
 import ru.zveron.personal_profile.profile_preview.PersonalProfileNavigator
 import ru.zveron.personal_profile.profile_preview.data.DeleteAccountRepository
 import ru.zveron.personal_profile.profile_preview.data.LogoutRepository
 import ru.zveron.personal_profile.profile_preview.data.PersonalProfileRepository
+import ru.zveron.platform.dialog.DialogManager
+import ru.zveron.platform.dialog.DialogParams
+import ru.zveron.platform.dialog.DialogResult
 
 internal class PersonalProfileViewModel(
     private val personalProfileRepository: PersonalProfileRepository,
@@ -22,6 +27,7 @@ internal class PersonalProfileViewModel(
     private val navigator: PersonalProfileNavigator,
     private val authorizationStorage: AuthorizationStorage,
     private val deleteAccountRepository: DeleteAccountRepository,
+    private val dialogManager: DialogManager,
 ): ViewModel() {
     private val _uiState = MutableStateFlow<PersonalProfileUiState>(PersonalProfileUiState.Loading)
     val uiState = _uiState.asStateFlow()
@@ -112,6 +118,18 @@ internal class PersonalProfileViewModel(
 
     fun onDeleteAccountTapped() {
         viewModelScope.launch {
+            val dialogParams = DialogParams(
+                title = ZveronText.RawResource(R.string.delete_account_dialog_title),
+                message = ZveronText.RawResource(R.string.delete_account_dialog_message),
+                confirmButtonLabel = ZveronText.RawResource(R.string.delete_account_dialog_confirm_button),
+                dismissButtonLabel = ZveronText.RawResource(R.string.delete_account_dialog_dismiss_button),
+            )
+
+            val dialogResult = dialogManager.requestDialog(dialogParams)
+            if (dialogResult != DialogResult.Confirm) {
+                return@launch
+            }
+
             try {
                 _uiState.update {
                     when (it) {

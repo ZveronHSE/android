@@ -624,7 +624,7 @@ private fun LotCardBottomButtons(
                             ActionButton(
                                 modifier = Modifier.weight(1f),
                                 onClick = clicker,
-                                brush = it.brush,
+                                backgroundBrush = it.brush,
                             ) {
                                 ZveronText(
                                     text = it.text,

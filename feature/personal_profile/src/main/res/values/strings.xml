@@ -6,4 +6,9 @@
     <string name="personal_profile_delete_account">Удалить аккаунт</string>
     <string name="personal_profile_error">Не удалось загрузить профиль</string>
     <string name="personal_profile_retry">Попробовать снова</string>
+
+    <string name="delete_account_dialog_title">Вы действительно хотите удалить профиль?</string>
+    <string name="delete_account_dialog_message">Это действие нельзя отменить</string>
+    <string name="delete_account_dialog_confirm_button">Удалить</string>
+    <string name="delete_account_dialog_dismiss_button">Отмена</string>
 </resources>

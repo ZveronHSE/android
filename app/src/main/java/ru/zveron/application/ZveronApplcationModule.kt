@@ -19,6 +19,7 @@ import ru.zveron.network.apigatewayModule
 import ru.zveron.parameters.di.parametersModule
 import ru.zveron.personal_profile.profile_preview.personalProfileModule
 import ru.zveron.platform.platformModule
+import ru.zveron.root.rootScreenModule
 import ru.zveron.user_lots.userLotsModule
 import ru.zveron.user_profile.userProfileModule
 
@@ -33,6 +34,8 @@ internal val appModule = module {
         favoritesDataModule,
         imageStorageModule,
         parametersModule,
+
+        rootScreenModule,
 
         socialsModule,
         rootPhoneModule,

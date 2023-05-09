@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,18 +35,19 @@ fun ActionButton(
     onClick: () -> Unit = {},
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     contentAlignment: Alignment = Alignment.Center,
-    brush: Brush = enabledButtonGradient,
+    backgroundBrush: Brush = enabledButtonGradient,
+    contentColor: Color = MaterialTheme.colors.onPrimary,
     content: @Composable BoxWithConstraintsScope.() -> Unit = {},
 ) {
     val alpha = if (enabled) 1f else 0.5f
 
     CompositionLocalProvider(
-        LocalContentColor provides MaterialTheme.colors.onPrimary
+        LocalContentColor provides contentColor
     ) {
         BoxWithConstraints(
             modifier = modifier
                 .height(52.dp)
-                .background(brush, RoundedCornerShape(10.dp), alpha)
+                .background(backgroundBrush, RoundedCornerShape(10.dp), alpha)
                 .clip(RoundedCornerShape(10.dp))
                 .clickable(
                     interactionSource = interactionSource,
