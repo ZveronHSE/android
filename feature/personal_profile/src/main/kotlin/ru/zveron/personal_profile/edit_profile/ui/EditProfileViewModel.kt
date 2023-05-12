@@ -78,9 +78,11 @@ internal class EditProfileViewModel(
 
 
     private fun getZveronImage(imageUrl: String?): ZveronImage {
-        return imageUrl?.let {
-            ZveronImage.RemoteImage(it)
-        } ?: ZveronImage.ResourceImage(DesignR.drawable.ic_no_avatar)
+        return if (imageUrl.isNullOrBlank()) {
+            ZveronImage.ResourceImage(DesignR.drawable.ic_no_avatar)
+        } else {
+            ZveronImage.RemoteImage(imageUrl)
+        }
     }
 
     fun setName(value: String) {

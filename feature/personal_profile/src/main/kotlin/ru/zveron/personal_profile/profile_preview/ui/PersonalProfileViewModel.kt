@@ -5,7 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ru.zveron.authorization.storage.AuthorizationStorage
@@ -18,6 +20,7 @@ import ru.zveron.personal_profile.profile_preview.PersonalProfileNavigator
 import ru.zveron.personal_profile.profile_preview.data.DeleteAccountRepository
 import ru.zveron.personal_profile.profile_preview.data.LogoutRepository
 import ru.zveron.personal_profile.profile_preview.data.PersonalProfileRepository
+import ru.zveron.personal_profile.profile_preview.data.ProfileInfoState
 import ru.zveron.platform.dialog.DialogManager
 import ru.zveron.platform.dialog.DialogParams
 import ru.zveron.platform.dialog.DialogResult
@@ -31,82 +34,58 @@ internal class PersonalProfileViewModel(
     private val deleteAccountRepository: DeleteAccountRepository,
     private val dialogManager: DialogManager,
 ): ViewModel() {
-    private val _uiState = MutableStateFlow<PersonalProfileUiState>(PersonalProfileUiState.Loading)
-    val uiState = _uiState.asStateFlow()
+    private val _isRefreshing = MutableStateFlow(false)
+    private val _isLogoutting = MutableStateFlow(false)
+    private val _isDeleting = MutableStateFlow(false)
+
+    val uiState = combine(
+        personalProfileRepository.profileInfoState,
+        _isRefreshing,
+        _isLogoutting,
+        _isDeleting,
+    ) { profileState, refreshing, isLogout, isDelete ->
+        when (profileState) {
+            ProfileInfoState.Error -> PersonalProfileUiState.Error
+            ProfileInfoState.Loading -> PersonalProfileUiState.Loading
+            is ProfileInfoState.Success -> {
+                val profileInfo = profileState.profileInfo
+
+                PersonalProfileUiState.Success(
+                    avatar = if (profileInfo.avatarUrl.isNotBlank()) {
+                        ZveronImage.RemoteImage(profileInfo.avatarUrl)
+                    } else {
+                        ZveronImage.ResourceImage(DesignR.drawable.ic_no_avatar)
+                    },
+                    rating = profileInfo.rating,
+                    displayName = "${profileInfo.name} ${profileInfo.surname}",
+                    isRefreshing = refreshing,
+                    isLogoutting = isLogout,
+                    isDeleting = isDelete,
+                )
+            }
+        }
+    }.stateIn(viewModelScope, SharingStarted.Lazily, PersonalProfileUiState.Loading)
 
     init {
         loadPersonalProfile()
     }
 
     private fun loadPersonalProfile() {
-        viewModelScope.launch {
-            try {
-                _uiState.update { PersonalProfileUiState.Loading }
-
-                val profileInfo = personalProfileRepository.getPersonalProfileInfo()
-
-                _uiState.update {
-                    PersonalProfileUiState.Success(
-                        avatar = if (profileInfo.avatarUrl.isNotBlank()) {
-                            ZveronImage.RemoteImage(profileInfo.avatarUrl)
-                        } else {
-                            ZveronImage.ResourceImage(DesignR.drawable.ic_no_avatar)
-                        },
-                        rating = profileInfo.rating,
-                        displayName = "${profileInfo.name} ${profileInfo.surname}",
-                    )
-                }
-            } catch (e: CancellationException) {
-                throw e
-            } catch (e: Exception) {
-                Log.d("Personal profile", "Error loading profile info", e)
-                _uiState.update { PersonalProfileUiState.Error }
-            }
-        }
+        viewModelScope.launch { personalProfileRepository.fetchPersonalProfileInfo() }
     }
 
     fun refresh() {
         viewModelScope.launch {
-            try {
-                _uiState.update {
-                    when (it) {
-                        is PersonalProfileUiState.Success -> it.copy(isRefreshing = true)
-                        else -> it
-                    }
-                }
-
-                val profileInfo = personalProfileRepository.getPersonalProfileInfo()
-
-                _uiState.update {
-                    PersonalProfileUiState.Success(
-                        avatar = if (profileInfo.avatarUrl.isNotBlank()) {
-                            ZveronImage.RemoteImage(profileInfo.avatarUrl)
-                        } else {
-                            ZveronImage.ResourceImage(DesignR.drawable.ic_no_avatar)
-                        },
-                        rating = profileInfo.rating,
-                        displayName = "${profileInfo.name} ${profileInfo.surname}",
-                        isRefreshing = false,
-                    )
-                }
-            } catch (e: CancellationException) {
-                throw e
-            } catch (e: Exception) {
-                Log.d("Personal profile", "Error loading profile info", e)
-                _uiState.update { PersonalProfileUiState.Error }
-            }
+            _isRefreshing.update { true }
+            personalProfileRepository.fetchPersonalProfileInfo()
+            _isRefreshing.update { false }
         }
     }
 
     fun onLogoutTapped() {
         viewModelScope.launch {
             try {
-                _uiState.update {
-                    when (it) {
-                        is PersonalProfileUiState.Success -> it.copy(isLogoutting = true)
-                        else -> it
-                    }
-                }
+                _isLogoutting.update { true }
                 logoutRepository.logout()
                 authorizationStorage.clearAuthorization()
                 navigator.reattachMainScreen()
@@ -114,6 +93,7 @@ internal class PersonalProfileViewModel(
                 throw e
             } catch (e: Exception) {
                 Log.d("Personal profile", "Error logging out", e)
+                _isLogoutting.update { false }
             }
         }
     }
@@ -133,12 +113,7 @@ internal class PersonalProfileViewModel(
             }
 
             try {
-                _uiState.update {
-                    when (it) {
-                        is PersonalProfileUiState.Success -> it.copy(isDeleting = true)
-                        else -> it
-                    }
-                }
+                _isDeleting.update { true }
                 deleteAccountRepository.deleteAccount()
                 authorizationStorage.clearAuthorization()
                 navigator.reattachMainScreen()
@@ -146,6 +121,7 @@ internal class PersonalProfileViewModel(
                 throw e
             } catch (e: Exception) {
                 Log.d("Personal profile", "Error deleting profile", e)
+                _isDeleting.update { true }
             }
         }
     }
