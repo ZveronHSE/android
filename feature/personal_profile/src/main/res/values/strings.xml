@@ -11,4 +11,14 @@
     <string name="delete_account_dialog_message">Это действие нельзя отменить</string>
     <string name="delete_account_dialog_confirm_button">Удалить</string>
     <string name="delete_account_dialog_dismiss_button">Отмена</string>
+
+    <string name="edit_profile_title">Редактирование</string>
+    <string name="edit_profile_ready">Готово</string>
+    <string name="edit_profile_name_placeholder">Имя</string>
+    <string name="edit_profile_surname_placeholder">Фамилия</string>
+    <string name="edit_profile_camera_item">Сделать фото</string>
+    <string name="edit_profile_gallery_item">Выбрать из галереи</string>
+    <string name="edit_profile_photo_retry">Попробовать еще раз</string>
+    <string name="edit_profile_error_title">Не удалось отредактировать профиль</string>
+    <string name="edit_profile_error_ok_title">Ок</string>
 </resources>

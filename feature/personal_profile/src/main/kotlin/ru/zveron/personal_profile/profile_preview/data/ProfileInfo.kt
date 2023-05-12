@@ -6,5 +6,12 @@ internal data class ProfileInfo(
     val surname: String,
     val avatarUrl: String,
     val rating: Double,
-    // TODO: add address
+    val addressInfo: ProfileAddress
+)
+
+internal data class ProfileAddress(
+    val region: String,
+    val town: String,
+    val longitude: Double,
+    val latitude: Double,
 )

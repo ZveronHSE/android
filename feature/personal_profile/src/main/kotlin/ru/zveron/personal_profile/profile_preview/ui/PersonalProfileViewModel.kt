@@ -9,10 +9,11 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ru.zveron.authorization.storage.AuthorizationStorage
-import ru.zveron.design.R as DesignR
 import ru.zveron.design.resources.ZveronImage
 import ru.zveron.design.resources.ZveronText
+import ru.zveron.personal_profile.ProfileUiInfo
 import ru.zveron.personal_profile.R
+import ru.zveron.personal_profile.mappings.toUiModel
 import ru.zveron.personal_profile.profile_preview.PersonalProfileNavigator
 import ru.zveron.personal_profile.profile_preview.data.DeleteAccountRepository
 import ru.zveron.personal_profile.profile_preview.data.LogoutRepository
@@ -20,6 +21,7 @@ import ru.zveron.personal_profile.profile_preview.data.PersonalProfileRepository
 import ru.zveron.platform.dialog.DialogManager
 import ru.zveron.platform.dialog.DialogParams
 import ru.zveron.platform.dialog.DialogResult
+import ru.zveron.design.R as DesignR
 
 internal class PersonalProfileViewModel(
     private val personalProfileRepository: PersonalProfileRepository,
@@ -148,8 +150,16 @@ internal class PersonalProfileViewModel(
         }
     }
 
-    fun onEditPorfileClick() {
+    fun onEditProfileClick() {
+        val profileInfo = personalProfileRepository.getCachedProfileInfo()
+        val profileUiInfo = ProfileUiInfo(
+            avatarUrl = profileInfo.avatarUrl,
+            name = profileInfo.name,
+            surname = profileInfo.surname,
+            addressUiInfo = profileInfo.addressInfo.toUiModel(),
+        )
 
+        navigator.editProfile(profileUiInfo)
     }
 
     fun onRetryClick() {

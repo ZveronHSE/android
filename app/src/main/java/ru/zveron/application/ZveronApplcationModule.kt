@@ -17,6 +17,7 @@ import ru.zveron.main_screen.bottom_navigation.personal_profile_backstack.person
 import ru.zveron.main_screen.mainScreenModule
 import ru.zveron.network.apigatewayModule
 import ru.zveron.parameters.di.parametersModule
+import ru.zveron.personal_profile.edit_profile.editProfileModule
 import ru.zveron.personal_profile.profile_preview.personalProfileModule
 import ru.zveron.platform.platformModule
 import ru.zveron.root.rootScreenModule
@@ -58,5 +59,6 @@ internal val appModule = module {
 
         personalProfileBackstackModule,
         personalProfileModule,
+        editProfileModule,
     )
 }

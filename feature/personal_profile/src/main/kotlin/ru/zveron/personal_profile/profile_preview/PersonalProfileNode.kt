@@ -7,6 +7,7 @@ import com.bumble.appyx.core.modality.BuildContext
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 import ru.zveron.appyx.viewmodel.ViewModelNode
+import ru.zveron.personal_profile.ProfileUiInfo
 import ru.zveron.personal_profile.profile_preview.ui.PersonalProfile
 import ru.zveron.personal_profile.profile_preview.ui.PersonalProfileViewModel
 
@@ -31,11 +32,15 @@ class PersonalProfileNode(
         PersonalProfile(
             uiState = uiState.value,
             modifier = modifier,
-            onEditProfileClick = viewModel::onEditPorfileClick,
+            onEditProfileClick = viewModel::onEditProfileClick,
             onLogoutClick = viewModel::onLogoutTapped,
             onDeleteProfileClick = viewModel::onDeleteAccountTapped,
             onRetryClick = viewModel::onRetryClick,
             onRefresh = viewModel::refresh,
         )
+    }
+
+    fun updateProfileInfo(profileUiInfo: ProfileUiInfo) {
+
     }
 }

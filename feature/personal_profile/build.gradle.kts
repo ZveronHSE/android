@@ -1,6 +1,7 @@
 plugins {
     id("zveron.android.library")
     id("zveron.android.library.compose")
+    id("kotlin-parcelize")
 }
 
 android {
@@ -9,6 +10,7 @@ android {
 
 dependencies {
     implementation(libs.androidx.coreKtx)
+    implementation(libs.androidx.lifecycle)
 
     implementation(libs.appyx.core)
 
@@ -24,11 +26,14 @@ dependencies {
     debugImplementation(libs.compose.ui.uiTooling)
 
     implementation(project(":design"))
+
     implementation(project(":core:appyx"))
     implementation(project(":core:network"))
     implementation(project(":core:models"))
     implementation(project(":core:authorization"))
     implementation(project(":core:platform:api"))
+
+    implementation(project(":data:image_storage"))
 
     implementation(project(":data:favorites"))
 }
