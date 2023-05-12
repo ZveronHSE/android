@@ -20,7 +20,7 @@ class RefreshTokenInteractor(
             return@coroutineScope
         }
 
-        checkTokenJob = launch {
+        val newJob = launch {
             val accessTokenExpiration = authorizationStorage.accessTokenExpiration
             val currentTime = System.currentTimeMillis()
 
@@ -28,6 +28,8 @@ class RefreshTokenInteractor(
                 refreshToken()
             }
         }
+        checkTokenJob = newJob
+        newJob.invokeOnCompletion { checkTokenJob = null }
     }
 
     suspend fun refreshToken() = coroutineScope {
@@ -37,12 +39,14 @@ class RefreshTokenInteractor(
             return@coroutineScope
         }
 
-        updateTokenJob = launch {
+        val newJob = launch {
             val fingerprint = authorizationStorage.deviceFingerPrint ?: return@launch
 
             val refreshToken = authorizationStorage.refreshToken ?: return@launch
 
             refreshTokenRepository.refreshToken(refreshToken, fingerprint)
         }
+        updateTokenJob = newJob
+        newJob.invokeOnCompletion { updateTokenJob = null }
     }
 }

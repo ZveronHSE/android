@@ -29,6 +29,8 @@ import ru.zveron.main_screen.bottom_navigation.favorites_backstack.FavoritesBack
 import ru.zveron.main_screen.bottom_navigation.favorites_backstack.FavoritesBackstackNode
 import ru.zveron.main_screen.bottom_navigation.lots_feed_backstack.LotsFeedBackStackNavigator
 import ru.zveron.main_screen.bottom_navigation.lots_feed_backstack.LotsFeedBackStackNode
+import ru.zveron.main_screen.bottom_navigation.personal_profile_backstack.PersonalProfileBackstackNavigator
+import ru.zveron.main_screen.bottom_navigation.personal_profile_backstack.PersonalProfileBackstackNode
 import ru.zveron.main_screen.bottom_navigation.user_lots_backstack.UserLotsBackStackNode
 import ru.zveron.main_screen.bottom_navigation.user_lots_backstack.UserLotsBackstackNavigator
 
@@ -41,6 +43,7 @@ internal class MainScreen(
             BottomNavigationNavTarget.LotsFeed,
             BottomNavigationNavTarget.Favorites,
             BottomNavigationNavTarget.UserLots,
+            BottomNavigationNavTarget.PersonalProfile,
         ),
         savedStateMap = buildContext.savedStateMap,
     ),
@@ -48,7 +51,8 @@ internal class MainScreen(
     buildContext = buildContext,
     navModel = spotlight,
     plugins = listOf(mainScreenComponent),
-), BottomTabsNavigator, LotsFeedBackStackNavigator, FavoritesBackstackNavigator, UserLotsBackstackNavigator {
+), BottomTabsNavigator, LotsFeedBackStackNavigator, FavoritesBackstackNavigator,
+    UserLotsBackstackNavigator, PersonalProfileBackstackNavigator {
 
     @Composable
     override fun View(modifier: Modifier) {
@@ -70,6 +74,11 @@ internal class MainScreen(
             BottomNavigationNavTarget.Favorites -> FavoritesBackstackNode(buildContext, this)
 
             BottomNavigationNavTarget.UserLots -> UserLotsBackStackNode(buildContext, this)
+
+            BottomNavigationNavTarget.PersonalProfile -> PersonalProfileBackstackNode(
+                buildContext,
+                this,
+            )
         }
     }
 
@@ -116,6 +125,10 @@ internal class MainScreen(
         spotlight.activate(BottomNavigationNavTarget.UserLots)
     }
 
+    override fun openPersonalProfileBackstack() {
+        spotlight.activate(BottomNavigationNavTarget.PersonalProfile)
+    }
+
     override fun goToAuthorization() {
         mainScreenNavigator.openAuthorization()
     }
@@ -134,6 +147,10 @@ internal class MainScreen(
 
     override fun createUserLot() {
         mainScreenNavigator.createLot()
+    }
+
+    override fun reattachMainScreen() {
+        mainScreenNavigator.reattachMainScreen()
     }
 
 }

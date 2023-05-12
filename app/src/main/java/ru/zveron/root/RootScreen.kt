@@ -1,20 +1,26 @@
 package ru.zveron.root
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.AlertDialog
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.TextButton
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -25,8 +31,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.bumble.appyx.core.children.nodeOrNull
 import com.bumble.appyx.core.composable.Children
 import com.bumble.appyx.core.modality.BuildContext
@@ -48,18 +58,22 @@ import ru.zveron.appyx.modal.Modal
 import ru.zveron.appyx.modal.activeElement
 import ru.zveron.appyx.modal.operation.dismiss
 import ru.zveron.appyx.modal.operation.show
+import ru.zveron.appyx.operations.clearWithNewRoot
 import ru.zveron.authorization.phone.RootPhoneNode
 import ru.zveron.authorization.socials_sheet.SocialsSheetScreen
 import ru.zveron.choose_item.ChooseItemNode
 import ru.zveron.create_lot.root.RootCreateLotNavigator
 import ru.zveron.create_lot.root.RootCreateLotNode
+import ru.zveron.design.components.ActionButton
 import ru.zveron.design.components.BottomSheet
 import ru.zveron.design.resources.ZveronText
+import ru.zveron.design.theme.gray3
 import ru.zveron.lot_card.LotCardNavigator
 import ru.zveron.lot_card.LotCardNode
 import ru.zveron.lot_card.LotCardParams
 import ru.zveron.main_screen.MainScreen
 import ru.zveron.main_screen.MainScreenNavigator
+import ru.zveron.platform.dialog.DialogResult
 import ru.zveron.user_profile.UserProfileNode
 import ru.zveron.user_profile.UserProfileParams
 
@@ -80,6 +94,10 @@ class RootScreen(
 ), MainScreenNavigator, BottomSheetStateHolder, RootCreateLotNavigator, LotCardNavigator {
     private val activeModalElementFlow: Flow<RootScreenNavTarget?> =
         modal.elements.map { it.activeElement }
+
+    private val rootDialogStateHolder by lazy {
+        component.getRootDialogScreenStateHolder()
+    }
 
     private val currentItemProvider
         get() = component.getChooseItemItemProvider().currentItemItemProvider
@@ -111,6 +129,58 @@ class RootScreen(
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
     override fun View(modifier: Modifier) {
+        val currentDialogRequest by rootDialogStateHolder.requests.collectAsState()
+        currentDialogRequest?.let { request ->
+            AlertDialog(
+                onDismissRequest = {
+                    request.submitResult(DialogResult.Dismiss)
+                },
+                buttons = {
+                    Column(
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 2.dp),
+                    ) {
+                        ActionButton(
+                            onClick = { request.submitResult(DialogResult.Confirm) },
+                            modifier = Modifier.fillMaxWidth(),
+                        ) {
+                            ZveronText(request.params.confirmButtonLabel)
+                        }
+
+                        request.params.dismissButtonLabel?.let {
+                            TextButton(
+                                onClick = { request.submitResult(DialogResult.Dismiss) },
+                                modifier = Modifier.align(Alignment.CenterHorizontally),
+                            ) {
+                                ZveronText(it, color = gray3)
+                            }
+                        }
+                    }
+                },
+                modifier = modifier,
+                title = request.params.title?.let {
+                    {
+                        ZveronText(
+                            it,
+                            style = TextStyle(
+                                fontWeight = FontWeight.Normal,
+                                fontSize = 18.sp,
+                                lineHeight = (27.6).sp,
+                                letterSpacing = (-0.69).sp,
+                            ),
+                        )
+                    }
+                },
+                text = request.params.message?.let {
+                    {
+                        ZveronText(
+                            it,
+                            style = MaterialTheme.typography.body1,
+                        )
+                    }
+                },
+            )
+        }
+
         val shouldBlockSheetStateHolder = shouldBlockBottomSheet.collectAsState(initial = false)
 
         val sheetState = rememberModalBottomSheetState(
@@ -207,6 +277,11 @@ class RootScreen(
 
     override fun goToSeller(id: Long) {
         backStack.push(RootScreenNavTarget.Profile(id))
+    }
+
+    override fun reattachMainScreen() {
+        backStack.clearWithNewRoot(RootScreenNavTarget.MainPage)
+        modal.dismiss()
     }
 
     override val shouldBlockBottomSheet: Flow<Boolean> =

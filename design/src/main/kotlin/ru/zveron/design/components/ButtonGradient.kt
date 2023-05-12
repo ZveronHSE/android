@@ -17,7 +17,10 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -32,18 +35,20 @@ fun ActionButton(
     onClick: () -> Unit = {},
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     contentAlignment: Alignment = Alignment.Center,
-    brush: Brush = enabledButtonGradient,
+    backgroundBrush: Brush = enabledButtonGradient,
+    contentColor: Color = MaterialTheme.colors.onPrimary,
     content: @Composable BoxWithConstraintsScope.() -> Unit = {},
 ) {
     val alpha = if (enabled) 1f else 0.5f
 
     CompositionLocalProvider(
-        LocalContentColor provides MaterialTheme.colors.onPrimary
+        LocalContentColor provides contentColor
     ) {
         BoxWithConstraints(
             modifier = modifier
                 .height(52.dp)
-                .background(brush, RoundedCornerShape(10.dp), alpha)
+                .background(backgroundBrush, RoundedCornerShape(10.dp), alpha)
+                .clip(RoundedCornerShape(10.dp))
                 .clickable(
                     interactionSource = interactionSource,
                     indication = LocalIndication.current,
@@ -59,11 +64,50 @@ fun ActionButton(
 }
 
 @Composable
+fun RegularButton(
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    onClickLabel: String? = null,
+    onClick: () -> Unit = {},
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    contentAlignment: Alignment = Alignment.Center,
+    brush: Brush = SolidColor(MaterialTheme.colors.surface),
+    content: @Composable BoxWithConstraintsScope.() -> Unit = {},
+) {
+    val alpha = if (enabled) 1f else 0.5f
+
+    BoxWithConstraints(
+        modifier = modifier
+            .height(36.dp)
+            .background(brush, RoundedCornerShape(8.dp), alpha)
+            .clip(RoundedCornerShape(8.dp))
+            .clickable(
+                interactionSource = interactionSource,
+                indication = LocalIndication.current,
+                enabled = enabled,
+                onClickLabel = onClickLabel,
+                role = Role.Button,
+                onClick = onClick,
+            ),
+        contentAlignment = contentAlignment,
+        content = content,
+    )
+}
+
+@Composable
 @Preview
 fun PreviewGradient() {
     ZveronTheme {
         ActionButton(modifier = Modifier.fillMaxWidth()) {
             Text("Отправить код", style = MaterialTheme.typography.body1)
         }
+    }
+}
+
+@Preview
+@Composable
+fun PreviewRegular() {
+    RegularButton(modifier = Modifier.fillMaxWidth()) {
+        Text("Отправить код", style = MaterialTheme.typography.body1)
     }
 }

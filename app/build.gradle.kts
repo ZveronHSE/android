@@ -102,4 +102,5 @@ dependencies {
     implementation(project(":feature:create_lot"))
     implementation(project(":feature:choose_item"))
     implementation(project(":feature:user_profile"))
+    implementation(project(":feature:personal_profile"))
 }

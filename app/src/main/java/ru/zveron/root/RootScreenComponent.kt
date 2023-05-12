@@ -16,4 +16,8 @@ class RootScreenComponent: KoinScopeComponent, Destroyable {
     fun getChooseItemItemProvider(): ChooseItemHolder {
         return scope.get()
     }
+
+    fun getRootDialogScreenStateHolder(): RootDialogStateHolder {
+        return scope.get()
+    }
 }

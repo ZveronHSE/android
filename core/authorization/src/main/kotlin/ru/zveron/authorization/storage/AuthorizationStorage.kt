@@ -19,4 +19,6 @@ interface AuthorizationStorage {
     fun updateRefreshToken(refreshToken: String, expiresIn: Long?)
 
     fun refreshDeviceFingerprint(fingerprint: String)
+
+    fun clearAuthorization()
 }

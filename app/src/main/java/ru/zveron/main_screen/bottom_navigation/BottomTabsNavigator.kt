@@ -6,4 +6,6 @@ interface BottomTabsNavigator {
     fun openFavoritesBackstack()
 
     fun openUserLotsBackstack()
+
+    fun openPersonalProfileBackstack()
 }
