@@ -7,16 +7,20 @@ class GetUserLotsInteractor(
     private val authorizationStorage: AuthorizationStorage,
     private val userLotsRepository: UserLotsRepository,
 ) {
-    suspend fun getUserLots(): UserLots {
+    suspend fun getActiveLots(): List<Lot> {
         require(authorizationStorage.isAuthorized()) {
             IllegalStateException("user must be authorized")
         }
 
-        val lots = userLotsRepository.loadLots()
+        return userLotsRepository.loadLots(true)
+    }
 
-        val activeLots = lots.filter { it.isActive }
-        val archiveLots = lots.filter { !it.isActive }
 
-        return UserLots(activeLots, archiveLots)
+    suspend fun getArchiveLots(): List<Lot> {
+        require(authorizationStorage.isAuthorized()) {
+            IllegalStateException("user must be authorized")
+        }
+
+        return userLotsRepository.loadLots(false)
     }
 }

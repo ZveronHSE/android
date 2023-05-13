@@ -5,25 +5,20 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
-import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -41,8 +36,8 @@ fun LotRow(
     zveronImage: ZveronImage,
     title: String,
     price: String,
-    views: Int,
-    likes: Int,
+//    views: Int,
+//    likes: Int,
     modifier: Modifier = Modifier,
     isActive: Boolean = true,
     onCardClick: () -> Unit = {},
@@ -65,7 +60,7 @@ fun LotRow(
             ZveronImage(
                 zveronImage,
                 modifier = Modifier.fillMaxHeight().width(150.dp),
-                contentScale = ContentScale.FillHeight,
+                contentScale = ContentScale.Crop,
                 loadingImageModifier = Modifier
                     .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
                     .background(Color.LightGray),
@@ -93,43 +88,43 @@ fun LotRow(
                     )
                 )
 
-                Spacer(Modifier.weight(1f))
+//                Spacer(Modifier.weight(1f))
 
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Icon(
-                        painterResource(R.drawable.heart_unliked),
-                        contentDescription = null,
-                        modifier = Modifier.size(16.dp),
-                        tint = Color.Unspecified,
-                    )
-
-                    Text(
-                        text = likes.toString(),
-                        style = TextStyle(
-                            fontWeight = FontWeight.Light,
-                            fontSize = 12.sp,
-                        ),
-                    )
-
-                    Spacer(Modifier.width(8.dp))
-
-                    Icon(
-                        painterResource(R.drawable.ic_eye),
-                        contentDescription = null,
-                        modifier = Modifier.size(16.dp),
-                        tint = Color.Unspecified,
-                    )
-
-                    Text(
-                        text = views.toString(),
-                        style = TextStyle(
-                            fontWeight = FontWeight.Light,
-                            fontSize = 12.sp,
-                        ),
-                    )
-                }
+//                Row(
+//                    verticalAlignment = Alignment.CenterVertically,
+//                ) {
+//                    Icon(
+//                        painterResource(R.drawable.heart_unliked),
+//                        contentDescription = null,
+//                        modifier = Modifier.size(16.dp),
+//                        tint = Color.Unspecified,
+//                    )
+//
+//                    Text(
+//                        text = likes.toString(),
+//                        style = TextStyle(
+//                            fontWeight = FontWeight.Light,
+//                            fontSize = 12.sp,
+//                        ),
+//                    )
+//
+//                    Spacer(Modifier.width(8.dp))
+//
+//                    Icon(
+//                        painterResource(R.drawable.ic_eye),
+//                        contentDescription = null,
+//                        modifier = Modifier.size(16.dp),
+//                        tint = Color.Unspecified,
+//                    )
+//
+//                    Text(
+//                        text = views.toString(),
+//                        style = TextStyle(
+//                            fontWeight = FontWeight.Light,
+//                            fontSize = 12.sp,
+//                        ),
+//                    )
+//                }
             }
         }
     }
@@ -147,8 +142,8 @@ internal fun LotRowColumnPreview() {
                     zveronImage = ZveronImage.ResourceImage(R.drawable.cool_dog),
                     title = "Продам щенков Корги. 2 месяца",
                     price = "20 000 ₽",
-                    views = 100,
-                    likes = 100,
+//                    views = 100,
+//                    likes = 100,
                     modifier = Modifier.padding(horizontal = 8.dp),
                     isActive = i % 2 == 0,
                 )

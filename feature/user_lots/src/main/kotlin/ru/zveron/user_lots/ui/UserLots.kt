@@ -50,40 +50,16 @@ import ru.zveron.design.wrappers.ListWrapper
 import ru.zveron.user_lots.R
 import ru.zveron.design.R as DesignR
 
+private const val BOTTOM_BAR_HEIGHT = 98
+
 @Composable
 internal fun UserLots(
-    state: UserLotsUiState,
-    isRefreshing: Boolean,
+    currentTab: UserLotTab,
     modifier: Modifier = Modifier,
-    refreshEnabled: Boolean = true,
     onTabClick: (UserLotTab) -> Unit = {},
-    onAddLotClick: () -> Unit = {},
-    onLotClick: (Long) -> Unit = {},
-    onRetryClicked: () -> Unit = {},
-    onRefresh: () -> Unit = {},
+    children: @Composable (Modifier) -> Unit,
 ) {
-    when (state) {
-        UserLotsUiState.Loading -> LoadingUserLots(modifier.fillMaxWidth())
-        is UserLotsUiState.Success -> SuccessUserLots(
-            userLotsUiState = state,
-            onTabClick = onTabClick,
-            onLotClick = onLotClick,
-            onAddLotClick = onAddLotClick,
-            isRefreshing = isRefreshing,
-            refreshEnabled = refreshEnabled,
-            onRefresh = onRefresh,
-        )
-        UserLotsUiState.Error -> ErrorUserLots(modifier.fillMaxWidth(), onRetryClicked)
-    }
-}
-
-@OptIn(ExperimentalTextApi::class)
-@Composable
-private fun ErrorUserLots(
-    modifier: Modifier = Modifier,
-    onRetryClicked: () -> Unit = {},
-) {
-    Column(modifier = modifier) {
+    Column(modifier = modifier.padding(start = 16.dp, end = 16.dp, bottom = BOTTOM_BAR_HEIGHT.dp)) {
         Spacer(Modifier.height(40.dp))
 
         Text(
@@ -93,9 +69,56 @@ private fun ErrorUserLots(
                 fontSize = 28.sp,
             ),
             color = gray5,
-            modifier = Modifier.padding(start = 16.dp)
         )
 
+        Spacer(Modifier.height(32.dp))
+
+        UserLotsTabs(currentTab, onTabClick = onTabClick)
+
+        Spacer(Modifier.height(24.dp))
+
+        children.invoke(
+            Modifier
+                .weight(1f)
+                .fillMaxWidth())
+    }
+}
+
+@Composable
+internal fun LotsList(
+    state: LotsUiState,
+    isRefreshing: Boolean,
+    showAddLotButton: Boolean,
+    modifier: Modifier = Modifier,
+    refreshEnabled: Boolean = true,
+    onAddLotClick: () -> Unit = {},
+    onLotClick: (Long) -> Unit = {},
+    onRetryClicked: () -> Unit = {},
+    onRefresh: () -> Unit = {},
+) {
+    when (state) {
+        LotsUiState.Loading -> LoadingLots(modifier.fillMaxWidth())
+        is LotsUiState.Success -> SuccessLots(
+            lotsUiState = state,
+            showAddLotButton = showAddLotButton,
+            onLotClick = onLotClick,
+            onAddLotClick = onAddLotClick,
+            isRefreshing = isRefreshing,
+            refreshEnabled = refreshEnabled,
+            onRefresh = onRefresh,
+        )
+
+        LotsUiState.Error -> ErrorLots(modifier.fillMaxWidth(), onRetryClicked)
+    }
+}
+
+@OptIn(ExperimentalTextApi::class)
+@Composable
+private fun ErrorLots(
+    modifier: Modifier = Modifier,
+    onRetryClicked: () -> Unit = {},
+) {
+    Column(modifier = modifier) {
         Spacer(Modifier.weight(1f))
 
         Icon(
@@ -139,24 +162,11 @@ private fun ErrorUserLots(
 }
 
 
-
 @Composable
-private fun LoadingUserLots(
+private fun LoadingLots(
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
-        Spacer(Modifier.height(40.dp))
-
-        Text(
-            text = stringResource(R.string.user_lots_title),
-            style = TextStyle(
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 28.sp,
-            ),
-            color = gray5,
-            modifier = Modifier.padding(start = 16.dp),
-        )
-
         Spacer(Modifier.weight(1f))
 
         CircularProgressIndicator(Modifier.align(Alignment.CenterHorizontally))
@@ -167,34 +177,17 @@ private fun LoadingUserLots(
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-private fun SuccessUserLots(
-    userLotsUiState: UserLotsUiState.Success,
+private fun SuccessLots(
+    lotsUiState: LotsUiState.Success,
     isRefreshing: Boolean,
+    showAddLotButton: Boolean,
     modifier: Modifier = Modifier,
     refreshEnabled: Boolean = true,
-    onTabClick: (UserLotTab) -> Unit = {},
     onAddLotClick: () -> Unit = {},
     onLotClick: (Long) -> Unit = {},
     onRefresh: () -> Unit = {},
 ) {
-    Column(modifier = modifier.padding(horizontal = 16.dp)) {
-        Spacer(Modifier.height(40.dp))
-
-        Text(
-            text = stringResource(R.string.user_lots_title),
-            style = TextStyle(
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 28.sp,
-            ),
-            color = gray5,
-        )
-
-        Spacer(Modifier.height(32.dp))
-
-        UserLotsTabs(userLotsUiState.currentTab, onTabClick = onTabClick)
-
-        Spacer(Modifier.height(24.dp))
-
+    Column(modifier = modifier) {
         val pullRefreshState = rememberPullRefreshState(
             refreshing = isRefreshing,
             onRefresh = onRefresh,
@@ -208,9 +201,10 @@ private fun SuccessUserLots(
         ) {
             LazyColumn {
                 UserLotsList(
-                    userLotsUiState.currentLots,
+                    lotsUiState.currentLots,
                     onLotClick = onLotClick,
                     onAddLotClick = onAddLotClick,
+                    showAddLotButton = showAddLotButton,
                 )
             }
 
@@ -267,6 +261,7 @@ private fun UserLotsTabs(
 
 private fun LazyListScope.UserLotsList(
     lots: ListWrapper<LotUiState>,
+    showAddLotButton: Boolean,
     onLotClick: (Long) -> Unit = {},
     onAddLotClick: () -> Unit = {},
 ) {
@@ -279,8 +274,8 @@ private fun LazyListScope.UserLotsList(
             zveronImage = lot.image,
             title = lot.title,
             price = lot.price,
-            views = lot.views,
-            likes = lot.likes,
+//            views = lot.views,
+//            likes = lot.likes,
             isActive = lot.isActive,
             onCardClick = clicker,
         )
@@ -290,15 +285,17 @@ private fun LazyListScope.UserLotsList(
         Spacer(Modifier.height(spacing))
     }
 
-    item {
-        ActionButton(
-            onClick = onAddLotClick,
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            Text(
-                text = stringResource(R.string.add_lot_button_title),
-                style = MaterialTheme.typography.body1
-            )
+    if (showAddLotButton) {
+        item {
+            ActionButton(
+                onClick = onAddLotClick,
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Text(
+                    text = stringResource(R.string.add_lot_button_title),
+                    style = MaterialTheme.typography.body1
+                )
+            }
         }
     }
 }
@@ -307,36 +304,57 @@ private fun LazyListScope.UserLotsList(
 @Composable
 private fun UserLotsSuccessPreview() {
     ZveronTheme {
-        val state = UserLotsUiState.Success(
-            currentTab = UserLotTab.ACTIVE,
-            currentLots = ListWrapper(listOf(
-                LotUiState(
-                    id = 1,
-                    title = "Собака Корги. 3 года. ОТдам на передержку",
-                    price = "40 000 ₽",
-                    image = ZveronImage.ResourceImage(DesignR.drawable.cool_dog),
-                    isActive = true,
-                    views = 100,
-                    likes = 10_000,
-                ),
-                LotUiState(
-                    id = 2,
-                    title = "Собака Самоед (помесь). 3 года",
-                    price = "40 000 ₽",
-                    image = ZveronImage.ResourceImage(DesignR.drawable.cool_dog),
-                    isActive = true,
-                    views = 100,
-                    likes = 10_000,
+        val state = LotsUiState.Success(
+            currentLots = ListWrapper(
+                listOf(
+                    LotUiState(
+                        id = 1,
+                        title = "Собака Корги. 3 года. ОТдам на передержку",
+                        price = "40 000 ₽",
+                        image = ZveronImage.ResourceImage(DesignR.drawable.cool_dog),
+                        isActive = true,
+//                    views = 100,
+//                    likes = 10_000,
+                    ),
+                    LotUiState(
+                        id = 2,
+                        title = "Собака Самоед (помесь). 3 года",
+                        price = "40 000 ₽",
+                        image = ZveronImage.ResourceImage(DesignR.drawable.cool_dog),
+                        isActive = true,
+//                    views = 100,
+//                    likes = 10_000,
+                    )
                 )
-            )),
+            ),
         )
 
-        SuccessUserLots(
-            userLotsUiState = state,
+        SuccessLots(
+            lotsUiState = state,
             isRefreshing = true,
+            showAddLotButton = true,
             modifier = Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colors.background)
+                .background(MaterialTheme.colors.background),
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun UserLotsSuccessEmptyPreview() {
+    ZveronTheme {
+        val state = LotsUiState.Success(
+            currentLots = ListWrapper(emptyList()),
+        )
+
+        SuccessLots(
+            lotsUiState = state,
+            isRefreshing = true,
+            showAddLotButton = false,
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colors.background),
         )
     }
 }
@@ -345,7 +363,7 @@ private fun UserLotsSuccessPreview() {
 @Composable
 private fun UserLotsLoadingPreview() {
     ZveronTheme {
-        LoadingUserLots(
+        LoadingLots(
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colors.background)
@@ -357,7 +375,7 @@ private fun UserLotsLoadingPreview() {
 @Composable
 private fun UserLotsErrorPreview() {
     ZveronTheme {
-        ErrorUserLots(
+        ErrorLots(
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colors.background)

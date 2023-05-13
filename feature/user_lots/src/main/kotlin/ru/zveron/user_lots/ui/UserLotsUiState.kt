@@ -7,16 +7,20 @@ import ru.zveron.design.wrappers.ListWrapper
 import ru.zveron.user_lots.R
 
 @Immutable
-sealed class UserLotsUiState {
+data class UserLotsUiState(
+    val currentTab: UserLotTab,
+)
+
+@Immutable
+internal sealed class LotsUiState {
     data class Success(
         val currentLots: ListWrapper<LotUiState>,
-        val currentTab: UserLotTab,
         val isRefreshing: Boolean = false,
-    ): UserLotsUiState()
+    ): LotsUiState()
 
-    object Loading: UserLotsUiState()
+    object Loading: LotsUiState()
 
-    object Error: UserLotsUiState()
+    object Error: LotsUiState()
 }
 
 data class LotUiState(
@@ -25,8 +29,8 @@ data class LotUiState(
     val price: String,
     val image: ZveronImage,
     val isActive: Boolean,
-    val views: Int,
-    val likes: Int,
+//    val views: Int,
+//    val likes: Int,
 )
 
 enum class UserLotTab(@StringRes val title: Int) {
