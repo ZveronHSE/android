@@ -5,7 +5,7 @@ import ru.zveron.user_lots.domain.Lot
 class UserLotsRepository(
     private val userLotsDataSource: UserLotsDataSource,
 ) {
-    suspend fun loadLots(): List<Lot> {
-        return userLotsDataSource.loadLots()
+    suspend fun loadLots(active: Boolean): List<Lot> {
+        return userLotsDataSource.loadLots(active)
     }
 }
