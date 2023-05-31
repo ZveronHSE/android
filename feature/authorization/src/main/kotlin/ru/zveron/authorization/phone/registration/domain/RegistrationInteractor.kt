@@ -23,6 +23,6 @@ class RegistrationInteractor(
         )
 
         authorizationStorage.updateAccessToken(result.accessToken.value, result.accessToken.expiresIn)
-        authorizationStorage.updateAccessToken(result.refreshToken.value, result.refreshToken.expiresIn)
+        authorizationStorage.updateRefreshToken(result.refreshToken.value, result.refreshToken.expiresIn)
     }
 }

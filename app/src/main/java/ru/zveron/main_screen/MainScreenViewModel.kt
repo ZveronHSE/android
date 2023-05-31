@@ -26,7 +26,7 @@ class MainScreenViewModel(
         BottomNavigationItem.LOTS_FEED to this::lotsFeedTapped,
         BottomNavigationItem.FAVORITES to this::favouritesTapped,
         BottomNavigationItem.CREATE_LOT to this::createLotTapped,
-        BottomNavigationItem.CHATS to this::messagesTapped,
+//        BottomNavigationItem.CHATS to this::messagesTapped,
         BottomNavigationItem.PROFILE to this::profileTapped,
     )
 
@@ -41,7 +41,7 @@ class MainScreenViewModel(
         tabs.add(mapTab(BottomNavigationItem.LOTS_FEED, selectedItem))
         tabs.add(mapTab(BottomNavigationItem.FAVORITES, selectedItem))
         tabs.add(mapTab(BottomNavigationItem.CREATE_LOT, selectedItem))
-        tabs.add(mapTab(BottomNavigationItem.CHATS, selectedItem))
+//        tabs.add(mapTab(BottomNavigationItem.CHATS, selectedItem))
         tabs.add(mapTab(BottomNavigationItem.PROFILE, selectedItem))
 
         return tabs

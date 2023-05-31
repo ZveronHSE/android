@@ -101,12 +101,12 @@ class SmsCodeViewModel(
     private fun getTickerFlow(): Flow<Int> {
         return (CODE_DELAY_IN_SECONDS downTo 1)
             .asFlow()
-            .onEach { delay(1000L) }
             .onEach { secondsLeft ->
                 _stateFlow.update {
                     it.copy(codeRequestState = CodeRequestState.NeedToWait(secondsLeft))
                 }
             }
+            .onEach { delay(1000L) }
             .onCompletion {
                 if (it !is CancellationException) {
                     _stateFlow.update { state ->
