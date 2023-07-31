@@ -2,6 +2,7 @@ package ru.zveron.authorization.phone.registration
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -42,6 +43,7 @@ import ru.zveron.appyx.viewmodel.ViewModelNode
 import ru.zveron.authorization.R
 import ru.zveron.authorization.phone.registration.ui.RegistrationViewModel
 import ru.zveron.design.components.ActionButton
+import ru.zveron.design.resources.ZveronText
 import ru.zveron.design.shimmering.shimmeringBackground
 import ru.zveron.design.theme.ZveronTheme
 import ru.zveron.design.R as DesignR
@@ -107,6 +109,8 @@ private fun Registration(
     modifier: Modifier = Modifier,
     onBackClicked: () -> Unit = {},
     onRegisterClicked: () -> Unit = {},
+    nameErrorText: ZveronText? = null,
+    surnameErrorText: ZveronText? = null,
 ) {
     Column(modifier = modifier.fillMaxSize()) {
         IconButton(
@@ -167,6 +171,22 @@ private fun Registration(
                 .padding(start = 16.dp, end = 34.dp),
         )
 
+        nameErrorText?.let {
+            Spacer(Modifier.height(4.dp))
+
+            Row(modifier = Modifier.padding(start = 16.dp)) {
+                ZveronText(
+                    text = nameErrorText,
+                    style = TextStyle(
+                        color = MaterialTheme.colors.error,
+                        fontSize = 13.sp,
+                        lineHeight = 15.23.sp,
+                        fontWeight = FontWeight.Normal,
+                    ),
+                )
+            }
+        }
+
         Spacer(Modifier.height(6.dp))
 
         TextField(
@@ -186,6 +206,22 @@ private fun Registration(
                 .padding(start = 16.dp, end = 34.dp),
         )
 
+        surnameErrorText?.let {
+            Spacer(Modifier.height(4.dp))
+
+            Row(modifier = Modifier.padding(start = 16.dp)) {
+                ZveronText(
+                    text = surnameErrorText,
+                    style = TextStyle(
+                        color = MaterialTheme.colors.error,
+                        fontSize = 13.sp,
+                        lineHeight = 15.23.sp,
+                        fontWeight = FontWeight.Normal,
+                    ),
+                )
+            }
+        }
+
         Spacer(Modifier.height(16.dp))
 
         Text(
@@ -198,7 +234,9 @@ private fun Registration(
             ),
             modifier = Modifier.padding(start = 16.dp),
         )
+
         Spacer(Modifier.height(6.dp))
+
         TextField(
             value = password,
             onValueChange = onPasswordChanged,
@@ -309,6 +347,7 @@ private fun RegistrationPreviewLoading() {
             onSurnameChanged = changeSurname,
             password = password,
             onPasswordChanged = changePassword,
+            nameErrorText = ZveronText.RawString("Имя не может быть пустым"),
         )
     }
 }

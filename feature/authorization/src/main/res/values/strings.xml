@@ -23,6 +23,8 @@
     <string name="password_label">Придумайте пароль</string>
     <string name="password_explanation">Нужен, чтобы войти без телефона</string>
     <string name="register">Зарегистрироваться</string>
+    <string name="name_empty_error_text">Имя не может быть пустым</string>
+    <string name="surname_empty_error_text">Фамилия не может быть пустой</string>
 
     <!-- Sms code screen -->
     <string name="confirmation_code">Код подтверждения</string>
